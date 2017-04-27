@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router'
 
 class Login extends React.Component {
 
@@ -7,15 +8,17 @@ class Login extends React.Component {
     this.state = {
       username: "",
       password: "",
-       auth: ""}
+       auth: "",
+     passMessage: "Password"}
     this.handleUserNameChange = this.handleUserNameChange.bind(this)
     this.handlePasswordChange = this.handlePasswordChange.bind(this)
+  //  this.componentWillMount = this.componentWillMount.bind(this)
     this.processLoginForm = this.processLoginForm.bind(this)
 
   }
 
   getInitialState() {
-  return {username: "",password: "", auth: false};
+  return {username: "",password: "", auth: false, passMessage: "Password"};
 }
 
 
@@ -24,10 +27,31 @@ class Login extends React.Component {
       console.log(this.state)
     }
 
+    componentDidMount() {
+      let that = this
+      this.props.ws.addEventListener('message', function (event) {
+    console.log('Message from server', event);
+    let m = JSON.parse(event.data)
+    console.log(m)
+    if (m.auth === "false") {
+      that.setState({auth: false,passMessage: "Wrong password, retry?"})
+    }
+    else {
+        that.setState({auth: true})
+        localStorage.setItem("currentUser",m.user)
+        localStorage.setItem("currentSession",m.session)
+    }
+    }
+)}
+
+componentWillUnmount() {
+  console.log("Login: removeEventListener....");
+  this.props.ws.removeEventListener('message')
+}
+
     processLoginForm(){
-      console.log(new Date() + JSON.stringify(this.state))
       console.log("Socket state: ",this.props.ws.readyState)
-      this.props.ws.send(JSON.stringify(this.state))
+      this.props.ws.send(JSON.stringify({type: "login",payload: this.state}))
     }
 
     handleUserNameChange(e) {
@@ -41,6 +65,9 @@ handlePasswordChange(e) {
 
 
 render() {
+
+  if (this.state.auth === true)
+    return <Redirect to= "/home" />
 
   return (
     <div>
@@ -56,7 +83,7 @@ render() {
     <label><b>Username</b></label>
     <input type="text" placeholder="Enter Username"   value={this.state.name} required onChange={this.handleUserNameChange} />
 
-    <label><b>Password</b></label>
+    <label><b>{this.state.passMessage}</b></label>
     <input type="password" placeholder="Enter Password"  value={this.state.name} required onChange={this.handlePasswordChange} />
 
     <button  type='button' onClick={this.processLoginForm}>Login</button>

@@ -13,6 +13,7 @@ let config = {
 let wsc = new WebSocket(config.wssHost)
 console.log("Socket state: ", wsc.readyState)
 
+
 class  VideoWrapper extends React.Component {
   render() {
     return (
@@ -35,9 +36,9 @@ const About = () => <h1>About ONACCI</h1>
 
 const Links = () => (
   <nav>
-    <NavLink exact activeClassName="active" to="/">Home</NavLink>
+    <NavLink exact activeClassName="active" to="/">Login</NavLink>
     <NavLink strict activeClassName="active" to={{pathname: '/about'}}>About</NavLink>
-    <NavLink strict activeClassName="active" to={{pathname: '/login'}}>Login</NavLink>
+    <NavLink strict activeClassName="active" to={{pathname: '/Home'}}>Home</NavLink>
     <NavLink strict activeClassName="active" to={{pathname: '/video'}}>Video</NavLink>
   </nav>
 )
@@ -45,8 +46,8 @@ const Links = () => (
 const App = () => (
 <Router>
   <div>
-  <Route exact path="/" component={Home} />
-  <Route default strict path="/login" component={LoginWrapper}/>
+  <Route default strict path="/" component={LoginWrapper}/>
+  <Route exact path="/home" component={Home} />
   <Route strict path="/about" component={About}/>
   <Route strict path="/video" component={VideoWrapper}/>
   </div>
