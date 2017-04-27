@@ -35,8 +35,7 @@ class MyVideo extends React.Component {
   }
 
     sendOnline() {
-      let sess = localStorage.getItem("currentSession")
-      this.props.ws.send(JSON.stringify({type: "online",payload: {command: "list",session: sess}}))
+      this.props.ws.send(JSON.stringify({type: "online",payload: {}, session: this.state.currentSession}))
     }
 
     componentWillMount() {
@@ -67,7 +66,7 @@ componentWillUnmount() {
 
 signal(onlineUser){
   console.log("Signaling.....",onlineUser)
-  this.setState({messageWindow: "Signaling......."})
+  this.setState({messageWindow: "Signaling.......\n"})
   let peerConn = new RTCPeerConnection(peerConnCfg)
    peerConn.onicecandidate = function (evt) {
      if (!evt || !evt.candidate) return;
@@ -91,7 +90,7 @@ signal(onlineUser){
       var off = new RTCSessionDescription(offer);
 
       peerConn.setLocalDescription(new RTCSessionDescription(off),function() {
-          this.props.ws.send(JSON.stringify({"sdp": off }));
+          this.props.ws.send(JSON.stringify({sdp: off }));
         }.bind(this),
         function(error) { console.log(error);}
       );
