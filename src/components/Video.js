@@ -71,7 +71,7 @@ signal(onlineUser){
    peerConn.onicecandidate = function (evt) {
      if (!evt || !evt.candidate) return;
      ringing.play();
-     this.props.ws.send(JSON.stringify({candidate: evt.candidate, targetUser: onlineUser}));
+     this.props.ws.send(JSON.stringify({type: "signal", payload: {candidate: evt.candidate, targetUser: onlineUser}}));
    }.bind(this)
 
     // once remote stream arrives, show it in the remote video element
