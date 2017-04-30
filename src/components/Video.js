@@ -12,10 +12,8 @@ window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecogn
   let ringing = new Audio('/sound/detringer.m4a');
   console.log(ringing)
   let peeronline = new Audio('/sound/peeronline.m4a');
-  let peerConnCfg = {'iceServers':
-    [{'url': 'stun:stun.services.mozilla.com'},
-     {'url': 'stun:stun.l.google.com:19302'}]
-  };
+
+
 
 class MyVideo extends React.Component {
 
@@ -23,89 +21,165 @@ class MyVideo extends React.Component {
     super(props)
     this.state = {
       online: [],
-      auth: false,
-      peerConn: null,
+      auth: true,
       remoteVideoSrc: null,
       localVideoSrc: null,
       targetUser: null,
       messageWindow: "",
       currentUser: null,
-      currentSession: null
+      currentSession: null,
+      answer: "disabled",
+      end: "disabled"
     }
   }
+
+
 
     sendOnline() {
       this.props.ws.send(JSON.stringify({type: "online",payload: {}, session: this.state.currentSession}))
     }
 
-    componentWillMount() {
-      let user = localStorage.getItem("currentUser")
-      let sess = localStorage.getItem("currentSession")
-      if (sess)
-        this.setState({auth: true,currentUser: user,currentSession: sess})
-      console.log(user,sess)
+    sendWhoAmI() {
+      this.props.ws.send(JSON.stringify({type: "whoAmI",payload: {},session: this.state.currentSession}))
+    }
+
+    messageHandler(event) {
+      let that = this
+      console.log('Message from server', event);
+      let m = JSON.parse(event.data)
+      switch(m.type) {
+        case "online":
+        that.setState({online: m.data})
+        break
+        case "signal":
+          console.log("signal payload:",m.payload)
+          this.setState({targetUser: m.payload.sourceUser})
+          if (m.payload.candidate) {
+            let cand = new RTCIceCandidate(m.payload.candidate)
+            console.log("cand: ",cand)
+            that.props.peerConn.addIceCandidate(cand).
+            then(()=>console.log("sucess addIceCandiate......"))
+            .catch(err=>console.log("Error addIceCandiate Failded:",err))
+            that.setState({messageWindow: m.payload.sourceUser + " Det ringer, det ringer..."})
+          } else if (m.payload.sdp) {
+              let sdp = new RTCSessionDescription(m.payload.sdp)
+              console.log("sdp: ",sdp)
+              that.props.peerConn.setRemoteDescription(sdp)
+          } else {
+            console.log("Uknown signaling type: ",m.payload)
+          }
+         break
+         case "whoAmIAns":
+          that.setState({currentUser: m.payload.username,currentSession: m.payload.session})
+         break
+         default:
+         console.log("Uknown message type:",m.type)
+       }
+
+    }
+
+      componentDidMount() {
+
+      let that = this
+
+      this.props.ws.addEventListener('message',this.messageHandler.bind(this))
       console.log(this.props.ws)
       this.sendOnline()
-      setInterval(this.sendOnline.bind(this),30*1000)
-    }
+      this.sendWhoAmI()
+      setInterval(this.sendOnline.bind(this),10*1000)
 
-    componentDidMount() {
-      let that = this
-      this.props.ws.addEventListener('message', function (event) {
-    console.log('Message from server', event);
-    let m = JSON.parse(event.data)
-    if (m.type === "online")
-      that.setState({online: m.data})
+      this.props.peerConn.onicecandidate = evt => {
+        console.log("onicecandidate event",evt)
+         if (!evt || !evt.candidate)
+         return;
+         ringing.play();
+         this.props.ws.send(JSON.stringify({type: "signal", payload:
+            {candidate: evt.candidate, targetUser: this.state.targetUser,sourceUser: this.state.currentUser}}));
+       }
+
+      this.props.peerConn.onaddstream = evt => {
+        console.log("Remote video called................",evt)
+        let remoteVideoSrc = URL.createObjectURL(evt.stream)
+        console.log("Remote Video Object: ",remoteVideoSrc)
+        that.setState({remoteVideoSrc})
+      }
     }
-)}
 
 componentWillUnmount() {
-  console.log("Video: removeEventListener....");
-  this.props.ws.removeEventListener('message')
+  console.log("Video unmounts........")
+    this.props.ws.removeEventListener('message',this.messageHandler)
+
 }
 
 signal(onlineUser){
   console.log("Signaling.....",onlineUser)
-  this.setState({messageWindow: "Signaling.......\n"})
-  let peerConn = new RTCPeerConnection(peerConnCfg)
-   peerConn.onicecandidate = function (evt) {
-     if (!evt || !evt.candidate) return;
-     ringing.play();
-     this.props.ws.send(JSON.stringify({type: "signal", payload: {candidate: evt.candidate, targetUser: onlineUser}}));
-   }.bind(this)
-
-    // once remote stream arrives, show it in the remote video element
-   peerConn.onaddstream = function(evt) {
-    let that = this
-    that.setState({remoteVideoSrc: URL.createObjectURL(evt.stream) })
-   }
+  this.setState({messageWindow: "Ringing.......\n"})
+  this.setState({targetUser: onlineUser})
 
   //this.setState({peerConn,targetUser: onlineUser})
 
-   navigator.getUserMedia({ "audio": true, "video": true }, function (stream) {
-    let localVideoSrc = URL.createObjectURL(stream);
-    peerConn.addStream(stream);
+   navigator.getUserMedia({ "audio": true, "video": true }, stream => {
+    let localVideoSrc = URL.createObjectURL(stream)
+    this.props.peerConn.addStream(stream)
     //Creating offer
-    peerConn.createOffer(function (offer) {
-      var off = new RTCSessionDescription(offer);
+    this.props.peerConn.createOffer(offer => {
+      let off = new RTCSessionDescription(offer);
 
-      peerConn.setLocalDescription(new RTCSessionDescription(off),function() {
-          this.props.ws.send(JSON.stringify({sdp: off }));
-        }.bind(this),
-        function(error) { console.log(error);}
+      this.props.peerConn.setLocalDescription(off,() => {
+          let message = JSON.stringify({type: "signal", payload: {sdp: off,targetUser: onlineUser }})
+          this.props.ws.send(message)
+        },
+        error =>{ console.log("peerConn.setLocalDescription: ",error);}
       );
-    }.bind(this),
-    function (error) { console.log(error);}
+    },
+    error => { console.log("peerConn.createOffer: ",error)}
   );
+  console.log("Local Video Object:",localVideoSrc)
 this.setState({localVideoSrc})
-}.bind(this), function(error) { console.log(error)
+}, error => { console.log(" navigator.getUserMedia: ",error)
 })
 
 }
 
+answerCall() {
+  navigator.getUserMedia({ "audio": true, "video": true }, stream => {
+    this.props.peerConn.addStream(stream);
+    this.props.peerConn.createAnswer(
+      answer => {
+        let ans = new RTCSessionDescription(answer);
+        this.props.peerConn.setLocalDescription(ans, () => {
+            let answer= JSON.stringify({type: "signal", payload: {sdp: ans,targetUser:  this.state.targetUser}})
+            console.log("answer: ",answer)
+            this.props.ws.send(answer);
+            this.setState({messageWindow: "Picking the call, conected...."})
+          },
+          error => { console.log(error);}
+        );
+      },
+      error => {console.log(error);}
+    )
+    let localVideoSrc = URL.createObjectURL(stream);
+    this.setState({localVideoSrc})
+  }, error => { console.log(error) ;});
+}
+
+
+endCall() {
+  this.setState({messageWindow: "Call ended..." + this.state.targetUser})
+  this.props.peerConn.close();
+  history.go(1);
+  if (this.state.localVideoSrc) {
+    this.state.localVideoSrc.getTracks().forEach(function (track) {
+      track.stop();
+    });
+  }
+}
+
+
 
   createOnlineList(onlineUser,i) {
-    return <li key={i} onClick={()=>this.signal(onlineUser)}>{onlineUser}</li>
+    if (onlineUser !== this.state.currentUser)
+      return <li key={i} onClick={()=>this.signal(onlineUser)}>{onlineUser}</li>
   }
 
   render() {
@@ -124,10 +198,11 @@ this.setState({localVideoSrc})
     <video className="rVideo" id="remoteVideo"  src={this.state.remoteVideoSrc} autoPlay poster="/images/onacci.png" ></video>
   </div>
   <div className = "lVideo" >
-    <video className = "lVideo" id="localVideo" src={this.state.localVideoSrc}autoPlay muted poster="/images/onacci.png"></video>
+    <video className = "lVideo" id="localVideo" src={this.state.localVideoSrc} autoPlay muted poster="/images/onacci.png"></video>
   </div>
   <div className = "cButtons">
-    <input  className ="button button3" id="resetButton" type="button"   disabled value="End Call"/>
+  <input className ="button button1" id="answer" type="button" onClick={this.answerCall.bind(this)} value="Answer"/>
+  <input  className ="button button2" id="end" type="button" onClick={this.endCall.bind(this)} value="End"/>
 </div>
 <div className = "iWindow">
   <textarea className = "iWindow" id="statusWindow" rows="5" cols="50" value = {this.state.messageWindow}></textarea>

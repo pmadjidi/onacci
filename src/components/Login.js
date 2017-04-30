@@ -36,11 +36,18 @@ class Login extends React.Component {
     if (m.auth === "false") {
       that.setState({auth: false,passMessage: "Wrong password, retry?"})
     }
-    else {
+    else if (m.auth === "true"){
         that.setState({auth: true})
-        localStorage.setItem("currentUser",m.user)
-        localStorage.setItem("currentSession",m.session)
+        console.log("Setting auth user and session key to:", m.user,m.session)
+        localStorage.setItem(m.session,m.user)
     }
+    /*
+    else {
+      console.log("AUTH Error....")
+      localStorage.setItem("currentUser","ERROR")
+      localStorage.setItem("currentSession","ERROR")
+    }
+    */
     }
 )}
 

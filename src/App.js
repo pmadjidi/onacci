@@ -13,11 +13,20 @@ let config = {
 let wsc = new WebSocket(config.wssHost)
 console.log("Socket state: ", wsc.readyState)
 
+let peerConnCfg = {'iceServers':
+  [{'url': 'stun:stun.services.mozilla.com'},
+   {'url': 'stun:stun.l.google.com:19302'}]
+};
+
+let peerConn = new RTCPeerConnection(peerConnCfg)
+
+
+
 
 class  VideoWrapper extends React.Component {
   render() {
     return (
-        <Video ws={wsc}/>
+        <Video ws={wsc} peerConn={peerConn}/>
     );
   }
 };
