@@ -22,21 +22,27 @@ class Login extends React.Component {
 }
 
 
-    componentWillMount() {
+    componentDidMount() {
       console.log(this.props.ws)
       console.log(this.state)
     }
 
-    componentDidMount() {
+    componentWillMount() {
       let that = this
       this.props.ws.addEventListener('message', function (event) {
     console.log('Message from server', event);
     let m = JSON.parse(event.data)
-    console.log(m)
-    if (m.auth === "false") {
+    console.log("Parsed message...",m)
+
+
+
+    if (m.auth === false || m.auth === "false") {
+      console.log("login failed....");
       that.setState({auth: false,passMessage: "Wrong password, retry?"})
     }
-    else if (m.auth === "true"){
+
+    if (m.auth === true  || m.auth === "true"){
+      console.log("login sucess....");
         that.setState({auth: true})
         console.log("Setting auth user and session key to:", m.user,m.session)
         localStorage.setItem(m.session,m.user)

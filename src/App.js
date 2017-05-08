@@ -7,7 +7,8 @@ import Login from './components/Login'
 
 
 let config = {
-  wssHost: 'wss://aka.ite.kth.se/websocket/'
+  //wssHost: 'wss://aka.ite.kth.se:9000/websocket/'
+  wssHost: 'wss://10.0.1.18:9000/websocket/'
 };
 
 let wsc = new WebSocket(config.wssHost)

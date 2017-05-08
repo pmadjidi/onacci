@@ -26,10 +26,12 @@ class MyVideo extends React.Component {
       localVideoSrc: null,
       targetUser: null,
       messageWindow: "",
+      chattWindow: "",
       currentUser: null,
       currentSession: null,
       answer: "disabled",
-      end: "disabled"
+      end: "disabled",
+      dataChannel: null
     }
   }
 
@@ -86,7 +88,7 @@ class MyVideo extends React.Component {
       console.log(this.props.ws)
       this.sendOnline()
       this.sendWhoAmI()
-      setInterval(this.sendOnline.bind(this),10*1000)
+      //setInterval(this.sendOnline.bind(this),10*1000)
 
       this.props.peerConn.onicecandidate = evt => {
         console.log("onicecandidate event",evt)
@@ -103,6 +105,33 @@ class MyVideo extends React.Component {
         console.log("Remote Video Object: ",remoteVideoSrc)
         that.setState({remoteVideoSrc})
       }
+
+      this.props.peerConn.ondatachannel = function(event) {
+        let receiveChannel = event.channel;
+        receiveChannel.onmessage = function(event){
+          that.setState({chattWindow: event.data})
+  }
+  }
+
+      let dataChannel = this.props.peerConn.createDataChannel(this.state.targetUser, {reliable: false})
+      dataChannel.onerror = function (error) {
+  console.log("Data Channel Error:", error);
+}
+
+dataChannel.onmessage = function (event) {
+  console.log("Got Data Channel Message:", event.data);
+}
+
+dataChannel.onopen = function () {
+  dataChannel.send("Hello from ONACCI...");
+}
+
+dataChannel.onclose = function () {
+  console.log("The Data Channel is Closed");
+}
+
+this.setState({dataChannel})
+
     }
 
 componentWillUnmount() {
@@ -175,6 +204,19 @@ endCall() {
   }
 }
 
+sendMessage(e) {
+  if (e.keyCode == 13)
+   {
+     console.log("this is enter")
+     this.state.dataChannel.send(e.data)
+   }
+   else {
+     this.setState({chattWindow: e.data})
+   console.log("this is key= ", e.keyCode)
+  }
+}
+
+// dataChannel = yourConn.createDataChannel("channel1", {reliable:true});
 
 
   createOnlineList(onlineUser,i) {
@@ -205,8 +247,11 @@ endCall() {
   <input  className ="button button2" id="end" type="button" onClick={this.endCall.bind(this)} value="End"/>
 </div>
 <div className = "iWindow">
-  <textarea className = "iWindow" id="statusWindow" rows="5" cols="50" value = {this.state.messageWindow}></textarea>
+  <textarea className = "iWindow" id="statusWindow" rows="2" cols="100" value = {this.state.messageWindow}></textarea>
  </div>
+ <div className = "cWindow">
+   <textarea className = "cWindow" id="chattWindow" rows="9" cols="100" onKeyUp= {this.sendMessage.bind(this)} value ={this.state.chattWindow}></textarea>
+  </div>
  </div>
  )
 }
