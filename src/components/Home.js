@@ -27,10 +27,15 @@ class  Home extends React.Component {
     this.props.ws.addEventListener('message',this.messageHandler.bind(this))
     console.log(this.props.ws)
     this.sendWhoAmI()
+    this.sendOnline()
   }
 
   sendWhoAmI() {
     this.props.ws.send(JSON.stringify({type: "whoAmI",payload: {},session: this.state.currentSession}))
+  }
+
+  sendOnline() {
+    this.props.ws.send(JSON.stringify({type: "online",payload: {}, session: this.state.currentSession}))
   }
 
   messageHandler(event) {
