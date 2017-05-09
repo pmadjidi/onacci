@@ -29,52 +29,110 @@ a.active {
 .button4 {background-color: #e7e7e7; color: black;} /* Gray */
 .button5 {background-color: #555555;} /* Black */
 
+
+.wrapperHome {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-gap: 10px;
+  grid-auto-rows: minmax(70px, auto);
+}
+
+
+
+.HomeStatusBar {
+  border-radius: 5px;
+  grid-row: 1 ;
+  grid-column: 1/6;
+  border-style: solid;
+}
+
+.HomeTeam {
+  border-radius: 5px;
+  grid-row: 2 / 10;
+  grid-column: 1;
+  border-style: solid;
+}
+
+
+.HomeOnline {
+  border-radius: 5px;
+  grid-row: 2/ 5;
+  grid-column: 2/3;
+  border-style: solid;
+}
+
+
+.HomeChannels {
+  border-radius: 5px;
+  grid-row: 5 / 10;
+  grid-column: 2/3;
+  border-style: solid;
+}
+
+.HomeWorkBench {
+  border-radius: 5px;
+  grid-row: 2 / 9;
+  grid-column: 3/6;
+  border-style: solid;
+}
+
+
+.HomeInput {
+  border-radius: 5px;
+  grid-row: 9 / 10;
+  grid-column: 3/6;
+  border-style: solid;
+}
+
+
+
+
+
 .wrapper {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-gap: 10px;
   grid-auto-rows: minmax(10px, auto);
-  #border:20px solid red;
 }
 
 .online {
+  border-radius: 5px;
   grid-row: 1 / 4;
   grid-column: 1/2;
-#  border: 10px solid blue;
 }
 
 .lVideo {
+  border-radius: 5px;
   grid-row: 1 / 4;
   grid-column: 2/3;
-#  border: 10px solid black;
 }
 
 .rVideo {
+  border-radius: 5px;
   grid-row: 1 / 4;
   grid-column: 3/4;
-#  border: 10px solid blue;
 }
 
 .iWindow {
+  border-radius: 10px;
   grid-row: 4/4;
   grid-column: 2/4;
-#  border: 5px solid yellow;
-  border: none;
+  overflow: auto;
 }
 
 .cWindow {
+  border-radius: 10px;
   grid-row: 5/6;
   grid-column: 2/4;
-//  border: 1px solid black;
-  border: none;
+  overflow: auto;
 }
 
 
 
 .cButtons {
+  border-radius: 10px;
   grid-row: 6/7;
   grid-column: 2/4;
-#  border: 5px solid green;
 }
 
 /*
@@ -84,6 +142,7 @@ ul {
 */
 
 input[type=text], input[type=password] {
+    border-radius: 5px;
     width: 100%;
     padding: 12px 20px;
     margin: 8px 0;
@@ -94,6 +153,7 @@ input[type=text], input[type=password] {
 
 /* Set a style for all buttons */
 button {
+    border-radius: 5px;
     background-color: black;
     color: white;
     padding: 14px 20px;
@@ -116,6 +176,7 @@ button:hover {
 
 /* Center the image and position the close button */
 .imgcontainer {
+    border-radius: 5px;
     text-align: center;
     margin: 24px 0 12px 0;
     position: relative;

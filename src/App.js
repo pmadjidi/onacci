@@ -8,7 +8,7 @@ import Login from './components/Login'
 
 let config = {
   //wssHost: 'wss://aka.ite.kth.se:9000/websocket/'
-  wssHost: 'wss://10.0.1.18:9000/websocket/'
+  wssHost: 'wss://aka.ite.kth.se:9000/websocket/'
 };
 
 let wsc = new WebSocket(config.wssHost)
@@ -19,7 +19,7 @@ let peerConnCfg = {'iceServers':
    {'url': 'stun:stun.l.google.com:19302'}]
 };
 
-let peerConn = new RTCPeerConnection(peerConnCfg)
+//let peerConn = new RTCPeerConnection(peerConnCfg)
 
 
 
@@ -27,7 +27,7 @@ let peerConn = new RTCPeerConnection(peerConnCfg)
 class  VideoWrapper extends React.Component {
   render() {
     return (
-        <Video ws={wsc} peerConn={peerConn}/>
+        <Video ws={wsc} peerConn={new RTCPeerConnection(peerConnCfg)}/>
     );
   }
 };
@@ -41,7 +41,40 @@ class  LoginWrapper extends React.Component {
 };
 
 
-const Home = () =>   <div><Links /><h1>Home</h1></div>
+
+class  Home extends React.Component {
+  render() {
+    return (
+      <div className = "wrapperHome">
+      <div className = "HomeStatusBar"> StatusBar </div>
+      <div className = "HomeTeam"> team </div>
+      <div className = "HomeOnline">online </div>
+      <div className = "HomeChannels">channels </div>
+      <div className = "HomeWorkBench">workBench </div>
+      <div className = "HomeInput"> Input </div>
+      </div>
+    )
+  }
+};
+
+
+
+const myHome = () =>   <div><Links /><h1>Home</h1></div>
+
+
+function  createOnlineList(onlineUser,i) {
+      return <li key={i} onClick={()=>this.signal(onlineUser)}>{onlineUser}</li>
+  }
+
+const Online = props => {return (
+  <div>
+  <ul>
+  {this.props.userList.map((onlineUser,i)=>this.createOnlineList(onlineUser,i))}
+  </ul>
+  </div>
+)
+}
+
 const About = () => <h1>About ONACCI</h1>
 
 const Links = () => (

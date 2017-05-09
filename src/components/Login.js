@@ -12,7 +12,6 @@ class Login extends React.Component {
      passMessage: "Password"}
     this.handleUserNameChange = this.handleUserNameChange.bind(this)
     this.handlePasswordChange = this.handlePasswordChange.bind(this)
-  //  this.componentWillMount = this.componentWillMount.bind(this)
     this.processLoginForm = this.processLoginForm.bind(this)
 
   }

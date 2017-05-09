@@ -106,8 +106,8 @@ class MyVideo extends React.Component {
         that.setState({remoteVideoSrc})
       }
 
-      this.props.peerConn.ondatachannel = function(event) {
-        let receiveChannel = event.channel;
+      this.props.peerConn.ondatachannel = evt => {
+        let receiveChannel = evt.channel;
         receiveChannel.onmessage = function(event){
           that.setState({chattWindow: event.data})
   }
@@ -205,22 +205,18 @@ endCall() {
 }
 
 sendMessage(e) {
-  if (e.keyCode == 13)
-   {
-     console.log("this is enter")
-     this.state.dataChannel.send(e.data)
-   }
-   else {
-     this.setState({chattWindow: e.data})
-   console.log("this is key= ", e.keyCode)
+  if (e.keyCode == 13) {
+  this.setState({chattWindow:  this.state.currentUser + this.state.chattWindow})
   }
+  this.setState({chattWindow: e.target.value });
+  console.log("chattWindow is: ",this.state.chattWindow);
+   this.state.dataChannel.send(this.state.chattWindow)
 }
 
 // dataChannel = yourConn.createDataChannel("channel1", {reliable:true});
 
 
   createOnlineList(onlineUser,i) {
-    if (onlineUser !== this.state.currentUser)
       return <li key={i} onClick={()=>this.signal(onlineUser)}>{onlineUser}</li>
   }
 
@@ -243,14 +239,14 @@ sendMessage(e) {
     <video className = "lVideo" id="localVideo" src={this.state.localVideoSrc} autoPlay muted poster="/images/onacci.png"></video>
   </div>
   <div className = "cButtons">
-  <input className ="button button1" id="answer" type="button" onClick={this.answerCall.bind(this)} value="Answer"/>
+  <input className ="button button1"  id="answer" type="button" onClick={this.answerCall.bind(this)} value="Answer"/>
   <input  className ="button button2" id="end" type="button" onClick={this.endCall.bind(this)} value="End"/>
 </div>
 <div className = "iWindow">
   <textarea className = "iWindow" id="statusWindow" rows="2" cols="100" value = {this.state.messageWindow}></textarea>
  </div>
  <div className = "cWindow">
-   <textarea className = "cWindow" id="chattWindow" rows="9" cols="100" onKeyUp= {this.sendMessage.bind(this)} value ={this.state.chattWindow}></textarea>
+   <textarea className = "cWindow" id="chattWindow"  autoFocus="autofocus" rows="9" cols="100" onChange= {this.sendMessage.bind(this)} value ={this.state.chattWindow}></textarea>
   </div>
  </div>
  )
