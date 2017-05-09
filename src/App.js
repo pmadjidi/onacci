@@ -4,11 +4,12 @@ import {BrowserRouter as Router,Route,NavLink} from 'react-router-dom'
 import './App.css';
 import Video from './components/Video'
 import Login from './components/Login'
+import Home from './components/Home'
 
 
 let config = {
   //wssHost: 'wss://aka.ite.kth.se:9000/websocket/'
-  wssHost: 'wss://aka.ite.kth.se:9000/websocket/'
+  wssHost: 'wss://localhost:9000/websocket/'
 };
 
 let wsc = new WebSocket(config.wssHost)
@@ -40,26 +41,16 @@ class  LoginWrapper extends React.Component {
   }
 };
 
-
-
-class  Home extends React.Component {
+class  HomeWrapper extends React.Component {
   render() {
     return (
-      <div className = "wrapperHome">
-      <div className = "HomeStatusBar"> StatusBar </div>
-      <div className = "HomeTeam"> team </div>
-      <div className = "HomeOnline">online </div>
-      <div className = "HomeChannels">channels </div>
-      <div className = "HomeWorkBench">workBench </div>
-      <div className = "HomeInput"> Input </div>
-      </div>
-    )
+        <Home ws={wsc} />
+    );
   }
 };
 
 
-
-const myHome = () =>   <div><Links /><h1>Home</h1></div>
+// const myHome = () =>   <div><Links /><h1>Home</h1></div>
 
 
 function  createOnlineList(onlineUser,i) {
@@ -77,20 +68,11 @@ const Online = props => {return (
 
 const About = () => <h1>About ONACCI</h1>
 
-const Links = () => (
-  <nav>
-    <NavLink exact activeClassName="active" to="/">Login</NavLink>
-    <NavLink strict activeClassName="active" to={{pathname: '/about'}}>About</NavLink>
-    <NavLink strict activeClassName="active" to={{pathname: '/Home'}}>Home</NavLink>
-    <NavLink strict activeClassName="active" to={{pathname: '/video'}}>Video</NavLink>
-  </nav>
-)
-
 const App = () => (
 <Router>
   <div>
   <Route default strict path="/" component={LoginWrapper}/>
-  <Route exact path="/home" component={Home} />
+  <Route exact path="/home" component={HomeWrapper} />
   <Route strict path="/about" component={About}/>
   <Route strict path="/video" component={VideoWrapper}/>
   </div>
