@@ -3,6 +3,7 @@ import { Redirect } from 'react-router'
 
 import Links from './Links'
 import Online from './Online'
+import Channels from './Channels'
 
 class  Home extends React.Component {
   constructor (props) {
@@ -38,16 +39,27 @@ class  Home extends React.Component {
     this.props.ws.send(JSON.stringify({type: "online",payload: {}, session: this.state.currentSession}))
   }
 
+  sendChannels() {
+    this.props.ws.send(JSON.stringify({type: "channels",payload: {}, session: this.state.currentSession}))
+  }
+
+
+
+
   messageHandler(event) {
     let that = this
     console.log('Message from server', event);
     let m = JSON.parse(event.data)
     switch(m.type) {
       case "online":
+      console.log("Got Online",m.data);
       that.setState({online: m.data})
       break
       case "whoAmIAns":
       that.setState({currentUser: m.payload.username,currentSession: m.payload.session})
+      break
+      case "channels":
+      that.setState({channels: m.data})
       break
       default:
       console.log("Uknown message type:",m.type)
@@ -60,20 +72,27 @@ class  Home extends React.Component {
   }
 
   onlineAction() {
-    console.log("test")
+    console.log("test Online")
+  }
+
+  channelAction() {
+    console.log("test Channel")
   }
 
   render() {
+    console.log("render online:",this.state.online)
     return (
       <div className = "wrapperHome">
       <div className = "HomeStatusBar"> <Links /> </div>
-      <div className = "HomeTeam"> team </div>
-      <div className = "HomeOnline">
+      <div className = "HomeTeam"> Teams: </div>
+      <div className = "HomeOnline">Online:
         <Online userList = {this.state.online} action={this.onlineAction.bind(this)}/>
      </div>
-      <div className = "HomeChannels">channels </div>
+      <div className = "HomeChannels">Channels:
+        <Channels channelList = {this.state.channels} action={this.channelAction.bind(this)}/>
+       </div>
       <div className = "HomeWorkBench">workBench </div>
-      <div className = "HomeInput"> Input </div>
+      <div className = "HomeInput"> Input: </div>
       </div>
     )
   }

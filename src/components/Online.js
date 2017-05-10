@@ -12,15 +12,16 @@ class Online extends React.Component {
 }
 
 
-createOnlineList(onlineUser,index) {
+createOnline(onlineUser,index) {
       return <li key={index} onClick={()=>this.props.action(onlineUser)}>{onlineUser}</li>
   }
 
 render() {
+  console.log("userList: in online: ",this.props.userList)
   return (
   <div>
   <ul>
-  {this.props.userList.map((onlineUser,index)=>this.createOnlineList(onlineUser,index))}
+  {this.props.userList.map((onlineUser,index)=>this.createOnline(onlineUser,index))}
   </ul>
   </div>
 )

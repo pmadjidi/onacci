@@ -8,16 +8,18 @@ class Login extends React.Component {
     this.state = {
       username: "",
       password: "",
-       auth: "",
-     passMessage: "Password"}
+      team: "",
+     passMessage: "Password",
+     teamMessage: "Team"}
     this.handleUserNameChange = this.handleUserNameChange.bind(this)
     this.handlePasswordChange = this.handlePasswordChange.bind(this)
+    this.handleTeamChange = this.handleTeamChange.bind(this)
     this.processLoginForm = this.processLoginForm.bind(this)
 
   }
 
   getInitialState() {
-  return {username: "",password: "", auth: false, passMessage: "Password"};
+  return {username: "",password: "",team: "", auth: false, passMessage: "Password"};
 }
 
 
@@ -46,13 +48,6 @@ class Login extends React.Component {
         console.log("Setting auth user and session key to:", m.user,m.session)
         localStorage.setItem(m.session,m.user)
     }
-    /*
-    else {
-      console.log("AUTH Error....")
-      localStorage.setItem("currentUser","ERROR")
-      localStorage.setItem("currentSession","ERROR")
-    }
-    */
     }
 )}
 
@@ -63,17 +58,24 @@ componentWillUnmount() {
 
     processLoginForm(){
       console.log("Socket state: ",this.props.ws.readyState)
-      this.props.ws.send(JSON.stringify({type: "login",payload: this.state}))
+      this.props.ws.send(JSON.stringify({type: "login",payload: {team: this.state.team,username: this.state.username,password: this.state.password}}))
     }
 
     handleUserNameChange(e) {
       console.log(e.target.value)
    this.setState({username: e.target.value});
 }
+
 handlePasswordChange(e) {
     console.log(e.target.value)
    this.setState({password: e.target.value});
 }
+
+handleTeamChange(e) {
+    console.log(e.target.value)
+   this.setState({team: e.target.value});
+}
+
 
 
 render() {
@@ -92,13 +94,17 @@ render() {
   </div>
 
   <div className="container">
+
+    <label><b>{this.state.teamMessage}</b></label>
+      <input type="text" placeholder="Enter Team"  value={this.state.team} required onChange={this.handleTeamChange} />
+
     <label><b>Username</b></label>
     <input type="text" placeholder="Enter Username"   value={this.state.name} required onChange={this.handleUserNameChange} />
 
     <label><b>{this.state.passMessage}</b></label>
     <input type="password" placeholder="Enter Password"  value={this.state.name} required onChange={this.handlePasswordChange} />
 
-    <button  type='button' onClick={this.processLoginForm}>Login</button>
+      <button  type='button' onClick={this.processLoginForm}>Login</button>
     <input type="checkbox" checked={this.props.checked} /> Remember me
   </div>
 
