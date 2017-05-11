@@ -152,13 +152,13 @@ class  Home extends React.Component {
         this.updateWorkBench()
     }
     else {
-      if (this.state.usersContent[message.targetUser])
-      this.state.usersContent[message.targetUser].push(message)
+      if (this.state.usersContent[message.sourceUser])
+      this.state.usersContent[message.sourceUser].push(message)
       else {
-        this.state.usersContent[message.targetUser] = new Array()
-        this.state.usersContent[message.targetUser].push(message)
+        this.state.usersContent[message.sourceUser] = new Array()
+        this.state.usersContent[message.sourceUser].push(message)
     }
-    if (this.state.selected.type === "user" && this.state.selected.name === message.targetUser)
+    if (this.state.selected.type === "user" && this.state.selected.name === message.sourceUser)
       this.updateWorkBench()
       }
       console.log("DEBUG",this.state)
@@ -186,6 +186,7 @@ class  Home extends React.Component {
   //  console.log("render Home:",this.state)
     return (
       <div className = "wrapperHome">
+      <div> {"Logged In: " + this.state.currentUser} </div>
       <div className = "HomeStatusBar"> <Links /> </div>
       <div className = "HomeTeam"> Teams: </div>
       <div className = "HomeOnline">Online:
