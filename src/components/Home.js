@@ -114,13 +114,14 @@ class  Home extends React.Component {
   }
 
   onlineAction(aUser) {
-    this.setState({selected: {type: "user",name: aUser}})
+
+    this.setState({selected: {type: "user",name: aUser},workBenchContent: ""})
     console.log("test Online selected: ",this.state.selected)
     this.updateWorkBench()
   }
 
   channelAction(aChannel) {
-    this.setState({selected: {type: "channel",name: aChannel}})
+    this.setState({selected: {type: "channel",name: aChannel},workBenchContent: ""})
     console.log("test Channel selected: ",this.state.selected)
     this.updateWorkBench()
   }
