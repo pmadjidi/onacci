@@ -17,7 +17,8 @@ class  Home extends React.Component {
       currentSession: null,
       selected: {type: "channel",name: "General"},
       input: "",
-      messages: {},
+      usersContent: {},
+      channelsContent: {},
       workBenchContent: ""
     }
   }
@@ -100,7 +101,7 @@ class  Home extends React.Component {
       that.setState({channels: m.data})
       break
       case "message":
-      that.processRecievedMessage(m.data)
+      that.processRecievedMessage(m.payload)
       break
       default:
       console.log("Uknown message type:",m.type)
@@ -115,11 +116,13 @@ class  Home extends React.Component {
   onlineAction(aUser) {
     this.setState({selected: {type: "user",name: aUser}})
     console.log("test Online selected: ",this.state.selected)
+    this.updateWorkBench()
   }
 
   channelAction(aChannel) {
     this.setState({selected: {type: "channel",name: aChannel}})
     console.log("test Channel selected: ",this.state.selected)
+    this.updateWorkBench()
   }
 
   processInput(e) {
@@ -135,11 +138,51 @@ class  Home extends React.Component {
   }
 
   processRecievedMessage(message){
-    console.log(message)
+    console.log("Recived Message",message)
+    let type = message.messageT
+      if (type === "channel") {
+        if (this.state.channelsContent[message.targetChannel])
+          this.state.channelsContent[message.targetChannel].push(message)
+        else {
+            this.state.channelsContent[message.targetChannel] = new Array()
+            this.state.channelsContent[message.targetChannel].push(message)
+      }
+      if (this.state.selected.type === "channel" && this.state.selected.name === message.targetChannel)
+        this.updateWorkBench()
+    }
+    else {
+      if (this.state.usersContent[message.targetUser])
+      this.state.usersContent[message.targetUser].push(message)
+      else {
+        this.state.usersContent[message.targetUser] = new Array()
+        this.state.usersContent[message.targetUser].push(message)
+    }
+    if (this.state.selected.type === "user" && this.state.selected.name === message.targetUser)
+      this.updateWorkBench()
+      }
+      console.log("DEBUG",this.state)
+  }
+
+  updateWorkBench() {
+    console.log("Updating workbench......");
+    let type =  this.state.selected.type
+    let workArray
+    let messages = ""
+    this.setState({workBenchContent: ""})
+
+    if ( type === "channel")
+      workArray = this.state.channelsContent[this.state.selected.name]
+    else {
+        workArray = this.state.usersContent[this.state.selected.name]
+    }
+    if (workArray) {
+         workArray.forEach(message=> messages = messages + message.sourceUser + ": " + message.content + "\n")
+        this.setState({workBenchContent: messages})
+    }
   }
 
   render() {
-    console.log("render Home:",this.state)
+  //  console.log("render Home:",this.state)
     return (
       <div className = "wrapperHome">
       <div className = "HomeStatusBar"> <Links /> </div>
