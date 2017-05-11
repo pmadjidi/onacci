@@ -12,10 +12,13 @@ class  Home extends React.Component {
       team: [],
       online: [],
       channels: [],
-      inputText: "",
-      targetUser: null,
+      currentTeam: "",
       currentUser: null,
-      currentSession: null
+      currentSession: null,
+      selected: {type: "channel",name: "General"},
+      input: "",
+      messages: {},
+      workBenchContent: ""
     }
   }
 
@@ -29,6 +32,7 @@ class  Home extends React.Component {
     console.log(this.props.ws)
     this.sendWhoAmI()
     this.sendOnline()
+    this.sendChannels()
   }
 
   sendWhoAmI() {
@@ -43,7 +47,42 @@ class  Home extends React.Component {
     this.props.ws.send(JSON.stringify({type: "channels",payload: {}, session: this.state.currentSession}))
   }
 
+  sendMessageUser() {
+      let messageT = "P2P"
+      let sourceUser = this.state.currentUser
+      let targetUser = this.state.selected.name
+      let content = this.state.input
+      let payload = {messageT,sourceUser,targetUser,content}
+      this.sendMessage(payload)
+  }
 
+
+  sendMessageChannel() {
+    let messageT = "channel"
+    let sourceUser = this.state.currentUser
+    let targetChannel = this.state.selected.name
+    let content = this.state.input
+    let payload = {messageT,sourceUser,targetChannel,content}
+    this.sendMessage(payload)
+  }
+
+  handelInput() {
+    console.log("in handle input");
+    if (this.state.selected.type === "user"){
+      this.sendMessageUser()
+    }
+    else {
+      this.sendMessageChannel()
+    }
+  }
+
+
+    sendMessage(payload){
+      let type = "message"
+      let session =  this.state.currentSession
+      console.log("sending message",payload);
+      this.props.ws.send(JSON.stringify({type,payload}))
+    }
 
 
   messageHandler(event) {
@@ -52,14 +91,16 @@ class  Home extends React.Component {
     let m = JSON.parse(event.data)
     switch(m.type) {
       case "online":
-      console.log("Got Online",m.data);
       that.setState({online: m.data})
       break
       case "whoAmIAns":
-      that.setState({currentUser: m.payload.username,currentSession: m.payload.session})
+      that.setState({currentUser: m.payload.username,currentSession: m.payload.session,currentTeam: m.payload.team})
       break
       case "channels":
       that.setState({channels: m.data})
+      break
+      case "message":
+      that.processRecievedMessage(m.data)
       break
       default:
       console.log("Uknown message type:",m.type)
@@ -71,16 +112,34 @@ class  Home extends React.Component {
       this.props.ws.removeEventListener('message',this.messageHandler)
   }
 
-  onlineAction() {
-    console.log("test Online")
+  onlineAction(aUser) {
+    this.setState({selected: {type: "user",name: aUser}})
+    console.log("test Online selected: ",this.state.selected)
   }
 
-  channelAction() {
-    console.log("test Channel")
+  channelAction(aChannel) {
+    this.setState({selected: {type: "channel",name: aChannel}})
+    console.log("test Channel selected: ",this.state.selected)
+  }
+
+  processInput(e) {
+      this.setState({input: e.target.value });
+  }
+
+  checkforEnter(e) {
+    if(e.key == 'Enter'){
+    this.handelInput()
+    this.setState({workBenchContent: this.state.workBenchContent + "\n" + this.state.input})
+    this.setState({input: ""})
+  }
+  }
+
+  processRecievedMessage(message){
+    console.log(message)
   }
 
   render() {
-    console.log("render online:",this.state.online)
+    console.log("render Home:",this.state)
     return (
       <div className = "wrapperHome">
       <div className = "HomeStatusBar"> <Links /> </div>
@@ -91,8 +150,12 @@ class  Home extends React.Component {
       <div className = "HomeChannels">Channels:
         <Channels channelList = {this.state.channels} action={this.channelAction.bind(this)}/>
        </div>
-      <div className = "HomeWorkBench">workBench </div>
-      <div className = "HomeInput"> Input: </div>
+      <div className = "HomeWorkBench">workBench: {this.state.selected.name}
+      <div> {this.state.workBenchContent} </div>
+      </div>
+      <div className = "HomeInput">
+        <input type="text" placeholder={"message To: " + this.state.selected.name}  value={this.state.input} onKeyPress={this.checkforEnter.bind(this)} onChange={this.processInput.bind(this)} />
+       </div>
       </div>
     )
   }
