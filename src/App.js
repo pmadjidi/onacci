@@ -9,7 +9,7 @@ import Home from './components/Home'
 
 let config = {
   //wssHost: 'wss://aka.ite.kth.se:9000/websocket/'
-  wssHost: 'wss://localhost:9000/websocket/'
+  wssHost: 'wss://aka.ite.kth.se:9000/websocket/'
 };
 
 let wsc = new WebSocket(config.wssHost)

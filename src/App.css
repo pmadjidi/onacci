@@ -89,23 +89,18 @@ a.active {
 }
 
 
-.HomeCard {
-    /* Add shadows to create the "card" effect */
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-    transition: 0.3s;
-    height: avialable;
-    width: avilable;
+.w3-panel{
+  padding:0.01em 16px;
+  margin-top:16px;
+  margin-bottom:16px
 }
 
-/* On mouse-over, add a deeper shadow */
-.HomeCard:hover {
-    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
-}
-
-/* Add some padding inside the card container */
-.HomeCardContainer {
-    padding: 2px 5px;
-}
+.w3-left{float:left!important}.w3-right{float:right!important}
+.w3-circle{border-radius:50%}
+.w3-margin{margin:16px!important}.w3-margin-top{margin-top:16px!important}.w3-margin-bottom{margin-bottom:16px!important}
+.w3-margin-left{margin-left:16px!important}.w3-margin-right{margin-right:16px!important}
+.w3-card-4,.w3-hover-shadow:hover{width: 60%; box-shadow:0 4px 10px 0 rgba(0,0,0,0.2),0 4px 20px 0 rgba(0,0,0,0.19)}
+.w3-img {width:30px; height: 30px}
 
 
 .wrapper {
