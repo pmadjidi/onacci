@@ -4,6 +4,7 @@ import { Redirect } from 'react-router'
 import Links from './Links'
 import Online from './Online'
 import Channels from './Channels'
+import Cards from './Cards'
 
 class  Home extends React.Component {
   constructor (props) {
@@ -15,11 +16,10 @@ class  Home extends React.Component {
       currentTeam: "",
       currentUser: null,
       currentSession: null,
-      selected: {type: "channel",name: "General"},
+      selected: {type: "",name: "",contentArray: []},
       input: "",
       usersContent: {},
-      channelsContent: {},
-      workBenchContent: ""
+      channelsContent: {}
     }
   }
 
@@ -53,7 +53,9 @@ class  Home extends React.Component {
       let sourceUser = this.state.currentUser
       let targetUser = this.state.selected.name
       let content = this.state.input
+      let time = new Date().getTime()
       let payload = {messageT,sourceUser,targetUser,content}
+      this.setState({selected: {type: "user",name: targetUser,contentArray: this.state.selected.contentArray.push(payload)}})
       this.sendMessage(payload)
   }
 
@@ -114,16 +116,19 @@ class  Home extends React.Component {
   }
 
   onlineAction(aUser) {
-
-    this.setState({selected: {type: "user",name: aUser},workBenchContent: ""})
+    let contentArray = this.state.usersContent[aUser]
+    if (!contentArray)
+      contentArray = []
+    this.setState({selected: {type: "user",name: aUser,contentArray: contentArray}})
     console.log("test Online selected: ",this.state.selected)
-    this.updateWorkBench()
   }
 
   channelAction(aChannel) {
-    this.setState({selected: {type: "channel",name: aChannel},workBenchContent: ""})
+    let contentArray = this.state.channelsContent[aChannel]
+    if (!contentArray)
+      contentArray = []
+    this.setState({selected: {type: "channel",name: aChannel,contentArray: contentArray}})
     console.log("test Channel selected: ",this.state.selected)
-    this.updateWorkBench()
   }
 
   processInput(e) {
@@ -133,13 +138,13 @@ class  Home extends React.Component {
   checkforEnter(e) {
     if(e.key == 'Enter'){
     this.handelInput()
-    this.setState({workBenchContent: this.state.workBenchContent + "\n" + this.state.input})
     this.setState({input: ""})
   }
   }
 
   processRecievedMessage(message){
     console.log("Recived Message",message)
+    let channelsContent
     let type = message.messageT
       if (type === "channel") {
         if (this.state.channelsContent[message.targetChannel])
@@ -148,9 +153,11 @@ class  Home extends React.Component {
             this.state.channelsContent[message.targetChannel] = new Array()
             this.state.channelsContent[message.targetChannel].push(message)
       }
-      if (this.state.selected.type === "channel" && this.state.selected.name === message.targetChannel)
-        this.updateWorkBench()
+      if (this.state.selected.type === "channel" && this.state.selected.name === message.targetChannel) {
+        let selected = {type: "channel",name: this.state.selected.name, contentArray: this.state.channelsContent[message.targetChannel]}
+        this.setState({selected})
     }
+  }
     else {
       if (this.state.usersContent[message.sourceUser])
       this.state.usersContent[message.sourceUser].push(message)
@@ -158,36 +165,24 @@ class  Home extends React.Component {
         this.state.usersContent[message.sourceUser] = new Array()
         this.state.usersContent[message.sourceUser].push(message)
     }
-    if (this.state.selected.type === "user" && this.state.selected.name === message.sourceUser)
-      this.updateWorkBench()
+    if (this.state.selected.type === "user" && this.state.selected.name === message.sourceUser) {
+    let selected = {type: "user",name: this.state.selected.name, contentArray: this.state.usersContent[message.sourceUser]}
+    this.setState({selected})
+  }
       }
       console.log("DEBUG",this.state)
   }
 
-  updateWorkBench() {
-    console.log("Updating workbench......");
-    let type =  this.state.selected.type
-    let workArray
-    let messages = ""
-    this.setState({workBenchContent: ""})
 
-    if ( type === "channel")
-      workArray = this.state.channelsContent[this.state.selected.name]
-    else {
-        workArray = this.state.usersContent[this.state.selected.name]
-    }
-    if (workArray) {
-         workArray.forEach(message=> messages = messages + message.sourceUser + ": " + message.content + "\n")
-        this.setState({workBenchContent: messages})
-    }
-  }
 
   render() {
   //  console.log("render Home:",this.state)
     return (
       <div className = "wrapperHome">
-      <div> {"Logged In: " + this.state.currentUser} </div>
-      <div className = "HomeStatusBar"> <Links /> </div>
+      <div className = "HomeStatusBar">
+      <div> <h5>{"Logged In: " + this.state.currentUser} </h5></div>
+        <Links />
+       </div>
       <div className = "HomeTeam"> Teams: </div>
       <div className = "HomeOnline">Online:
         <Online userList = {this.state.online} action={this.onlineAction.bind(this)}/>
@@ -196,7 +191,7 @@ class  Home extends React.Component {
         <Channels channelList = {this.state.channels} action={this.channelAction.bind(this)}/>
        </div>
       <div className = "HomeWorkBench">workBench: {this.state.selected.name}
-      <div> {this.state.workBenchContent} </div>
+      <Cards messages = {this.state.selected.contentArray} ></Cards>
       </div>
       <div className = "HomeInput">
         <input type="text" placeholder={"message To: " + this.state.selected.name}  value={this.state.input} onKeyPress={this.checkforEnter.bind(this)} onChange={this.processInput.bind(this)} />
