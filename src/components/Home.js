@@ -55,7 +55,7 @@ class  Home extends React.Component {
       let content = this.state.input
       let time = new Date().getTime()
       let payload = {messageT,sourceUser,targetUser,content}
-      this.setState({selected: {type: "user",name: targetUser,contentArray: this.state.selected.contentArray.push(payload)}})
+      //this.setState({selected: {type: "user",name: targetUser,contentArray: this.state.selected.contentArray.push(payload)}})
       this.sendMessage(payload)
   }
 
@@ -159,14 +159,22 @@ class  Home extends React.Component {
     }
   }
     else {
-      if (this.state.usersContent[message.sourceUser])
-      this.state.usersContent[message.sourceUser].push(message)
+      let sourceUser = message.sourceUser
+      let targetUser = message.targetUser
+      let user = null
+      if (sourceUser === this.state.currentUser)
+        user = targetUser
       else {
-        this.state.usersContent[message.sourceUser] = new Array()
-        this.state.usersContent[message.sourceUser].push(message)
+        user = sourceUser
+      }
+      if (this.state.usersContent[user])
+      this.state.usersContent[user].push(message)
+      else {
+        this.state.usersContent[user] = new Array()
+        this.state.usersContent[user].push(message)
     }
-    if (this.state.selected.type === "user" && this.state.selected.name === message.sourceUser) {
-    let selected = {type: "user",name: this.state.selected.name, contentArray: this.state.usersContent[message.sourceUser]}
+    if (this.state.selected.type === "user" && this.state.selected.name === user) {
+    let selected = {type: "user",name: user, contentArray: this.state.usersContent[user]}
     this.setState({selected})
   }
       }
@@ -180,7 +188,7 @@ class  Home extends React.Component {
     return (
       <div className = "wrapperHome">
       <div className = "HomeStatusBar">
-      <div> <h5>{"Logged In: " + this.state.currentUser} </h5></div>
+      <div className= "HomeCurrentUser"> <h5>{"Logged In: " + this.state.currentUser} </h5></div>
         <Links />
        </div>
       <div className = "HomeTeam"> Teams: </div>

@@ -9,6 +9,7 @@ const Links = () => (
     <NavLink strict activeClassName="active" to={{pathname: '/about'}}>About</NavLink>
     <NavLink strict activeClassName="active" to={{pathname: '/Home'}}>Home</NavLink>
     <NavLink strict activeClassName="active" to={{pathname: '/video'}}>Video</NavLink>
+    <NavLink strict activeClassName="active" to={{pathname: '/settings'}}>Settings</NavLink>
   </nav>
 )
 

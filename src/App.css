@@ -1,3 +1,8 @@
+
+body {
+  font-family: Fertigo;
+}
+
 a {
   margin: 10px;
 }
@@ -33,10 +38,12 @@ a.active {
 .wrapperHome {
   margin: 5%;
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(10, 1fr);
   grid-gap: 1px;
   grid-auto-rows: minmax(70px, auto);
+  height: 700px;
 }
+
 
 .HomeCardImage {
   width: 30px;
@@ -46,7 +53,7 @@ a.active {
 .HomeStatusBar {
   border-radius: 5px;
   grid-row: 1 ;
-  grid-column: 1/6;
+  grid-column: 1/10;
   border-style: ridge;
 }
 
@@ -76,18 +83,47 @@ a.active {
 .HomeWorkBench {
   border-radius: 5px;
   grid-row: 2 / 9;
-  grid-column: 3/6;
+  grid-column: 3/10;
   border-style: ridge;
+  overflow: auto;
 }
 
 
 .HomeInput {
   border-radius: 5px;
   grid-row: 9 / 10;
-  grid-column: 3/6;
+  grid-column: 3/10;
   border-style: ridge;
 }
 
+
+.HomeCurrentUser {
+padding: 12px;
+}
+
+.wrapperSettings {
+  margin: 5%;
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-gap: 1px;
+  grid-auto-rows: minmax(70px, auto);
+  height: 700px;
+}
+
+
+.settings {
+  border-radius: 5px;
+  grid-row: 1 / 10;
+  grid-column: 1;
+  border-style: ridge;
+}
+
+
+.drop_zoneSettings {
+  border: 5px solid blue;
+  width:  200px;
+  height: 100px;
+}
 
 .w3-panel{
   padding:0.01em 16px;

@@ -5,6 +5,7 @@ import './App.css';
 import Video from './components/Video'
 import Login from './components/Login'
 import Home from './components/Home'
+import Settings from './components/Settings'
 
 
 let config = {
@@ -75,6 +76,7 @@ const App = () => (
   <Route exact path="/home" component={HomeWrapper} />
   <Route strict path="/about" component={About}/>
   <Route strict path="/video" component={VideoWrapper}/>
+  <Route strict path="/settings" component={Settings}/>
   </div>
 </Router>
 
