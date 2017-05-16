@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router'
-
+import  ReactDOM  from 'react-dom'
 import Links from './Links'
 import Online from './Online'
 import Channels from './Channels'
 import Cards from './Cards'
+
+
 
 class  Home extends React.Component {
   constructor (props) {
@@ -181,9 +182,20 @@ class  Home extends React.Component {
       console.log("DEBUG",this.state)
   }
 
+  scrollToBottom() {
+  const scrollHeight = this.messageList.scrollHeight;
+  const height = this.messageList.clientHeight;
+  const maxScrollTop = scrollHeight - height;
+  this.messageList.scrollTop = maxScrollTop > 0 ? maxScrollTop : 0;
+}
 
+componentDidUpdate() {
+  this.scrollToBottom();
+}
 
   render() {
+    if (this.state.currentUser === null)
+      return null
   //  console.log("render Home:",this.state)
     return (
       <div className = "wrapperHome">
@@ -197,8 +209,11 @@ class  Home extends React.Component {
      </div>
       <div className = "HomeChannels">Channels:
         <Channels channelList = {this.state.channels} action={this.channelAction.bind(this)}/>
+        <div style={ {float:"left", clear: "both"} }
+                ref={(el) => { this.messagesEnd = el; }}></div>
        </div>
-      <div className = "HomeWorkBench">workBench: {this.state.selected.name}
+      <div className = "HomeWorkBench"  ref={(div) => {this.messageList = div}}>
+      workBench: {this.state.selected.name}
       <Cards messages = {this.state.selected.contentArray} ></Cards>
       </div>
       <div className = "HomeInput">
