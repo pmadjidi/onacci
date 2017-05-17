@@ -111,6 +111,12 @@ padding: 12px;
   height: 700px;
 }
 
+.channelList {
+    list-style-type: none;
+    margin: 10px;
+    padding: 10px;
+}
+
 
 .settings {
   border-radius: 5px;
@@ -127,9 +133,14 @@ padding: 12px;
 }
 
 .w3-panel{
-  padding:0.01em 16px;
+  margin-left: 32px;
+  padding:0.01em 32px;
   margin-top:16px;
   margin-bottom:16px
+}
+
+.typing {
+padding: 12px;
 }
 
 .w3-left{float:left!important}.w3-right{float:right!important}

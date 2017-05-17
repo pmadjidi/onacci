@@ -14,13 +14,13 @@ class Channels extends React.Component {
 
 
 createChannel(channel,index) {
-      return <li key={index} onClick={()=>this.props.action(channel)}>{channel}</li>
+      return <li key={index} onClick={()=>this.props.action(channel)}># {" " + channel}</li>
   }
 
 render() {
   return (
   <div>
-  <ul>
+  <ul className= "channelList">
   {this.props.channelList.map((channel,index)=>this.createChannel(channel,index))}
   </ul>
   </div>

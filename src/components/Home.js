@@ -6,6 +6,15 @@ import Channels from './Channels'
 import Cards from './Cards'
 
 
+class Typing  extends React.Component{
+    render() {
+        if (this.props.name === null)
+          return <div className="typing">...</div>
+        return (
+            <div className = "typing">Typing: {this.props.name} ....</div>
+        )
+    }
+}
 
 class  Home extends React.Component {
   constructor (props) {
@@ -20,7 +29,8 @@ class  Home extends React.Component {
       selected: {type: "",name: "",contentArray: []},
       input: "",
       usersContent: {},
-      channelsContent: {}
+      channelsContent: {},
+      typing: null
     }
   }
 
@@ -53,25 +63,56 @@ class  Home extends React.Component {
   }
 
   sendMessageUser() {
-      let messageT = "P2P"
+      let type = "P2P"
       let sourceUser = this.state.currentUser
       let targetUser = this.state.selected.name
       let content = this.state.input
       let time = new Date().getTime()
-      let payload = {messageT,sourceUser,targetUser,content}
+      let payload = {type: "message", payload: {type,sourceUser,targetUser,content}}
       //this.setState({selected: {type: "user",name: targetUser,contentArray: this.state.selected.contentArray.push(payload)}})
       this.sendMessage(payload)
   }
 
+  sendTypingUser() {
+      let type = "typingUser"
+      let sourceUser = this.state.currentUser
+      let targetUser = this.state.selected.name
+      let time = new Date().getTime()
+      let payload = {type: "message", payload: {type,sourceUser,targetUser}}
+      //this.setState({selected: {type: "user",name: targetUser,contentArray: this.state.selected.contentArray.push(payload)}})
+      this.sendMessage(payload)
+  }
+
+  sendTypingChannel() {
+      let type = "typingChannel"
+      let sourceUser = this.state.currentUser
+      let targetChannel = this.state.selected.name
+      let time = new Date().getTime()
+      let payload = {type: "message", payload: {type,sourceUser,targetChannel}}
+      //this.setState({selected: {type: "user",name: targetUser,contentArray: this.state.selected.contentArray.push(payload)}})
+      this.sendMessage(payload)
+  }
+
+sendTyping() {
+  if (this.state.selected.type === "channel")
+    this.sendTypingChannel()
+  else {
+    this.sendTypingUser()
+  }
+}
+
+
 
   sendMessageChannel() {
-    let messageT = "channel"
+    let type = "channel"
     let sourceUser = this.state.currentUser
     let targetChannel = this.state.selected.name
     let content = this.state.input
-    let payload = {messageT,sourceUser,targetChannel,content}
+    let payload = {type: "message",payload: {type,sourceUser,targetChannel,content}}
     this.sendMessage(payload)
   }
+
+
 
   handelInput() {
     console.log("in handle input");
@@ -85,10 +126,9 @@ class  Home extends React.Component {
 
 
     sendMessage(payload){
-      let type = "message"
-      let session =  this.state.currentSession
+      payload.session = this.state.currentSession
       console.log("sending message",payload);
-      this.props.ws.send(JSON.stringify({type,payload}))
+      this.props.ws.send(JSON.stringify(payload))
     }
 
 
@@ -121,11 +161,12 @@ class  Home extends React.Component {
 
   onlineAction(aUser) {
     let contentArray = this.state.usersContent[aUser]
-    if (!contentArray)
+    if (!contentArray) {
       contentArray = []
-      let payload = {type: "replay",payload: {type: "P2P", userName: aUser}}
+      let payload = {type: "message",payload: {type: "replayP2P", userName: aUser}}
       this.sendMessage(payload)
     this.setState({selected: {type: "user",name: aUser,contentArray: contentArray}})
+  }
     console.log("test Online selected: ",this.state.selected)
   }
 
@@ -134,15 +175,16 @@ class  Home extends React.Component {
     let contentArray = this.state.channelsContent[aChannel]
     if (!contentArray) {
       contentArray = []
-      let payload = {type: "replay",payload: {type: "channel", channelName: aChannel}}
+      let payload = {type: "message",payload: {type: "replayCH", channelName: aChannel}}
       this.sendMessage(payload)
     this.setState({selected: {type: "channel",name: aChannel,contentArray: contentArray}})
-    console.log("test Channel selected: ",this.state.selected)
     }
+    console.log("test Channel selected: ",this.state.selected)
   }
 
   processInput(e) {
       this.setState({input: e.target.value });
+      this.sendTyping()
   }
 
   checkforEnter(e) {
@@ -155,7 +197,7 @@ class  Home extends React.Component {
   processRecievedMessage(message){
     console.log("Recived Message",message)
     let channelsContent
-    let type = message.messageT
+    let type = message.type
       if (type === "channel") {
         if (this.state.channelsContent[message.targetChannel])
           this.state.channelsContent[message.targetChannel].push(message)
@@ -168,7 +210,7 @@ class  Home extends React.Component {
         this.setState({selected})
     }
   }
-    else {
+    else if (type === "P2P") {
       let sourceUser = message.sourceUser
       let targetUser = message.targetUser
       let user = null
@@ -188,7 +230,25 @@ class  Home extends React.Component {
     this.setState({selected})
   }
       }
-      console.log("DEBUG",this.state)
+
+      else if (type === "typingUser") {
+        if (this.state.selected.type === "user" && this.state.selected.name === message.sourceUser)
+        this.setState({typing: message.sourceUser})
+        setTimeout(this.clearType.bind(this), 7000)
+      }
+      else if (type === "typingChannel") {
+        if (this.state.selected.type === "channel" && this.state.selected.name === message.targetChannel)
+        this.setState({typing: message.sourceUser})
+        setTimeout(this.clearType.bind(this), 7000)
+      }
+      else {
+        console.log("Error, unkown type, processRecievedMessage", type);
+        console.log("DEBUG state....",this.state)
+      }
+  }
+
+  clearType() {
+    this.setState({typing: null})
   }
 
   scrollToBottom() {
@@ -199,7 +259,8 @@ class  Home extends React.Component {
 }
 
 componentDidUpdate() {
-  this.scrollToBottom();
+  if (this.state.currentUser !== null)
+    this.scrollToBottom();
 }
 
   render() {
@@ -222,11 +283,12 @@ componentDidUpdate() {
                 ref={(el) => { this.messagesEnd = el; }}></div>
        </div>
       <div className = "HomeWorkBench"  ref={(div) => {this.messageList = div}}>
-      workBench: {this.state.selected.name}
+      <div className = "typing">{this.state.selected.type + " "} {this.state.selected.name}</div>
       <Cards messages = {this.state.selected.contentArray} ></Cards>
       </div>
       <div className = "HomeInput">
         <input type="text" placeholder={"message To: " + this.state.selected.name}  value={this.state.input} onKeyPress={this.checkforEnter.bind(this)} onChange={this.processInput.bind(this)} />
+       <Typing name={this.state.typing} />
        </div>
       </div>
     )
