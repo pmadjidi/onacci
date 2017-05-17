@@ -39,17 +39,17 @@ class  Home extends React.Component {
 
   sendWhoAmI() {
     let payload = {type: "whoAmI",payload: {},session: this.state.currentSession}
-    sendMessage(payload)
+    this.sendMessage(payload)
   }
 
   sendOnline() {
-    payload = {type: "online",payload: {}, session: this.state.currentSession}
-    sendMessage(payload)
+    let payload = {type: "online",payload: {}, session: this.state.currentSession}
+    this.sendMessage(payload)
   }
 
   sendChannels() {
-    payload = {type: "channels",payload: {}, session: this.state.currentSession}
-    sendMessage(payload)
+    let payload = {type: "channels",payload: {}, session: this.state.currentSession}
+    this.sendMessage(payload)
   }
 
   sendMessageUser() {
@@ -123,8 +123,8 @@ class  Home extends React.Component {
     let contentArray = this.state.usersContent[aUser]
     if (!contentArray)
       contentArray = []
-      let payload = {type "replay",payload: {type: "P2P", userName: aUser}}
-      sendMessage(payload)
+      let payload = {type: "replay",payload: {type: "P2P", userName: aUser}}
+      this.sendMessage(payload)
     this.setState({selected: {type: "user",name: aUser,contentArray: contentArray}})
     console.log("test Online selected: ",this.state.selected)
   }
@@ -134,8 +134,8 @@ class  Home extends React.Component {
     let contentArray = this.state.channelsContent[aChannel]
     if (!contentArray) {
       contentArray = []
-      let payload = {type "replay",payload: {type: "channel", channelName: aChannel}}
-      sendMessage(payload)
+      let payload = {type: "replay",payload: {type: "channel", channelName: aChannel}}
+      this.sendMessage(payload)
     this.setState({selected: {type: "channel",name: aChannel,contentArray: contentArray}})
     console.log("test Channel selected: ",this.state.selected)
     }
