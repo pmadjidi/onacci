@@ -38,15 +38,18 @@ class  Home extends React.Component {
   }
 
   sendWhoAmI() {
-    this.props.ws.send(JSON.stringify({type: "whoAmI",payload: {},session: this.state.currentSession}))
+    let payload = {type: "whoAmI",payload: {},session: this.state.currentSession}
+    sendMessage(payload)
   }
 
   sendOnline() {
-    this.props.ws.send(JSON.stringify({type: "online",payload: {}, session: this.state.currentSession}))
+    payload = {type: "online",payload: {}, session: this.state.currentSession}
+    sendMessage(payload)
   }
 
   sendChannels() {
-    this.props.ws.send(JSON.stringify({type: "channels",payload: {}, session: this.state.currentSession}))
+    payload = {type: "channels",payload: {}, session: this.state.currentSession}
+    sendMessage(payload)
   }
 
   sendMessageUser() {
@@ -120,16 +123,22 @@ class  Home extends React.Component {
     let contentArray = this.state.usersContent[aUser]
     if (!contentArray)
       contentArray = []
+      let payload = {type "replay",payload: {type: "P2P", userName: aUser}}
+      sendMessage(payload)
     this.setState({selected: {type: "user",name: aUser,contentArray: contentArray}})
     console.log("test Online selected: ",this.state.selected)
   }
 
   channelAction(aChannel) {
+
     let contentArray = this.state.channelsContent[aChannel]
-    if (!contentArray)
+    if (!contentArray) {
       contentArray = []
+      let payload = {type "replay",payload: {type: "channel", channelName: aChannel}}
+      sendMessage(payload)
     this.setState({selected: {type: "channel",name: aChannel,contentArray: contentArray}})
     console.log("test Channel selected: ",this.state.selected)
+    }
   }
 
   processInput(e) {
