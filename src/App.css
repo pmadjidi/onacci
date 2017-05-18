@@ -87,6 +87,7 @@ a.active {
   grid-column: 3/10;
   border-style: ridge;
   overflow: auto;
+  color: blue;
 }
 
 
@@ -115,8 +116,34 @@ padding: 12px;
     list-style-type: none;
     margin: 10px;
     padding: 10px;
+
 }
 
+.teamList {
+    list-style-type: none;
+    margin: 10px;
+    padding: 10px;
+
+}
+
+.onlineList {
+    list-style-type: none;
+    margin: 10px;
+    padding: 10px;
+
+}
+
+.channelHash {
+color: blue;
+font-weight: bold;
+font-size: 120%;
+}
+
+.teamStar {
+color: blue;
+font-weight: bold;
+font-size: 120%;
+}
 
 .settings {
   border-radius: 5px;

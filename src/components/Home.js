@@ -4,6 +4,7 @@ import Links from './Links'
 import Online from './Online'
 import Channels from './Channels'
 import Cards from './Cards'
+import Teams from './Teams'
 
 
 class Typing  extends React.Component{
@@ -141,6 +142,7 @@ sendTyping() {
       that.setState({online: m.data})
       break
       case "whoAmIAns":
+      this.state.team.push(m.payload.team)
       that.setState({currentUser: m.payload.username,currentSession: m.payload.session,currentTeam: m.payload.team})
       break
       case "channels":
@@ -149,8 +151,11 @@ sendTyping() {
       case "message":
       that.processRecievedMessage(m.payload)
       break
+      case "auth":
+      console.log(m);
+      break
       default:
-      console.log("Uknown message type:",m.type)
+      console.log("Uknown message type:",m)
      }
   }
 
@@ -160,24 +165,23 @@ sendTyping() {
   }
 
   onlineAction(aUser) {
-    let contentArray = this.state.usersContent[aUser]
-    if (!contentArray) {
-      contentArray = []
+    let contentArray = this.state.usersContent
+    if (!contentArray[aUser]) {
+      contentArray[aUser] = new Array()
       let payload = {type: "message",payload: {type: "replayP2P", userName: aUser}}
-      this.sendMessage(payload)
-    this.setState({selected: {type: "user",name: aUser,contentArray: contentArray}})
+    this.setState({selected: {type: "user",name: aUser,contentArray: contentArray[aUser]}})
+    this.sendMessage(payload)
   }
     console.log("test Online selected: ",this.state.selected)
   }
 
   channelAction(aChannel) {
-
-    let contentArray = this.state.channelsContent[aChannel]
-    if (!contentArray) {
-      contentArray = []
+    let contentArray = this.state.channelsContent
+    if (!contentArray[aChannel]) {
+      contentArray[aChannel] = new Array()
       let payload = {type: "message",payload: {type: "replayCH", channelName: aChannel}}
-      this.sendMessage(payload)
-    this.setState({selected: {type: "channel",name: aChannel,contentArray: contentArray}})
+     this.setState({selected: {type: "channel",name: aChannel,contentArray: contentArray[aChannel]}})
+     this.sendMessage(payload)
     }
     console.log("test Channel selected: ",this.state.selected)
   }
@@ -273,7 +277,9 @@ componentDidUpdate() {
       <div className= "HomeCurrentUser"> <h5>{"Logged In: " + this.state.currentUser} </h5></div>
         <Links />
        </div>
-      <div className = "HomeTeam"> Teams: </div>
+      <div className = "HomeTeam"> Teams:
+        <Teams teamList = {this.state.team} action = {()=>{console.log("Clicked on team")}} />
+     </div>
       <div className = "HomeOnline">Online:
         <Online userList = {this.state.online} action={this.onlineAction.bind(this)}/>
      </div>

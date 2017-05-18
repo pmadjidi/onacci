@@ -14,7 +14,7 @@ class Channels extends React.Component {
 
 
 createChannel(channel,index) {
-      return <li key={index} onClick={()=>this.props.action(channel)}># {" " + channel}</li>
+      return <li key={index} onClick={()=>this.props.action(channel)}><span className="channelHash">#</span> {" " + channel}</li>
   }
 
 render() {

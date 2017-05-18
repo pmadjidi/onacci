@@ -9,6 +9,7 @@ class Login extends React.Component {
       username: "",
       password: "",
       team: "",
+     userMessage: "User",
      passMessage: "Password",
      teamMessage: "Team"}
     this.handleUserNameChange = this.handleUserNameChange.bind(this)
@@ -58,6 +59,20 @@ componentWillUnmount() {
 
     processLoginForm(){
       console.log("Socket state: ",this.props.ws.readyState)
+      if (this.state.team === "") {
+        this.setState({teamMessage: "Team field can not be EMPTY..."})
+        return
+      }
+      if (this.state.username === "") {
+        this.setState({userMessage: "Username field can not be EMPTY..."})
+        return
+      }
+
+      if (this.state.password === "") {
+        this.setState({passMessage: "Password field can not be EMPTY..."})
+        return
+      }
+
       this.props.ws.send(JSON.stringify({type: "login",payload: {team: this.state.team,username: this.state.username,password: this.state.password}}))
     }
 
@@ -98,7 +113,7 @@ render() {
     <label><b>{this.state.teamMessage}</b></label>
       <input type="text" placeholder="Enter Team"  value={this.state.team} required onChange={this.handleTeamChange} />
 
-    <label><b>Username</b></label>
+    <label><b>{this.state.userMessage}</b></label>
     <input type="text" placeholder="Enter Username"   value={this.state.name} required onChange={this.handleUserNameChange} />
 
     <label><b>{this.state.passMessage}</b></label>
