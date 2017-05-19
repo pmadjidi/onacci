@@ -164,6 +164,7 @@ sendTyping() {
       this.props.ws.removeEventListener('message',this.messageHandler)
   }
 
+/*
   onlineAction(aUser) {
     let contentArray = this.state.usersContent
     if (!contentArray[aUser]) {
@@ -174,16 +175,34 @@ sendTyping() {
   }
     console.log("test Online selected: ",this.state.selected)
   }
+  */
+
+  onlineAction(aUser) {
+    let replay = {type: "message",payload: {type: "replayCH", userName: aUser}}
+    let contentArray = this.state.usersContent[aUser]
+    if (!contentArray) {
+      this.sendMessage(replay)
+      this.setState({selected: {type: "user",name: aUser,contentArray: new Array()}})
+      return
+  }
+
+      this.setState({selected: {type: "user",name: aUser,contentArray: contentArray}})
+      console.log("A User selected...",this.state.selected)
+      return
+    }
 
   channelAction(aChannel) {
-    let contentArray = this.state.channelsContent
-    if (!contentArray[aChannel]) {
-      contentArray[aChannel] = new Array()
-      let payload = {type: "message",payload: {type: "replayCH", channelName: aChannel}}
-     this.setState({selected: {type: "channel",name: aChannel,contentArray: contentArray[aChannel]}})
-     this.sendMessage(payload)
+    let replay = {type: "message",payload: {type: "replayCH", channelName: aChannel}}
+    let contentArray = this.state.channelsContent[aChannel]
+    if (!contentArray) {
+      this.sendMessage(replay)
+      this.setState({selected: {type: "channel",name: aChannel,contentArray: new Array()}})
+      return
     }
-    console.log("test Channel selected: ",this.state.selected)
+
+    this.setState({selected: {type: "channel",name: aChannel,contentArray: contentArray}})
+    console.log("A Channel selected...",this.state.selected)
+    return
   }
 
   processInput(e) {

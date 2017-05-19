@@ -9,6 +9,8 @@ class Login extends React.Component {
       username: "",
       password: "",
       team: "",
+      session: null,
+      checked: false,
      userMessage: "User",
      passMessage: "Password",
      teamMessage: "Team"}
@@ -25,6 +27,7 @@ class Login extends React.Component {
 
 
     componentDidMount() {
+      let session = localStorage.getItem("OnacciSession")
       console.log(this.props.ws)
       console.log(this.state)
     }
@@ -47,10 +50,18 @@ class Login extends React.Component {
       console.log("login sucess....");
         that.setState({auth: true})
         console.log("Setting auth user and session key to:", m.user,m.session)
-        localStorage.setItem(m.session,m.user)
+        if (that.state.checked) {
+        that.storeLogin()
+        }
     }
     }
 )}
+
+storeLogin() {
+  let date = new Date().getTime()
+  let token = JSON.stringify({username: this.state.username,session: this.state.session,team: this.state.team,date: date})
+  localStorage.setItem("OnacciSession",token)
+}
 
 componentWillUnmount() {
   console.log("Login: removeEventListener....");
@@ -91,7 +102,10 @@ handleTeamChange(e) {
    this.setState({team: e.target.value});
 }
 
-
+rememberMe() {
+  this.setState({checked: !this.state.checked})
+  console.log(this.state);
+}
 
 render() {
 
@@ -120,7 +134,7 @@ render() {
     <input type="password" placeholder="Enter Password"  value={this.state.name} required onChange={this.handlePasswordChange} />
 
       <button  type='button' onClick={this.processLoginForm}>Login</button>
-    <input type="checkbox" checked={this.props.checked} /> Remember me
+    <input type="checkbox" checked={this.state.checked} onClick={this.rememberMe.bind(this)}/> Remember me
   </div>
 
   <div className="container" style={{"backgroundColor": "#f1f1f1"}}>

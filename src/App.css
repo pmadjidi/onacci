@@ -51,6 +51,11 @@ a.active {
   height: 30px;
 }
 
+.cardDate {
+  font-size: 50%;
+
+}
+
 .HomeStatusBar {
   border-radius: 5px;
   grid-row: 1 ;
@@ -87,7 +92,6 @@ a.active {
   grid-column: 3/10;
   border-style: ridge;
   overflow: auto;
-  color: blue;
 }
 
 
@@ -174,7 +178,7 @@ padding: 12px;
 .w3-circle{border-radius:50%}
 .w3-margin{margin:16px!important}.w3-margin-top{margin-top:16px!important}.w3-margin-bottom{margin-bottom:16px!important}
 .w3-margin-left{margin-left:16px!important}.w3-margin-right{margin-right:16px!important}
-.w3-card-4,.w3-hover-shadow:hover{width: 60%; box-shadow:0 4px 10px 0 rgba(0,0,0,0.2),0 4px 20px 0 rgba(0,0,0,0.19)}
+.w3-card-4,.w3-hover-shadow:hover{border-radius: 5px;width: 60%; box-shadow:0 4px 10px 0 rgba(0,0,0,0.2),0 4px 20px 0 rgba(0,0,0,0.19)}
 .w3-img {width:30px; height: 30px}
 
 
