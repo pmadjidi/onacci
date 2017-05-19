@@ -37,12 +37,14 @@ a.active {
 
 .wrapperHome {
   margin: 5%;
+  border-radius: 10px;
   display: grid;
-  grid-template-columns: repeat(10, 1fr);
-  grid-gap: 1px;
+  grid-template-columns: repeat(9, 1fr);
+  grid-gap: 7px;
   grid-auto-rows: minmax(70px, auto);
   height: 700px;
   grid-template-rows: 7em 1fr 1fr 4em;
+  border-style: ridge;
 }
 
 
@@ -60,14 +62,16 @@ a.active {
   border-radius: 5px;
   grid-row: 1 ;
   grid-column: 1/10;
-  border-style: ridge;
+  #border-style: ridge;
+  background-color: lightyellow;
 }
 
 .HomeTeam {
   border-radius: 5px;
   grid-row: 2 / 10;
   grid-column: 1;
-  border-style: ridge;
+  #border-style: ridge;
+  background-color: lightgreen;
 }
 
 
@@ -75,7 +79,8 @@ a.active {
   border-radius: 5px;
   grid-row: 2/ 5;
   grid-column: 2/3;
-  border-style: ridge;
+  #border-style: ridge;
+  background-color: lightblue;
 }
 
 
@@ -83,15 +88,17 @@ a.active {
   border-radius: 5px;
   grid-row: 5 / 10;
   grid-column: 2/3;
-  border-style: ridge;
+  #border-style: ridge;
+  background-color: lightgray;
 }
 
 .HomeWorkBench {
   border-radius: 5px;
   grid-row: 2 / 9;
   grid-column: 3/10;
-  border-style: ridge;
+  #border-style: ridge;
   overflow: auto;
+  background-color: black;
 }
 
 
@@ -99,7 +106,8 @@ a.active {
   border-radius: 5px;
   grid-row: 9 / 10;
   grid-column: 3/10;
-  border-style: ridge;
+  #border-style: ridge;
+  background-color: lightcyan;
 }
 
 
@@ -172,13 +180,14 @@ font-size: 120%;
 
 .typing {
 padding: 12px;
+color: lightblue;
 }
 
 .w3-left{float:left!important}.w3-right{float:right!important}
 .w3-circle{border-radius:50%}
 .w3-margin{margin:16px!important}.w3-margin-top{margin-top:16px!important}.w3-margin-bottom{margin-bottom:16px!important}
 .w3-margin-left{margin-left:16px!important}.w3-margin-right{margin-right:16px!important}
-.w3-card-4,.w3-hover-shadow:hover{border-radius: 5px;width: 60%; box-shadow:0 4px 10px 0 rgba(0,0,0,0.2),0 4px 20px 0 rgba(0,0,0,0.19)}
+.w3-card-4,.w3-hover-shadow:hover{background-color: #ccffff;border-radius: 5px;width: 60%; box-shadow:0 4px 10px 0 rgba(0,0,0,0.2),0 4px 20px 0 rgba(0,0,0,0.19)}
 .w3-img {width:30px; height: 30px}
 
 

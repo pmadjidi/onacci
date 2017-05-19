@@ -46,6 +46,7 @@ class  Home extends React.Component {
     this.sendWhoAmI()
     this.sendOnline()
     this.sendChannels()
+    this.channelAction("General")
   }
 
   sendWhoAmI() {
@@ -67,11 +68,12 @@ class  Home extends React.Component {
       let type = "P2P"
       let sourceUser = this.state.currentUser
       let targetUser = this.state.selected.name
-      let content = this.state.input
+      let content = this.CL(this.state.input)
       let time = new Date().getTime()
       let payload = {type: "message", payload: {type,sourceUser,targetUser,content}}
       //this.setState({selected: {type: "user",name: targetUser,contentArray: this.state.selected.contentArray.push(payload)}})
-      this.sendMessage(payload)
+      if (content)
+        this.sendMessage(payload)
   }
 
   sendTypingUser() {
@@ -102,15 +104,24 @@ sendTyping() {
   }
 }
 
+CL(string) {
+    if (string)
+      return string.charAt(0).toUpperCase() + string.slice(1);
+    else {
+        return string
+    }
+}
+
 
 
   sendMessageChannel() {
     let type = "channel"
     let sourceUser = this.state.currentUser
     let targetChannel = this.state.selected.name
-    let content = this.state.input
+    let content = this.CL(this.state.input)
     let payload = {type: "message",payload: {type,sourceUser,targetChannel,content}}
-    this.sendMessage(payload)
+    if (content)
+      this.sendMessage(payload)
   }
 
 
@@ -164,18 +175,6 @@ sendTyping() {
       this.props.ws.removeEventListener('message',this.messageHandler)
   }
 
-/*
-  onlineAction(aUser) {
-    let contentArray = this.state.usersContent
-    if (!contentArray[aUser]) {
-      contentArray[aUser] = new Array()
-      let payload = {type: "message",payload: {type: "replayP2P", userName: aUser}}
-    this.setState({selected: {type: "user",name: aUser,contentArray: contentArray[aUser]}})
-    this.sendMessage(payload)
-  }
-    console.log("test Online selected: ",this.state.selected)
-  }
-  */
 
   onlineAction(aUser) {
     let replay = {type: "message",payload: {type: "replayCH", userName: aUser}}
@@ -293,7 +292,7 @@ componentDidUpdate() {
     return (
       <div className = "wrapperHome">
       <div className = "HomeStatusBar">
-      <div className= "HomeCurrentUser"> <h5>{"Logged In: " + this.state.currentUser} </h5></div>
+      <div className= "HomeCurrentUser"> <h5>{"Logged In: " + this.CL(this.state.currentUser)} </h5></div>
         <Links />
        </div>
       <div className = "HomeTeam"> Teams:
@@ -308,7 +307,7 @@ componentDidUpdate() {
                 ref={(el) => { this.messagesEnd = el; }}></div>
        </div>
       <div className = "HomeWorkBench"  ref={(div) => {this.messageList = div}}>
-      <div className = "typing">{this.state.selected.type + " "} {this.state.selected.name}</div>
+      <div className = "typing">{this.CL(this.state.selected.type) + " "} {this.CL(this.state.selected.name)}</div>
       <Cards messages = {this.state.selected.contentArray} ></Cards>
       </div>
       <div className = "HomeInput">

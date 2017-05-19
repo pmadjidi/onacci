@@ -12,9 +12,12 @@ class Teams extends React.Component {
     }
 }
 
+CL(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
 
 createChannel(team,index) {
-      return <li key={index} onClick={()=>this.props.action(team)}><span className="teamStar">*</span> {" " + team}</li>
+      return <li key={index} onClick={()=>this.props.action(team)}><span className="teamStar">*</span> {" " + this.CL(team)}</li>
   }
 
 render() {

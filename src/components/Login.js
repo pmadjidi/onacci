@@ -27,9 +27,9 @@ class Login extends React.Component {
 
 
     componentDidMount() {
-      let session = localStorage.getItem("OnacciSession")
       console.log(this.props.ws)
       console.log(this.state)
+      setTimeout(this.getLoginFromLocalStorage.bind(this), 2000)
     }
 
     componentWillMount() {
@@ -47,20 +47,30 @@ class Login extends React.Component {
     }
 
     if (m.auth === true  || m.auth === "true"){
-      console.log("login sucess....");
-        that.setState({auth: true})
+      console.log("login sucess....")
         console.log("Setting auth user and session key to:", m.user,m.session)
         if (that.state.checked) {
-        that.storeLogin()
+        that.storeLogin(m.user,m.session,m.team)
         }
+        that.setState({auth: true})
     }
     }
 )}
 
-storeLogin() {
+storeLogin(name,sess,team) {
   let date = new Date().getTime()
-  let token = JSON.stringify({username: this.state.username,session: this.state.session,team: this.state.team,date: date})
+  let token = JSON.stringify({username: name,session: sess,team: team,date: date})
   localStorage.setItem("OnacciSession",token)
+}
+
+getLoginFromLocalStorage() {
+  let userInfo = localStorage.getItem("OnacciSession")
+  console.log(userInfo);
+  let user
+  if (userInfo) {
+    user = JSON.parse(userInfo)
+    this.send({type: "session",payload: {team: user.team,username: user.username,session: user.session}})
+  }
 }
 
 componentWillUnmount() {
@@ -84,12 +94,16 @@ componentWillUnmount() {
         return
       }
 
-      this.props.ws.send(JSON.stringify({type: "login",payload: {team: this.state.team,username: this.state.username,password: this.state.password}}))
+      this.send({type: "login",payload: {team: this.state.team,username: this.state.username,password: this.state.password}})
     }
 
     handleUserNameChange(e) {
       console.log(e.target.value)
    this.setState({username: e.target.value});
+}
+
+send(payload) {
+  this.props.ws.send(JSON.stringify(payload))
 }
 
 handlePasswordChange(e) {

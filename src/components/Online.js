@@ -11,10 +11,21 @@ class Online extends React.Component {
     }
 }
 
+CL(string) {
+    if (string)
+      return string.charAt(0).toUpperCase() + string.slice(1);
+    else {
+        return string
+    }
+}
+
 
 createOnline(onlineUser,index) {
-      return <li key={index} onClick={()=>this.props.action(onlineUser)}>@{onlineUser}</li>
+      if (onlineUser)
+        return <li key={index} onClick={()=>this.props.action(onlineUser)}>@{this.CL(onlineUser)}</li>
   }
+
+
 
 render() {
   console.log("userList: in Online Render(): ",this.props.userList)
