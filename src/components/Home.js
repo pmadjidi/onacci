@@ -144,6 +144,32 @@ CL(string) {
     }
 
 
+
+
+  handleDrop(e) {
+  // prevent browser default behavior on drop
+  e.preventDefault();
+
+  // iterate over the files dragged on to the browser
+  for (var x=0; x < e.dataTransfer.files.length; x++) {
+
+    // instantiate a new FileReader object
+    var fr = new FileReader();
+
+    // loading files from the file system is an asynchronous
+    // operation, run this function when the loading process
+    // is complete
+    fr.addEventListener("loadend",()=> {
+      // send the file over web sockets
+      this.props.ws.send(fr.result);
+    });
+
+    // load the file into an array buffer
+    fr.readAsArrayBuffer(e.dataTransfer.files[x]);
+  }
+}
+
+
   messageHandler(event) {
     let that = this
     console.log('Message from server', event);
@@ -290,7 +316,7 @@ componentDidUpdate() {
       return null
   //  console.log("render Home:",this.state)
     return (
-      <div className = "wrapperHome">
+      <div className = "wrapperHome" onDrop = {this.handleDrop.bind(this)}>
       <div className = "HomeStatusBar">
       <div className= "HomeCurrentUser">
         <div className="HomeInfo">{"Logged In @ " + this.CL(this.state.currentUser)}</div>
@@ -309,7 +335,11 @@ componentDidUpdate() {
         <Online userList = {this.state.online} action={this.onlineAction.bind(this)}/>
      </div>
       <div className = "HomeChannels">
-        <div className="HomeInfo">Channels</div>
+        <div className="HomeInfo">Channels
+          <div>
+          <p><span ClassName = "HomeChannelPlus">+</span></p>
+          </div>
+        </div>
         <Channels channelList = {this.state.channels} action={this.channelAction.bind(this)}/>
         <div style={ {float:"left", clear: "both"} }
                 ref={(el) => { this.messagesEnd = el; }}></div>
