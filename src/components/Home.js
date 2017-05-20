@@ -292,23 +292,34 @@ componentDidUpdate() {
     return (
       <div className = "wrapperHome">
       <div className = "HomeStatusBar">
-      <div className= "HomeCurrentUser"> <h5>{"Logged In: " + this.CL(this.state.currentUser)} </h5></div>
+      <div className= "HomeCurrentUser">
+        <div className="HomeInfo">{"Logged In: " + this.CL(this.state.currentUser)}</div>
+        </div>
         <Links />
        </div>
-      <div className = "HomeTeam"> Teams:
+      <div className = "HomeTeam">
+        <div className="HomeInfo">Teams</div>
         <Teams teamList = {this.state.team} action = {()=>{console.log("Clicked on team")}} />
      </div>
-      <div className = "HomeOnline">Online:
+     <div className = "HomeTools">
+       <div className="HomeInfo">Tools</div>
+    </div>
+      <div className = "HomeOnline">
+        <div className="HomeInfo">Online</div>
         <Online userList = {this.state.online} action={this.onlineAction.bind(this)}/>
      </div>
-      <div className = "HomeChannels">Channels:
+      <div className = "HomeChannels">
+        <div className="HomeInfo">Channels</div>
         <Channels channelList = {this.state.channels} action={this.channelAction.bind(this)}/>
         <div style={ {float:"left", clear: "both"} }
                 ref={(el) => { this.messagesEnd = el; }}></div>
        </div>
       <div className = "HomeWorkBench"  ref={(div) => {this.messageList = div}}>
-      <div className = "typing">{this.CL(this.state.selected.type) + " "} {this.CL(this.state.selected.name)}</div>
+      <div className = "HomeInfo">{this.CL(this.state.selected.type) + " "} {this.CL(this.state.selected.name)}</div>
       <Cards messages = {this.state.selected.contentArray} ></Cards>
+      </div>
+      <div className = "HomeAssets">
+          <div className="HomeInfo">Assets</div>
       </div>
       <div className = "HomeInput">
         <input type="text" placeholder={"message To: " + this.state.selected.name}  value={this.state.input} onKeyPress={this.checkforEnter.bind(this)} onChange={this.processInput.bind(this)} />

@@ -61,19 +61,26 @@ a.active {
 .HomeStatusBar {
   border-radius: 5px;
   grid-row: 1 ;
-  grid-column: 1/10;
+  grid-column: 2/10;
   #border-style: ridge;
-  background-color: lightyellow;
+  background-color: rgb(235,245,245);
 }
 
 .HomeTeam {
   border-radius: 5px;
-  grid-row: 2 / 10;
+  grid-row: 1 / 6;
   grid-column: 1;
   #border-style: ridge;
-  background-color: lightgreen;
+  background-color: rgb(215,245,245);
 }
 
+.HomeTools {
+  border-radius: 5px;
+  grid-row: 6 / 10;
+  grid-column: 1;
+  #border-style: ridge;
+  background-color: rgb(215,245,245);
+}
 
 .HomeOnline {
   border-radius: 5px;
@@ -95,10 +102,19 @@ a.active {
 .HomeWorkBench {
   border-radius: 5px;
   grid-row: 2 / 9;
-  grid-column: 3/10;
+  grid-column: 3/9;
   #border-style: ridge;
   overflow: auto;
-  background-color: black;
+  background-color: rgb(240,240,240);
+}
+
+.HomeAssets {
+  border-radius: 5px;
+  grid-row: 2 / 9;
+  grid-column: 9;
+  #border-style: ridge;
+  overflow: auto;
+  background-color: rgb(248,245,240);
 }
 
 
@@ -178,16 +194,20 @@ font-size: 120%;
   margin-bottom:16px
 }
 
-.typing {
+.HomeInfo {
 padding: 12px;
-color: lightblue;
+color: rgb(150,150,150);
 }
 
 .w3-left{float:left!important}.w3-right{float:right!important}
 .w3-circle{border-radius:50%}
 .w3-margin{margin:16px!important}.w3-margin-top{margin-top:16px!important}.w3-margin-bottom{margin-bottom:16px!important}
 .w3-margin-left{margin-left:16px!important}.w3-margin-right{margin-right:16px!important}
-.w3-card-4,.w3-hover-shadow:hover{background-color: #ccffff;border-radius: 5px;width: 60%; box-shadow:0 4px 10px 0 rgba(0,0,0,0.2),0 4px 20px 0 rgba(0,0,0,0.19)}
+.w3-card-4,.w3-hover-shadow:hover{
+  word-break: break-all;
+  background-color: white;
+  border-radius: 5px;width: 60%;
+  box-shadow:0 4px 10px 0 rgba(0,0,0,0.2),0 4px 20px 0 rgba(0,0,0,0.19)}
 .w3-img {width:30px; height: 30px}
 
 
