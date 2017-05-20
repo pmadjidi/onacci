@@ -102,7 +102,7 @@ a.active {
 .HomeWorkBench {
   border-radius: 5px;
   grid-row: 2 / 9;
-  grid-column: 3/9;
+  grid-column: 3/8;
   #border-style: ridge;
   overflow: auto;
   background-color: rgb(240,240,240);
@@ -111,7 +111,7 @@ a.active {
 .HomeAssets {
   border-radius: 5px;
   grid-row: 2 / 9;
-  grid-column: 9;
+  grid-column: 8/10;
   #border-style: ridge;
   overflow: auto;
   background-color: rgb(248,245,240);
@@ -207,7 +207,8 @@ color: rgb(150,150,150);
   word-break: break-all;
   background-color: white;
   border-radius: 5px;width: 60%;
-  box-shadow:0 4px 10px 0 rgba(0,0,0,0.2),0 4px 20px 0 rgba(0,0,0,0.19)}
+#  box-shadow:0 4px 10px 0 rgba(0,0,0,0.2),0 4px 20px 0 rgba(0,0,0,0.19)
+}
 .w3-img {width:30px; height: 30px}
 
 

@@ -10,9 +10,9 @@ import Teams from './Teams'
 class Typing  extends React.Component{
     render() {
         if (this.props.name === null)
-          return <div className="typing">...</div>
+          return <div className="HomeInfo">.....</div>
         return (
-            <div className = "typing">Typing: {this.props.name} ....</div>
+            <div className = "HomeInfo">Typing: {this.props.name} ...</div>
         )
     }
 }
@@ -293,7 +293,7 @@ componentDidUpdate() {
       <div className = "wrapperHome">
       <div className = "HomeStatusBar">
       <div className= "HomeCurrentUser">
-        <div className="HomeInfo">{"Logged In: " + this.CL(this.state.currentUser)}</div>
+        <div className="HomeInfo">{"Logged In @ " + this.CL(this.state.currentUser)}</div>
         </div>
         <Links />
        </div>
