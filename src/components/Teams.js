@@ -23,6 +23,7 @@ createChannel(team,index) {
 render() {
   return (
   <div>
+  <div className="HomeInfo">Teams</div>
   <ul className= "teamList">
   {this.props.teamList.map((team,index)=>this.createChannel(team,index))}
   </ul>

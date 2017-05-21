@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
-import  ReactDOM  from 'react-dom'
+import Emojify from 'react-emojione';
 import Links from './Links'
 import Online from './Online'
 import Channels from './Channels'
 import Cards from './Cards'
 import Teams from './Teams'
+
+
 
 
 class Typing  extends React.Component{
@@ -42,57 +44,51 @@ class  Home extends React.Component {
   componentDidMount() {
     let that = this
     this.props.ws.addEventListener('message',this.messageHandler.bind(this))
-    console.log(this.props.ws)
+    //console.log(this.props.ws)
     this.sendWhoAmI()
     this.sendOnline()
     this.sendChannels()
-    this.channelAction("General")
+    this.channelAction({name: "General"})
   }
 
   sendWhoAmI() {
-    let payload = {type: "whoAmI",payload: {},session: this.state.currentSession}
+    let payload = {type: "whoAmI",payload: {}}
     this.sendMessage(payload)
   }
 
   sendOnline() {
-    let payload = {type: "online",payload: {}, session: this.state.currentSession}
+    let payload = {type: "online",payload: {}}
     this.sendMessage(payload)
   }
 
   sendChannels() {
-    let payload = {type: "channels",payload: {}, session: this.state.currentSession}
+    let payload = {type: "channels",payload: {}}
     this.sendMessage(payload)
   }
 
   sendMessageUser() {
       let type = "P2P"
-      let sourceUser = this.state.currentUser
       let targetUser = this.state.selected.name
       let content = this.CL(this.state.input)
       let time = new Date().getTime()
-      let payload = {type: "message", payload: {type,sourceUser,targetUser,content}}
-      //this.setState({selected: {type: "user",name: targetUser,contentArray: this.state.selected.contentArray.push(payload)}})
+      let payload = {type: "message", payload: {type,targetUser,content}}
       if (content)
         this.sendMessage(payload)
   }
 
   sendTypingUser() {
       let type = "typingUser"
-      let sourceUser = this.state.currentUser
       let targetUser = this.state.selected.name
       let time = new Date().getTime()
-      let payload = {type: "message", payload: {type,sourceUser,targetUser}}
-      //this.setState({selected: {type: "user",name: targetUser,contentArray: this.state.selected.contentArray.push(payload)}})
+      let payload = {type: "message", payload: {type,targetUser}}
       this.sendMessage(payload)
   }
 
   sendTypingChannel() {
       let type = "typingChannel"
-      let sourceUser = this.state.currentUser
       let targetChannel = this.state.selected.name
       let time = new Date().getTime()
-      let payload = {type: "message", payload: {type,sourceUser,targetChannel}}
-      //this.setState({selected: {type: "user",name: targetUser,contentArray: this.state.selected.contentArray.push(payload)}})
+      let payload = {type: "message", payload: {type,targetChannel}}
       this.sendMessage(payload)
   }
 
@@ -116,10 +112,9 @@ CL(string) {
 
   sendMessageChannel() {
     let type = "channel"
-    let sourceUser = this.state.currentUser
     let targetChannel = this.state.selected.name
     let content = this.CL(this.state.input)
-    let payload = {type: "message",payload: {type,sourceUser,targetChannel,content}}
+    let payload = {type: "message",payload: {type,targetChannel,content}}
     if (content)
       this.sendMessage(payload)
   }
@@ -137,10 +132,12 @@ CL(string) {
   }
 
 
-    sendMessage(payload){
-      payload.session = this.state.currentSession
-      console.log("sending message",payload);
-      this.props.ws.send(JSON.stringify(payload))
+    sendMessage(message){
+      console.log("DDDD",message);
+      message.payload.session = this.state.currentSession
+      message.payload.sourceUser = this.state.currentUser
+      console.log("sending message",message);
+      this.props.ws.send(JSON.stringify(message))
     }
 
 
@@ -185,6 +182,9 @@ CL(string) {
       case "channels":
       that.setState({channels: m.data})
       break
+      case "newChannel":
+      that.setState({channels: this.state.channels.push(m.data)})
+      break
       case "message":
       that.processRecievedMessage(m.payload)
       break
@@ -216,7 +216,8 @@ CL(string) {
       return
     }
 
-  channelAction(aChannel) {
+  channelAction(channel) {
+    let aChannel = channel.name
     let replay = {type: "message",payload: {type: "replayCH", channelName: aChannel}}
     let contentArray = this.state.channelsContent[aChannel]
     if (!contentArray) {
@@ -226,6 +227,7 @@ CL(string) {
     }
 
     this.setState({selected: {type: "channel",name: aChannel,contentArray: contentArray}})
+    this.resetChannelNotification(aChannel)
     console.log("A Channel selected...",this.state.selected)
     return
   }
@@ -242,58 +244,108 @@ CL(string) {
   }
   }
 
+  setChannelNotification(channelName) {
+    let ar = this.state.channels.map(channel=> {
+      if (channel.name === channelName) {
+        channel.notify += 1
+      }
+      return channel
+    })
+    this.setState({channels: ar})
+  }
+
+
+    resetChannelNotification(channelName) {
+      let ar = this.state.channels.map(channel=> {
+        if (channel.name === channelName) {
+          channel.notify = 0
+        }
+        return channel
+      })
+      this.setState({channels: ar})
+    }
+
+
+    setUserNotification(userName) {
+      console.log("implement user notification");
+    }
+
+  processChannelMessage(message) {
+      let channelsContent
+    if (this.state.channelsContent[message.targetChannel])
+      this.state.channelsContent[message.targetChannel].push(message)
+    else {
+        this.state.channelsContent[message.targetChannel] = new Array()
+        this.state.channelsContent[message.targetChannel].push(message)
+  }
+  if (this.state.selected.type === "channel" && this.state.selected.name === message.targetChannel) {
+    let selected = {type: "channel",name: this.state.selected.name, contentArray: this.state.channelsContent[message.targetChannel]}
+    this.setState({selected})
+}
+else {
+  this.setChannelNotification(message.targetChannel)
+}
+
+  }
+
+  processRecivedP2P(message) {
+    let sourceUser = message.sourceUser
+    let targetUser = message.targetUser
+    let user = null
+    if (sourceUser === this.state.currentUser)
+      user = targetUser
+    else {
+      user = sourceUser
+    }
+    if (this.state.usersContent[user])
+    this.state.usersContent[user].push(message)
+    else {
+      this.state.usersContent[user] = new Array()
+      this.state.usersContent[user].push(message)
+  }
+  if (this.state.selected.type === "user" && this.state.selected.name === user) {
+  let selected = {type: "user",name: user, contentArray: this.state.usersContent[user]}
+  this.setState({selected})
+  } else {
+  this.setUserNotification(message.targetUser)
+  }
+}
+
+  processRecivedTypingUser(message) {
+    if (this.state.selected.type === "user" && this.state.selected.name === message.sourceUser)
+    this.setState({typing: message.sourceUser})
+    setTimeout(this.clearType.bind(this), 7000)
+  }
+
+  processRecievedTypingChannel(message) {
+    if (this.state.selected.type === "channel" && this.state.selected.name === message.targetChannel)
+    this.setState({typing: message.sourceUser})
+    setTimeout(this.clearType.bind(this), 7000)
+  }
+
   processRecievedMessage(message){
     console.log("Recived Message",message)
-    let channelsContent
     let type = message.type
-      if (type === "channel") {
-        if (this.state.channelsContent[message.targetChannel])
-          this.state.channelsContent[message.targetChannel].push(message)
-        else {
-            this.state.channelsContent[message.targetChannel] = new Array()
-            this.state.channelsContent[message.targetChannel].push(message)
-      }
-      if (this.state.selected.type === "channel" && this.state.selected.name === message.targetChannel) {
-        let selected = {type: "channel",name: this.state.selected.name, contentArray: this.state.channelsContent[message.targetChannel]}
-        this.setState({selected})
-    }
-  }
-    else if (type === "P2P") {
-      let sourceUser = message.sourceUser
-      let targetUser = message.targetUser
-      let user = null
-      if (sourceUser === this.state.currentUser)
-        user = targetUser
-      else {
-        user = sourceUser
-      }
-      if (this.state.usersContent[user])
-      this.state.usersContent[user].push(message)
-      else {
-        this.state.usersContent[user] = new Array()
-        this.state.usersContent[user].push(message)
-    }
-    if (this.state.selected.type === "user" && this.state.selected.name === user) {
-    let selected = {type: "user",name: user, contentArray: this.state.usersContent[user]}
-    this.setState({selected})
-  }
-      }
 
-      else if (type === "typingUser") {
-        if (this.state.selected.type === "user" && this.state.selected.name === message.sourceUser)
-        this.setState({typing: message.sourceUser})
-        setTimeout(this.clearType.bind(this), 7000)
-      }
-      else if (type === "typingChannel") {
-        if (this.state.selected.type === "channel" && this.state.selected.name === message.targetChannel)
-        this.setState({typing: message.sourceUser})
-        setTimeout(this.clearType.bind(this), 7000)
-      }
-      else {
+      switch(type) {
+        case "channel":
+        this.processChannelMessage(message)
+        break
+        case "P2P":
+        this.processRecivedP2P(message)
+        break
+        case "typingUser":
+        this.processRecivedTypingUser(message)
+        break
+        case "typingChannel":
+        this.processRecievedTypingChannel(message)
+        break
+        default:
         console.log("Error, unkown type, processRecievedMessage", type);
         console.log("DEBUG state....",this.state)
       }
-  }
+    }
+
 
   clearType() {
     this.setState({typing: null})
@@ -324,32 +376,33 @@ componentDidUpdate() {
         <Links />
        </div>
       <div className = "HomeTeam">
-        <div className="HomeInfo">Teams</div>
         <Teams teamList = {this.state.team} action = {()=>{console.log("Clicked on team")}} />
      </div>
      <div className = "HomeTools">
        <div className="HomeInfo">Tools</div>
     </div>
       <div className = "HomeOnline">
-        <div className="HomeInfo">Online</div>
         <Online userList = {this.state.online} action={this.onlineAction.bind(this)}/>
      </div>
       <div className = "HomeChannels">
-        <div className="HomeInfo">Channels
-          <div>
-          <p><span ClassName = "HomeChannelPlus">+</span></p>
-          </div>
-        </div>
-        <Channels channelList = {this.state.channels} action={this.channelAction.bind(this)}/>
+        <Channels channelList = {this.state.channels} action={this.channelAction.bind(this)} send={this.sendMessage.bind(this)}/>
         <div style={ {float:"left", clear: "both"} }
                 ref={(el) => { this.messagesEnd = el; }}></div>
        </div>
       <div className = "HomeWorkBench"  ref={(div) => {this.messageList = div}}>
-      <div className = "HomeInfo">{this.CL(this.state.selected.type) + " "} {this.CL(this.state.selected.name)}</div>
-      <Cards messages = {this.state.selected.contentArray} ></Cards>
+      <div className = "WorkBenchInfo">{this.CL(this.state.selected.type) + " "} {this.CL(this.state.selected.name)}</div>
+      <Cards messages = {this.state.selected.contentArray} send={this.sendMessage.bind(this)} ></Cards>
       </div>
       <div className = "HomeAssets">
-          <div className="HomeInfo">Assets</div>
+          <div className="HomeInfo">Assets
+            <div>
+            <p><span className = "HomeChannelPlus">+</span></p>
+            </div>
+            <Emojify style={{height: 32, width: 32}} onClick={e => alert(e.target.title)}>
+              <span>Easy! :wink:</span>
+              <span>😸 :D  ^__^</span>
+            </Emojify>
+            </div>
       </div>
       <div className = "HomeInput">
         <input type="text" placeholder={"message To: " + this.state.selected.name}  value={this.state.input} onKeyPress={this.checkforEnter.bind(this)} onChange={this.processInput.bind(this)} />

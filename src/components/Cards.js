@@ -1,6 +1,20 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router'
+import {emojify} from 'react-emojione';
+import Emojify from 'react-emojione';
 
+const eOptins = {
+    convertShortnames: true,
+    convertUnicode: true,
+    convertAscii: true,
+    style: {
+        backgroundImage: 'url("/path/to/your/emojione.sprites.png")',
+        height: 32,
+        margin: 4,
+    },
+    // this click handler will be set on every emoji
+    onClick: event => alert(event.target.title)
+};
 
 
 class Cards extends React.Component {
@@ -20,13 +34,24 @@ CL(string) {
 }
 
 createCard(message,index) {
+  if (!message.id)
+    return null
+
   let date = new Date(message.time)
+  let formatedContent = emojify(message.content,{output: 'unicode'})
+  //console.log("debag create cards", formatedContent);
+  if (!message.seen) {
+  let mess = {type: "seen",payload: {id: message.id}}
+  console.log("DEBUGG",mess);
+  message.seen = "X"
+  this.props.send(mess)
+  }
   return  (
     <div id={index}>
     <img id={index} src="/images/onacci.png" alt="Avatar" className ="w3-left w3-circle w3-margin-right w3-img" />
     <div id={index} className ="w3-panel w3-card-4 w3-margin-left">
-      <p>{ this.CL(message.sourceUser) }</p>
-      <p>{message.content}</p>
+      <p className="CardText">{ this.CL(message.sourceUser) }</p>
+      <p>{formatedContent}</p>
       <p className = "cardDate">{ date.toString("YY MMM dd HH MM ss")}</p>
       </div>
     </div>
