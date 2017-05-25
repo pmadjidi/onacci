@@ -227,6 +227,7 @@ CL(string) {
     }
 
     this.setState({selected: {type: "channel",name: aChannel,contentArray: contentArray}})
+    contentArray.forEach(message=>this.sendNotifyed(message))
     this.resetChannelNotification(aChannel)
     console.log("A Channel selected...",this.state.selected)
     return
@@ -270,6 +271,14 @@ CL(string) {
       console.log("implement user notification");
     }
 
+    sendNotifyed(message) {
+      if (!message.notifyed) {
+      let mess = {type: "seen",payload: {id: message.id}}
+      console.log("DEBUGG",mess);
+      this.sendMessage(mess)
+      }
+    }
+
   processChannelMessage(message) {
       let channelsContent
     if (this.state.channelsContent[message.targetChannel])
@@ -280,6 +289,7 @@ CL(string) {
   }
   if (this.state.selected.type === "channel" && this.state.selected.name === message.targetChannel) {
     let selected = {type: "channel",name: this.state.selected.name, contentArray: this.state.channelsContent[message.targetChannel]}
+    this.sendNotifyed(message) // channel windo open
     this.setState({selected})
 }
 else {

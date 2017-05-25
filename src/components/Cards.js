@@ -39,19 +39,19 @@ createCard(message,index) {
 
   let date = new Date(message.time)
   let formatedContent = emojify(message.content,{output: 'unicode'})
-  //console.log("debag create cards", formatedContent);
-  if (!message.seen) {
+  /*console.log("debag create cards", formatedContent);
+  if (!message.notifyed) {
   let mess = {type: "seen",payload: {id: message.id}}
   console.log("DEBUGG",mess);
-  message.seen = "X"
   this.props.send(mess)
-  }
+  }*/
+
   return  (
-    <div id={index}>
+    <div id={index} className="fade-in">
     <img id={index} src="/images/onacci.png" alt="Avatar" className ="w3-left w3-circle w3-margin-right w3-img" />
     <div id={index} className ="w3-panel w3-card-4 w3-margin-left">
-      <p className="CardText">{ this.CL(message.sourceUser) }</p>
-      <p>{formatedContent}</p>
+      <p className="cardName">{ this.CL(message.sourceUser) }</p>
+      <p className="cardContent">{formatedContent}</p>
       <p className = "cardDate">{ date.toString("YY MMM dd HH MM ss")}</p>
       </div>
     </div>
