@@ -378,7 +378,7 @@ componentDidUpdate() {
       return null
   //  console.log("render Home:",this.state)
     return (
-      <div className = "wrapperHome" onDrop = {this.handleDrop.bind(this)}>
+      <div className = "wrapperHome fade-in.home" onDrop = {this.handleDrop.bind(this)}>
       <div className = "HomeStatusBar">
       <div className= "HomeCurrentUser">
         <div className="HomeInfo">{"Logged In @ " + this.CL(this.state.currentUser)}</div>

@@ -296,6 +296,9 @@ color: rgb(150,150,150);
     -webkit-animation-delay: 0.7s ;
   }
 
+.fade-in.home {
+    -webkit-animation-delay: 3.5s
+}
 
 
 
