@@ -22,7 +22,7 @@ CL(string) {
 
 createOnline(onlineUser,index) {
       if (onlineUser)
-        return <li key={index} onClick={()=>this.props.action(onlineUser)}><span className={onlineUser.status}>@</span>{this.CL(onlineUser.name)}</li>
+        return <li key={index} className={onlineUser.status} onClick={()=>this.props.action(onlineUser)}>{this.CL(onlineUser.name)}</li>
   }
 
 

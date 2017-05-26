@@ -50,13 +50,13 @@ a.active {
 }
 
 .online{
-  color: blue;
-  font-size: 120%;
+  color: black;
+  font-size: 110%;
 }
 
 .offline {
-  color: black;
-  font-size: 80%;
+  color: gray;
+  font-size: 90%;
 }
 
 .HomeCardImage {
