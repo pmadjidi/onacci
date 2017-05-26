@@ -203,15 +203,15 @@ CL(string) {
 
 
   onlineAction(aUser) {
-    let replay = {type: "message",payload: {type: "replayCH", userName: aUser}}
-    let contentArray = this.state.usersContent[aUser]
+    let replay = {type: "message",payload: {type: "replayCH", userName: aUser.name}}
+    let contentArray = this.state.usersContent[aUser.name]
     if (!contentArray) {
       this.sendMessage(replay)
-      this.setState({selected: {type: "user",name: aUser,contentArray: new Array()}})
+      this.setState({selected: {type: "user",name: aUser.name,contentArray: new Array()}})
       return
   }
 
-      this.setState({selected: {type: "user",name: aUser,contentArray: contentArray}})
+      this.setState({selected: {type: "user",name: aUser.name,contentArray: contentArray}})
       console.log("A User selected...",this.state.selected)
       return
     }
