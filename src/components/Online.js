@@ -31,7 +31,7 @@ render() {
   console.log("userList: in Online Render(): ",this.props.userList)
   return (
   <div>
-  <div className="HomeInfo">Online</div>
+  <div className="HomeInfo">Team</div>
   <ul className= "onlineList">
   {this.props.userList.map((onlineUser,index)=>this.createOnline(onlineUser,index))}
   </ul>

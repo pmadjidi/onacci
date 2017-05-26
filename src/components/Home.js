@@ -136,6 +136,7 @@ CL(string) {
       console.log("DDDD",message);
       message.payload.session = this.state.currentSession
       message.payload.sourceUser = this.state.currentUser
+      message.payload.team = this.state.currentTeam
       console.log("sending message",message);
       this.props.ws.send(JSON.stringify(message))
     }
