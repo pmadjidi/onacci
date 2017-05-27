@@ -127,7 +127,7 @@ render() {
     return <Redirect to= "/home" />
 
   return (
-    <div>
+    <div className="fade-in">
 
 
   <div className="modal" id="id01" >

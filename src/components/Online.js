@@ -30,9 +30,9 @@ createOnline(onlineUser,index) {
 render() {
   console.log("userList: in Online Render(): ",this.props.userList)
   return (
-  <div>
+  <div className="fade-in">
   <div className="HomeInfo">Team</div>
-  <ul className= "onlineList">
+  <ul className= "onlineLis fade-in">
   {this.props.userList.map((onlineUser,index)=>this.createOnline(onlineUser,index))}
   </ul>
   </div>

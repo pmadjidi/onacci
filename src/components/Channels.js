@@ -24,16 +24,25 @@ createChannel(channel,index) {
     //console.log("DEBUG",channel);
       return (
       <li className="channelLi" key={index} onClick={()=>this.props.action(channel)}>
-        <span className="channelHash">#</span>{channel.name}<span id={index} className="HomeInfo">{channel.notify > 0 ? channel.notify:null}</span></li>
+        <span className="channelHash">#</span>{this.CL(channel.name)}<span id={index} className="HomeInfo">{channel.notify > 0 ? channel.notify:null}</span></li>
         )
   }
 
 checkforEnter(e) {
   if(e.key == 'Enter'){
     if (this.state.input !== "")
-      this.props.send({type: "createchannel", payload:{channelname: this.state.input}})
+      this.props.send({type: "createchannel", payload:{channelname: this.state.input,
+        purpuse: this.state.inputPurpuse,invite: this.state.inputInvite}})
   this.setState({toggleInput: "none",input: ""})
 }
+}
+
+CL(string) {
+    if (string)
+      return string.charAt(0).toUpperCase() + string.slice(1);
+    else {
+        return string
+    }
 }
 
 
@@ -60,9 +69,13 @@ toggleInput() {
 }
 
 render() {
+
   console.log("called channel render");
+  console.log("Props....",this.props.channelList)
+  if (!this.props.channelList)
+     return <div>Loading...</div>;
   return (
-  <div>
+  <div className="fade-in">
     <div className="HomeInfo">Channels
       <div>
       <p><span className = "HomeChannelPlus" onClick={this.toggleInput.bind(this)}>+</span></p>

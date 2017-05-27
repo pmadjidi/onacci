@@ -125,6 +125,7 @@ a.active {
   grid-column: 2/4;
   #border-style: ridge;
   background-color: lightblue;
+  overflow-y: scroll;
 }
 
 .HomeOnline:Hover{
@@ -139,6 +140,7 @@ a.active {
   grid-column: 2/4;
   #border-style: ridge;
   background-color: lightgray;
+  overflow-y: scroll;
 }
 
 .HomeChannels:Hover{
@@ -308,7 +310,7 @@ color: rgb(150,150,150);
   }
 
 .fade-in.home {
-    -webkit-animation-delay: 3.5s
+    -webkit-animation-delay: 10
 }
 
 

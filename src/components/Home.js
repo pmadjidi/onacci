@@ -138,7 +138,15 @@ CL(string) {
       message.payload.sourceUser = this.state.currentUser
       message.payload.team = this.state.currentTeam
       console.log("sending message",message);
+      try {
       this.props.ws.send(JSON.stringify(message))
+    } catch (err) {
+      console.log(err);
+      console.log("retry in 2 seconds");
+      setTimeout(() => {
+      this.props.ws.send(JSON.stringify(message))
+    }, 2000)
+    }
     }
 
 
@@ -219,11 +227,14 @@ CL(string) {
 
   channelAction(channel) {
     let aChannel = channel.name
+    console.log("channel selected:  ", aChannel);
     let replay = {type: "message",payload: {type: "replayCH", channelName: aChannel}}
     let contentArray = this.state.channelsContent[aChannel]
     if (!contentArray) {
+      contentArray = this.state.channelsContent[aChannel] = new Array()
+      //this.sendMessage(replay)
+      this.setState({selected: {type: "channel",name: aChannel,contentArray: contentArray}})
       this.sendMessage(replay)
-      this.setState({selected: {type: "channel",name: aChannel,contentArray: new Array()}})
       return
     }
 
