@@ -69,7 +69,7 @@ createCard(message,index) {
     <img src="/images/onacci.png" alt="Avatar" className ="w3-left w3-circle w3-margin-right w3-img" />
     <div className ="w3-panel w3-card-4 w3-margin-left">
       <p className="cardName">{ this.CL(message.sourceUser) }</p>
-      <p className={format}><Linkify tagName="p">{formatedContent}></Linkify></p>
+      <p className={format}><Linkify tagName="p">{formatedContent}</Linkify></p>
       <div style={style}> <YouTubeVideo id={id} /></div>
       <p className = "cardDate">{ date.toString("YY MMM dd HH MM ss")}</p>
       </div>
