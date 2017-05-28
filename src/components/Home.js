@@ -150,7 +150,9 @@ CL(string) {
     }
 
 
-
+  allowDrop(event){
+        event.preventDefault();
+      }
 
   handleDrop(e) {
   // prevent browser default behavior on drop
@@ -275,6 +277,7 @@ CL(string) {
         }
         return channel
       })
+      console.log("debug resetChannelNotification",ar);
       this.setState({channels: ar})
     }
 
@@ -390,7 +393,7 @@ componentDidUpdate() {
       return null
   //  console.log("render Home:",this.state)
     return (
-      <div className = "wrapperHome fade-in.home" onDrop = {this.handleDrop.bind(this)}>
+      <div className = "wrapperHome fade-in.home" onDragOver={this.allowDrop.bind(this)} onDrop = {this.handleDrop.bind(this)}>
       <div className = "HomeStatusBar">
       <div className= "HomeCurrentUser">
         <div className="HomeInfo">{"Logged In @ " + this.CL(this.state.currentUser)}</div>
@@ -411,7 +414,7 @@ componentDidUpdate() {
         <div style={ {float:"left", clear: "both"} }
                 ref={(el) => { this.messagesEnd = el; }}></div>
        </div>
-      <div className = "HomeWorkBench"  ref={(div) => {this.messageList = div}}>
+      <div className = "HomeWorkBench"  ref={(div) => {this.messageList = div}} onDrop = {this.handleDrop.bind(this)} >
       <div className = "WorkBenchInfo">{this.CL(this.state.selected.type) + " "} {this.CL(this.state.selected.name)}</div>
       <Cards messages = {this.state.selected.contentArray} send={this.sendMessage.bind(this)} ></Cards>
       </div>

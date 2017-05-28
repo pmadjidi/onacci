@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router'
 import {emojify} from 'react-emojione';
 import Emojify from 'react-emojione';
+import Linkify from 'linkifyjs/react';
+
+import YouTubeVideo from './Youtube'
 
 const eOptins = {
     convertShortnames: true,
@@ -33,25 +36,41 @@ CL(string) {
     }
 }
 
+getYouTubeId(url) {
+    var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    var match = url.match(regExp);
+
+    if (match && match[2].length == 11) {
+        return match[2];
+    } else {
+        return false;
+    }
+}
+
+
 createCard(message,index) {
   if (!message.id)
     return null
 
+  let style = {display: "none"}
+  let format = "cardContent"
   let date = new Date(message.time)
   let formatedContent = emojify(message.content,{output: 'unicode'})
-  /*console.log("debag create cards", formatedContent);
-  if (!message.notifyed) {
-  let mess = {type: "seen",payload: {id: message.id}}
-  console.log("DEBUGG",mess);
-  this.props.send(mess)
-  }*/
+  let id = this.getYouTubeId(message.content)
+  if (id) {
+    style = {display: "block"}
+    format = "YouTubeLink"
+  }
+
 
   return  (
-    <div id={index} className="fade-in">
-    <img id={index} src="/images/onacci.png" alt="Avatar" className ="w3-left w3-circle w3-margin-right w3-img" />
-    <div id={index} className ="w3-panel w3-card-4 w3-margin-left">
+// Math.random().toString(36).slice(2)
+    <div key={message.id} className="fade-in">
+    <img src="/images/onacci.png" alt="Avatar" className ="w3-left w3-circle w3-margin-right w3-img" />
+    <div className ="w3-panel w3-card-4 w3-margin-left">
       <p className="cardName">{ this.CL(message.sourceUser) }</p>
-      <p className="cardContent">{formatedContent}</p>
+      <p className={format}><Linkify tagName="p">{formatedContent}></Linkify></p>
+      <div style={style}> <YouTubeVideo id={id} /></div>
       <p className = "cardDate">{ date.toString("YY MMM dd HH MM ss")}</p>
       </div>
     </div>
