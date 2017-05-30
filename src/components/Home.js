@@ -33,7 +33,8 @@ class  Home extends React.Component {
       input: "",
       usersContent: {},
       channelsContent: {},
-      typing: null
+      typing: null,
+      commState: ""
     }
   }
 
@@ -44,12 +45,37 @@ class  Home extends React.Component {
   componentDidMount() {
     let that = this
     this.props.ws.addEventListener('message',this.messageHandler.bind(this))
+    this.props.ws.onopen = evt => { this.onOpen(evt) };
+    this.props.ws.onclose = evt => { this.onClose(evt) };
+    this.props.ws.onerror =  evt => { this.onError(evt) };
     //console.log(this.props.ws)
     this.sendWhoAmI()
     this.sendOnline()
     this.sendChannels()
     this.channelAction({name: "General"})
   }
+
+
+  onOpen(evt)
+  {
+  this.setState({commState: "CONNECTED"})
+  }
+
+  onClose(evt)
+  {
+    this.setState({commState: "DISCONNECTED"})
+  }
+
+
+  onError(evt)
+  {
+    this.setState({commState: "DISCONNECTED"})
+    console.log("Socket Error: ", evt.data);
+  }
+
+
+
+
 
   sendWhoAmI() {
     let payload = {type: "whoAmI",payload: {}}
@@ -154,29 +180,65 @@ CL(string) {
         event.preventDefault();
       }
 
-  handleDrop(e) {
+  handleDropAvatar(e) {
+    console.log("CALLED.......");
+    console.log(e.dataTransfer.files);
   // prevent browser default behavior on drop
   e.preventDefault();
 
+
   // iterate over the files dragged on to the browser
   for (var x=0; x < e.dataTransfer.files.length; x++) {
-
     // instantiate a new FileReader object
     var fr = new FileReader();
+    fr.fileName = e.dataTransfer.files[x].name
 
     // loading files from the file system is an asynchronous
     // operation, run this function when the loading process
     // is complete
-    fr.addEventListener("loadend",()=> {
+    fr.addEventListener("loadend",(evt)=> {
+      console.log(fr.result)
       // send the file over web sockets
-      this.props.ws.send(fr.result);
-    });
+      //this.props.ws.binaryData = 'ArrayBuffer'
+      let payload = {type: "avatar", payload: {name: fr.fileName, file: fr.result}}
+      this.sendMessage(payload)
+    })
 
     // load the file into an array buffer
-    fr.readAsArrayBuffer(e.dataTransfer.files[x]);
+    //fr.readAsArrayBuffer(e.dataTransfer.files[x]);
+     fr.readAsDataURL(e.dataTransfer.files[x])
   }
 }
 
+handleDrop(e) {
+  console.log("CALLED.......");
+  console.log(e.dataTransfer.files);
+// prevent browser default behavior on drop
+e.preventDefault();
+
+
+// iterate over the files dragged on to the browser
+for (var x=0; x < e.dataTransfer.files.length; x++) {
+  // instantiate a new FileReader object
+  var fr = new FileReader();
+  fr.fileName = e.dataTransfer.files[x].name
+
+  // loading files from the file system is an asynchronous
+  // operation, run this function when the loading process
+  // is complete
+  fr.addEventListener("loadend",(evt)=> {
+    console.log(fr.result)
+    // send the file over web sockets
+    //this.props.ws.binaryData = 'ArrayBuffer'
+    let payload = {type: "assets", payload: {name: fr.fileName, file: fr.result}}
+    this.sendMessage(payload)
+  })
+
+  // load the file into an array buffer
+  //fr.readAsArrayBuffer(e.dataTransfer.files[x]);
+   fr.readAsDataURL(e.dataTransfer.files[x])
+}
+}
 
   messageHandler(event) {
     let that = this
@@ -393,10 +455,10 @@ componentDidUpdate() {
       return null
   //  console.log("render Home:",this.state)
     return (
-      <div className = "wrapperHome fade-in.home" onDragOver={this.allowDrop.bind(this)} onDrop = {this.handleDrop.bind(this)}>
+      <div className = "wrapperHome fade-in.home">
       <div className = "HomeStatusBar">
       <div className= "HomeCurrentUser">
-        <div className="HomeInfo">{"Logged In @ " + this.CL(this.state.currentUser)}</div>
+        <div className="HomeInfo">{"Logged In @ " + this.CL(this.state.currentUser) + "         Status:  " + this.state.commState}</div>
         </div>
         <Links />
        </div>
@@ -406,7 +468,7 @@ componentDidUpdate() {
      <div className = "HomeTools">
        <div className="HomeInfo">Tools</div>
     </div>
-      <div className = "HomeOnline">
+      <div className = "HomeOnline" onDragOver={this.allowDrop.bind(this)} onDrop = {this.handleDropAvatar.bind(this)}>
         <Online userList = {this.state.online} action={this.onlineAction.bind(this)}/>
      </div>
       <div className = "HomeChannels">
@@ -414,7 +476,7 @@ componentDidUpdate() {
         <div style={ {float:"left", clear: "both"} }
                 ref={(el) => { this.messagesEnd = el; }}></div>
        </div>
-      <div className = "HomeWorkBench"  ref={(div) => {this.messageList = div}} onDrop = {this.handleDrop.bind(this)} >
+      <div className = "HomeWorkBench"  ref={(div) => {this.messageList = div}} onDragOver={this.allowDrop.bind(this)} onDrop = {this.handleDrop.bind(this)} >
       <div className = "WorkBenchInfo">{this.CL(this.state.selected.type) + " "} {this.CL(this.state.selected.name)}</div>
       <Cards messages = {this.state.selected.contentArray} send={this.sendMessage.bind(this)} ></Cards>
       </div>

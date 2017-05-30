@@ -25,6 +25,7 @@ class Cards extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      errorImage: ""
     }
 }
 
@@ -52,6 +53,8 @@ createCard(message,index) {
   if (!message.id)
     return null
 
+  let avatar = "/avatar/" + message.team + "/" + message.sourceUser + ".png"
+  console.log(avatar);
   let style = {display: "none"}
   let format = "cardContent"
   let date = new Date(message.time)
@@ -66,17 +69,18 @@ createCard(message,index) {
   return  (
 // Math.random().toString(36).slice(2)
     <div key={message.id} className="fade-in">
-    <img src="/images/onacci.png" alt="Avatar" className ="w3-left w3-circle w3-margin-right w3-img" />
+    <img src={avatar} alt="Avatar" className ="w3-left  w3-margin-right w3-img" ref={img => this.img = img} onError={(e)=>{e.target.src='/images/onacci.png'}} />
     <div className ="w3-panel w3-card-4 w3-margin-left">
       <p className="cardName">{ this.CL(message.sourceUser) }</p>
       <p className={format}><Linkify tagName="p">{formatedContent}</Linkify></p>
       <div style={style}> <YouTubeVideo id={id} /></div>
-      <p className = "cardDate">{ date.toString("YY MMM dd HH MM ss")}</p>
+      <p className = "cardDate w3-margin-left">{ date.toString("YY MMM dd HH MM ss")}</p>
       </div>
     </div>
   )
 
   }
+
 
 render() {
   if (!this.props.messages)

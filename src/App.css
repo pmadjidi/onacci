@@ -345,7 +345,10 @@ color: rgb(150,150,150);
 .w3-card-4:hover{
  background-color: rgba(0,0,0,.03);
 }
-.w3-img {width:30px; height: 30px}
+.w3-img {
+  padding: 16px;
+  width:40px;
+   height: 40px}
 .w3-badge {
   background-color: rgb(240,0,0);
   color:black;
