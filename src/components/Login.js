@@ -13,7 +13,7 @@ class Login extends React.Component {
       checked: false,
      userMessage: "User",
      passMessage: "Password",
-     teamMessage: "Team"}
+     teamMessage: "Team, organisation or entity"}
     this.handleUserNameChange = this.handleUserNameChange.bind(this)
     this.handlePasswordChange = this.handlePasswordChange.bind(this)
     this.handleTeamChange = this.handleTeamChange.bind(this)
@@ -139,13 +139,13 @@ render() {
   <div className="container">
 
     <label><b>{this.state.teamMessage}</b></label>
-      <input type="text" placeholder="Enter Team"  value={this.state.team} required onChange={this.handleTeamChange} />
+      <input className = "input" type="text" placeholder="Enter Team or Organisation or Entity"  value={this.state.team} required onChange={this.handleTeamChange} />
 
     <label><b>{this.state.userMessage}</b></label>
-    <input type="text" placeholder="Enter Username"   value={this.state.name} required onChange={this.handleUserNameChange} />
+    <input className = "input" type="text" placeholder="Enter Username"   value={this.state.name} required onChange={this.handleUserNameChange} />
 
     <label><b>{this.state.passMessage}</b></label>
-    <input type="password" placeholder="Enter Password"  value={this.state.name} required onChange={this.handlePasswordChange} />
+    <input className = "input" type="password" placeholder="Enter Password"  value={this.state.name} required onChange={this.handlePasswordChange} />
 
       <button  type='button' onClick={this.processLoginForm}>Login</button>
     <input type="checkbox" checked={this.state.checked} onClick={this.rememberMe.bind(this)}/> Remember me

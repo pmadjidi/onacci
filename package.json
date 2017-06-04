@@ -6,10 +6,13 @@
     "react-scripts": "0.9.5"
   },
   "dependencies": {
+    "emoji-mart": "^1.0.0",
     "linkifyjs": "^2.1.4",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
     "react-emojione": "^3.1.10",
+    "react-images": "^0.5.2",
+    "react-player": "^0.18.0",
     "react-router-dom": "^4.1.1"
   },
   "scripts": {

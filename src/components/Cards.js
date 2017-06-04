@@ -2,17 +2,84 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router'
 import {emojify} from 'react-emojione';
 import Emojify from 'react-emojione';
+import {Emoji} from 'emoji-mart'
 import Linkify from 'linkifyjs/react';
-
+import Lightbox from 'react-images';
 import YouTubeVideo from './Youtube'
+import { emojiIndex } from 'emoji-mart'
+
+function parseEmulti(str) {
+  let match = []
+  let start = -1
+  let end = -1
+  let i = 0
+  let Emulti = []
+  let parsedStr = str
+  let result = []
+
+  if (!str)
+    return ""
+  else {
+  for (i = 0; i < str.length; i++) {
+    if (str[i] === ":")
+      if (start === -1)
+        start = i
+      else {
+        end = i + 1
+      match.push({start,end})
+      start = end = -1
+    }
+  }
+  console.log(match);
+  Emulti = match.map(pos=>{
+    return str.substring(pos.start,pos.end)
+  })
+
+  //0 till start
+  //end to start
+  // end to str.length
+
+  if (match.length > 0)
+  {
+
+  result.push(str.substring(0,match[0].start))
+  result.push(<Emoji emoji={Emulti[0]} size={32}/>)
+
+  for ( i = 1; i < match.length ; i++) {
+  result.push(str.substring(match[i-1].end,match[i].start))
+  result.push(<Emoji emoji={Emulti[i]} size={32}/>)
+    //parsedStr = parsedStr.replace(Emulti[i],"<Emoji emoji={" + Emulti[i].substring(1,Emulti[i].length -1) +"} size={32}/>")
+  }
+
+  console.log("result is:",result)
+  return result
+}
+return str
+
+}
+}
+
+const LIGHTBOX_IMAGE_SET = [
+  {
+    src: 'http://example.com/example/img1.jpg',
+    caption: 'Sydney, Australia - Photo by Jill Smith',
+  },
+  {
+    src: 'http://example.com/example/img2.jpg',
+  }
+];
+
+
 
 const eOptins = {
+  /*
     convertShortnames: true,
     convertUnicode: true,
     convertAscii: true,
+    */
     style: {
         backgroundImage: 'url("/path/to/your/emojione.sprites.png")',
-        height: 32,
+        height: 64,
         margin: 4,
     },
     // this click handler will be set on every emoji
@@ -53,12 +120,38 @@ createCard(message,index) {
   if (!message.id)
     return null
 
+
+/*
+  // (:.[^:]*:)
+
+  if (message.content.match(/^:.[^:]*:$/)) {
+    let avatar = "/avatar/" + message.team + "/" + message.sourceUser + ".png"
+    return (
+      <div id = {message.id} key={message.id} className="fade-in" onClick={()=>this.props.messageSelect(message.id)}>
+      <img src={avatar} alt="Avatar" className ="w3-left  w3-margin-right w3-img" ref={img => this.img = img} onError={(e)=>{e.target.src='/images/onacci.png'}} />
+      <div className ="w3-panel w3-card-4 w3-margin-left">
+        <p className="cardName">{ this.CL(message.sourceUser) }</p>
+        <p className={format}>
+          <Emoji
+          emoji={message.content}
+          size={32}
+        />
+    </p>
+        </div>
+      </div>
+    )
+  }
+  */
+
+
   let avatar = "/avatar/" + message.team + "/" + message.sourceUser + ".png"
   console.log(avatar);
   let style = {display: "none"}
   let format = "cardContent"
   let date = new Date(message.time)
-  let formatedContent = emojify(message.content,{output: 'unicode'})
+//  let formatedContent = emojify(message.content,eOptins)
+  let formatedContent = parseEmulti(message.content)
+  console.log("formatedContent",formatedContent);
   let id = this.getYouTubeId(message.content)
   if (id) {
     style = {display: "block"}
@@ -66,13 +159,17 @@ createCard(message,index) {
   }
 
 
+
+
   return  (
 // Math.random().toString(36).slice(2)
-    <div key={message.id} className="fade-in">
+    <div id = {message.id} key={message.id} className="fade-in" onClick={()=>this.props.messageSelect(message.id)}>
     <img src={avatar} alt="Avatar" className ="w3-left  w3-margin-right w3-img" ref={img => this.img = img} onError={(e)=>{e.target.src='/images/onacci.png'}} />
     <div className ="w3-panel w3-card-4 w3-margin-left">
       <p className="cardName">{ this.CL(message.sourceUser) }</p>
-      <p className={format}><Linkify tagName="p">{formatedContent}</Linkify></p>
+      <p className={format}><Linkify tagName="p">
+          {parseEmulti(message.content)}
+      </Linkify></p>
       <div style={style}> <YouTubeVideo id={id} /></div>
       <p className = "cardDate w3-margin-left">{ date.toString("YY MMM dd HH MM ss")}</p>
       </div>
@@ -95,3 +192,10 @@ render() {
 }
 
 export default Cards
+
+/*
+
+<Lightbox
+  images={LIGHTBOX_IMAGE_SET}
+/>
+*/

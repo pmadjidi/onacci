@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
+import {Picker} from 'emoji-mart'
+import {Emoji} from 'emoji-mart'
 import Emojify from 'react-emojione';
 import Links from './Links'
 import Online from './Online'
 import Channels from './Channels'
 import Cards from './Cards'
 import Teams from './Teams'
+import Assets from './Assets'
 
 
 
@@ -24,17 +27,20 @@ class  Home extends React.Component {
     super(props)
     this.state = {
       team: [],
+      assets: [],
       online: [],
       channels: [],
       currentTeam: "",
       currentUser: null,
       currentSession: null,
-      selected: {type: "",name: "",contentArray: []},
+      selected: {type: "",name: "",contentArray: [],assetArray: []},
       input: "",
       usersContent: {},
       channelsContent: {},
       typing: null,
-      commState: ""
+      commState: "",
+      emoj: "",
+      togglePicker: "none"
     }
   }
 
@@ -200,6 +206,7 @@ CL(string) {
       console.log(fr.result)
       // send the file over web sockets
       //this.props.ws.binaryData = 'ArrayBuffer'
+
       let payload = {type: "avatar", payload: {name: fr.fileName, file: fr.result}}
       this.sendMessage(payload)
     })
@@ -212,7 +219,7 @@ CL(string) {
 
 handleDrop(e) {
   console.log("CALLED.......");
-  console.log(e.dataTransfer.files);
+  console.log(e.dataTransfer.files.length);
 // prevent browser default behavior on drop
 e.preventDefault();
 
@@ -220,24 +227,25 @@ e.preventDefault();
 // iterate over the files dragged on to the browser
 for (var x=0; x < e.dataTransfer.files.length; x++) {
   // instantiate a new FileReader object
-  var fr = new FileReader();
-  fr.fileName = e.dataTransfer.files[x].name
+  this.sendAsset(e.dataTransfer.files[x].name,
+    e.dataTransfer.files[x])
+}
+}
 
-  // loading files from the file system is an asynchronous
-  // operation, run this function when the loading process
-  // is complete
+
+sendAsset(fileName,file) {
+  let fr = new FileReader();
   fr.addEventListener("loadend",(evt)=> {
-    console.log(fr.result)
-    // send the file over web sockets
-    //this.props.ws.binaryData = 'ArrayBuffer'
-    let payload = {type: "assets", payload: {name: fr.fileName, file: fr.result}}
+    let type = this.state.selected.type
+    let name = this.state.selected.name
+    let payload = {type: "assets", payload: {name: fileName, file: fr.result, type: type, resourcename: name}}
+    let paylog = {type: "assets", payload: {name: fileName, type: type, resourcename: name}}
     this.sendMessage(payload)
+    console.log("Sending: ",paylog);
   })
 
-  // load the file into an array buffer
-  //fr.readAsArrayBuffer(e.dataTransfer.files[x]);
-   fr.readAsDataURL(e.dataTransfer.files[x])
-}
+  fr.readAsDataURL(file)
+
 }
 
   messageHandler(event) {
@@ -264,9 +272,18 @@ for (var x=0; x < e.dataTransfer.files.length; x++) {
       case "auth":
       console.log(m);
       break
+      case "assets":
+      that.processAsset(m.payload)
+      break
       default:
       console.log("Uknown message type:",m)
      }
+  }
+
+
+  processAsset(payload){
+    //console.log("processAsset recieved: ",payload);
+    this.setState({assets: payload})
   }
 
   componentWillUnmount() {
@@ -275,12 +292,20 @@ for (var x=0; x < e.dataTransfer.files.length; x++) {
   }
 
 
+  assetsAction(aAsset) {
+    console.log("Asset selected:", aAsset);
+  }
+
   onlineAction(aUser) {
-    let replay = {type: "message",payload: {type: "replayCH", userName: aUser.name}}
+    let replayUser = {type: "message",payload: {type: "replayCH", userName: aUser.name}}
+    let replayAssets = {type: "assets",payload: {type: "user", userName: aUser.name}}
     let contentArray = this.state.usersContent[aUser.name]
+    let assetArray = this.state.assets[aUser.name]
+    this.sendMessage(replayAssets)
     if (!contentArray) {
-      this.sendMessage(replay)
-      this.setState({selected: {type: "user",name: aUser.name,contentArray: new Array()}})
+      let contentArray = this.state.usersContent[aUser.name] = new Array()
+      this.sendMessage(replayUser)
+      this.setState({selected: {type: "user",name: aUser.name,contentArray: contentArray}})
       return
   }
 
@@ -292,16 +317,16 @@ for (var x=0; x < e.dataTransfer.files.length; x++) {
   channelAction(channel) {
     let aChannel = channel.name
     console.log("channel selected:  ", aChannel);
-    let replay = {type: "message",payload: {type: "replayCH", channelName: aChannel}}
+    let replayChannel = {type: "message",payload: {type: "replayCH", channelName: aChannel}}
+    let replayAssets = {type: "assets",payload: {type: "channel", channelName: aChannel}}
     let contentArray = this.state.channelsContent[aChannel]
+    this.sendMessage(replayAssets)
     if (!contentArray) {
       contentArray = this.state.channelsContent[aChannel] = new Array()
-      //this.sendMessage(replay)
       this.setState({selected: {type: "channel",name: aChannel,contentArray: contentArray}})
-      this.sendMessage(replay)
+      this.sendMessage(replayChannel)
       return
     }
-
     this.setState({selected: {type: "channel",name: aChannel,contentArray: contentArray}})
     contentArray.forEach(message=>this.sendNotifyed(message))
     this.resetChannelNotification(aChannel)
@@ -450,6 +475,26 @@ componentDidUpdate() {
     this.scrollToBottom();
 }
 
+
+messageSelect(messageId) {
+  console.log("message selected:",messageId);
+  this.setState({selectedMessage: messageId})
+}
+
+
+
+togglePicker() {
+  if (this.state.togglePicker === "none")
+    this.setState({togglePicker: "block"})
+    else {
+      this.setState({togglePicker: "none"})
+    }
+}
+
+processEmoji(emoji) {
+  this.setState({input: this.state.input + emoji.colons,togglePicker: "none" })
+}
+
   render() {
     if (this.state.currentUser === null)
       return null
@@ -478,21 +523,30 @@ componentDidUpdate() {
        </div>
       <div className = "HomeWorkBench"  ref={(div) => {this.messageList = div}} onDragOver={this.allowDrop.bind(this)} onDrop = {this.handleDrop.bind(this)} >
       <div className = "WorkBenchInfo">{this.CL(this.state.selected.type) + " "} {this.CL(this.state.selected.name)}</div>
-      <Cards messages = {this.state.selected.contentArray} send={this.sendMessage.bind(this)} ></Cards>
+<Cards messages = {this.state.selected.contentArray} send={this.sendMessage.bind(this)} messageSelect={this.messageSelect.bind(this)} ></Cards>
       </div>
       <div className = "HomeAssets">
-          <div className="HomeInfo">Assets
-            <div>
-            <p><span className = "HomeChannelPlus">+</span></p>
-            </div>
-            <Emojify style={{height: 32, width: 32}} onClick={e => alert(e.target.title)}>
-              <span>Easy! :wink:</span>
-              <span>😸 :D  ^__^</span>
-            </Emojify>
-            </div>
+
+            <Assets assetList = {this.state.assets} action={this.assetsAction.bind(this)}/>
+
       </div>
       <div className = "HomeInput">
-        <input type="text" placeholder={"message To: " + this.state.selected.name}  value={this.state.input} onKeyPress={this.checkforEnter.bind(this)} onChange={this.processInput.bind(this)} />
+        <input className = "HomeInputField" type="text" placeholder={"message To: " + this.state.selected.name}  value={this.state.input} onKeyPress={this.checkforEnter.bind(this)} onChange={this.processInput.bind(this)} />
+        <div onClick={()=>this.togglePicker.bind(this)}>
+          <p><span className = "HomeChannelPlus" onClick={this.togglePicker.bind(this)}>&#9786;</span></p>
+        </div>
+        <div>
+        <Picker style={{display: this.state.togglePicker,zIndex: 2, position: 'absolute', bottom: '10px', right: '40px' }}
+      emojiSize={24}
+      sheetSize={64}
+      color='#39BFD4'
+      perLine={9}
+      skin={1}
+      native={false}
+      set='emojione'
+      onClick={this.processEmoji.bind(this) }
+  />
+</div>
        <Typing name={this.state.typing} />
        </div>
       </div>
@@ -501,3 +555,14 @@ componentDidUpdate() {
 };
 
 export default Home
+
+
+/*
+
+
+
+<Emojify style={{height: 32, width: 32}} onClick={e => alert(e.target.title)}>
+  <span>Easy! :wink:</span>
+  <span>😸 :D  ^__^</span>
+</Emojify>
+*/
