@@ -16,6 +16,7 @@ function parseEmulti(str) {
   let Emulti = []
   let parsedStr = str
   let result = []
+  let size = 32
 
   if (!str)
     return ""
@@ -38,18 +39,23 @@ function parseEmulti(str) {
   //0 till start
   //end to start
   // end to str.length
+  if (match.length === 1)
+    size = 64
+  else {
+    size = 32
+  }
 
   if (match.length > 0)
   {
 
   result.push(str.substring(0,match[0].start))
-  result.push(<Emoji emoji={Emulti[0]} size={32}/>)
+  result.push(<Emoji emoji={Emulti[0]} size={size}/>)
 
   for ( i = 1; i < match.length ; i++) {
   result.push(str.substring(match[i-1].end,match[i].start))
-  result.push(<Emoji emoji={Emulti[i]} size={32}/>)
-    //parsedStr = parsedStr.replace(Emulti[i],"<Emoji emoji={" + Emulti[i].substring(1,Emulti[i].length -1) +"} size={32}/>")
+  result.push(<Emoji emoji={Emulti[i]} size={size}/>)
   }
+  result.push(str.substring(match[match.length -1 ].end,str.length))
 
   console.log("result is:",result)
   return result
@@ -119,30 +125,6 @@ getYouTubeId(url) {
 createCard(message,index) {
   if (!message.id)
     return null
-
-
-/*
-  // (:.[^:]*:)
-
-  if (message.content.match(/^:.[^:]*:$/)) {
-    let avatar = "/avatar/" + message.team + "/" + message.sourceUser + ".png"
-    return (
-      <div id = {message.id} key={message.id} className="fade-in" onClick={()=>this.props.messageSelect(message.id)}>
-      <img src={avatar} alt="Avatar" className ="w3-left  w3-margin-right w3-img" ref={img => this.img = img} onError={(e)=>{e.target.src='/images/onacci.png'}} />
-      <div className ="w3-panel w3-card-4 w3-margin-left">
-        <p className="cardName">{ this.CL(message.sourceUser) }</p>
-        <p className={format}>
-          <Emoji
-          emoji={message.content}
-          size={32}
-        />
-    </p>
-        </div>
-      </div>
-    )
-  }
-  */
-
 
   let avatar = "/avatar/" + message.team + "/" + message.sourceUser + ".png"
   console.log(avatar);

@@ -238,10 +238,14 @@ sendAsset(fileName,file) {
   fr.addEventListener("loadend",(evt)=> {
     let type = this.state.selected.type
     let name = this.state.selected.name
-    let payload = {type: "assets", payload: {name: fileName, file: fr.result, type: type, resourcename: name}}
-    let paylog = {type: "assets", payload: {name: fileName, type: type, resourcename: name}}
+    let payload
+    if (type === "channel")
+      payload = {type: "assets", payload: {name: fileName, file: fr.result, type: type, targetChannel: name}}
+    else
+      payload = {type: "assets", payload: {name: fileName, file: fr.result, type: type, targetUser: name}}
+
     this.sendMessage(payload)
-    console.log("Sending: ",paylog);
+
   })
 
   fr.readAsDataURL(file)
@@ -492,6 +496,8 @@ togglePicker() {
 }
 
 processEmoji(emoji) {
+  console.log("REFS", this.refs);
+  //this.refs.HomeInputField.getInputDOMNode().focus();
   this.setState({input: this.state.input + emoji.colons,togglePicker: "none" })
 }
 
@@ -531,7 +537,11 @@ processEmoji(emoji) {
 
       </div>
       <div className = "HomeInput">
-        <input className = "HomeInputField" type="text" placeholder={"message To: " + this.state.selected.name}  value={this.state.input} onKeyPress={this.checkforEnter.bind(this)} onChange={this.processInput.bind(this)} />
+        <input className = "HomeInputField" type="text"
+          placeholder={"message To: " + this.state.selected.name}
+           value={this.state.input} onKeyPress={this.checkforEnter.bind(this)}
+           onChange={this.processInput.bind(this)}
+           ref="HomeInputField"/>
         <div onClick={()=>this.togglePicker.bind(this)}>
           <p><span className = "HomeChannelPlus" onClick={this.togglePicker.bind(this)}>&#9786;</span></p>
         </div>
@@ -555,14 +565,3 @@ processEmoji(emoji) {
 };
 
 export default Home
-
-
-/*
-
-
-
-<Emojify style={{height: 32, width: 32}} onClick={e => alert(e.target.title)}>
-  <span>Easy! :wink:</span>
-  <span>😸 :D  ^__^</span>
-</Emojify>
-*/
