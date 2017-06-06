@@ -70,8 +70,7 @@ toggleInput() {
 
 render() {
 
-  console.log("called channel render");
-  console.log("Props....",this.props.channelList)
+  
   if (!this.props.channelList)
      return <div>Loading...</div>;
   return (

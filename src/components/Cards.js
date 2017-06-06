@@ -31,7 +31,6 @@ function parseEmulti(str) {
       start = end = -1
     }
   }
-  console.log(match);
   Emulti = match.map(pos=>{
     return str.substring(pos.start,pos.end)
   })
@@ -40,9 +39,9 @@ function parseEmulti(str) {
   //end to start
   // end to str.length
   if (match.length === 1)
-    size = 64
-  else {
     size = 32
+  else {
+    size = 16
   }
 
   if (match.length > 0)
@@ -56,8 +55,6 @@ function parseEmulti(str) {
   result.push(<Emoji emoji={Emulti[i]} size={size}/>)
   }
   result.push(str.substring(match[match.length -1 ].end,str.length))
-
-  console.log("result is:",result)
   return result
 }
 return str
@@ -127,18 +124,25 @@ createCard(message,index) {
     return null
 
   let avatar = "/avatar/" + message.team + "/" + message.sourceUser + ".png"
-  console.log(avatar);
-  let style = {display: "none"}
+  let youTubeStyle = {display: "none"}
+  let lightBoxStyle = {display: "none"}
   let format = "cardContent"
   let date = new Date(message.time)
+  let image
 //  let formatedContent = emojify(message.content,eOptins)
   let formatedContent = parseEmulti(message.content)
-  console.log("formatedContent",formatedContent);
   let id = this.getYouTubeId(message.content)
   if (id) {
-    style = {display: "block"}
+    youTubeStyle = {display: "block"}
     format = "YouTubeLink"
   }
+
+  if (message.file) {
+    lightBoxStyle = {display: "block"}
+    image  = "/assets/" + message.team + "/" + message.file
+    console.log("should display picture ",image);
+  }
+
 
 
 
@@ -152,7 +156,8 @@ createCard(message,index) {
       <p className={format}><Linkify tagName="p">
           {parseEmulti(message.content)}
       </Linkify></p>
-      <div style={style}> <YouTubeVideo id={id} /></div>
+    <img style={lightBoxStyle} src={image}  height="200" width="300" />
+      <div style={youTubeStyle}> <YouTubeVideo id={id} /></div>
       <p className = "cardDate w3-margin-left">{ date.toString("YY MMM dd HH MM ss")}</p>
       </div>
     </div>

@@ -77,8 +77,6 @@ toggleInput() {
 
 render() {
 
-  console.log("called Asset render");
-  console.log("Props....",this.props.assetList)
   if (!this.props.assetList)
      return <div>Loading...</div>;
   return (
