@@ -29,7 +29,7 @@ class Login extends React.Component {
     componentDidMount() {
       console.log(this.props.ws)
       console.log(this.state)
-      setTimeout(this.getLoginFromLocalStorage.bind(this), 2000)
+      setTimeout(this.getLoginFromLocalStorage.bind(this), 100)
     }
 
     componentWillMount() {
