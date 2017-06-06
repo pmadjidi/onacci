@@ -7,6 +7,7 @@ import Linkify from 'linkifyjs/react';
 import Lightbox from 'react-images';
 import YouTubeVideo from './Youtube'
 import { emojiIndex } from 'emoji-mart'
+import ReactPlayer from 'react-player'
 
 function parseEmulti(str) {
   let match = []
@@ -126,9 +127,12 @@ createCard(message,index) {
   let avatar = "/avatar/" + message.team + "/" + message.sourceUser + ".png"
   let youTubeStyle = {display: "none"}
   let lightBoxStyle = {display: "none"}
+  let soundStyle = {display: "none"}
   let format = "cardContent"
   let date = new Date(message.time)
   let image
+  let sound
+  let fileExt
 //  let formatedContent = emojify(message.content,eOptins)
   let formatedContent = parseEmulti(message.content)
   let id = this.getYouTubeId(message.content)
@@ -138,9 +142,23 @@ createCard(message,index) {
   }
 
   if (message.file) {
-    lightBoxStyle = {display: "block"}
-    image  = "/assets/" + message.team + "/" + message.file
-    console.log("should display picture ",image);
+    fileExt = message.name.split('.').pop();
+    console.log("File Extension is:",fileExt);
+    switch (fileExt) {
+      case "JPG":
+      lightBoxStyle = {display: "block"}
+      image  = "/assets/" + message.team + "/" + message.file
+      console.log("should display",image);
+      break
+      case "mp3":
+      soundStyle = {display: "block"}
+      sound = "/assets/" + message.team + "/" + message.file
+      console.log("should play sound");
+      break
+      default:
+        console.log("Unknown media file.....");
+    }
+
   }
 
 
@@ -158,6 +176,7 @@ createCard(message,index) {
       </Linkify></p>
     <img style={lightBoxStyle} src={image}  height="200" width="300" />
       <div style={youTubeStyle}> <YouTubeVideo id={id} /></div>
+      <ReactPlayer style={soundStyle} url={sound} controls={true} width={"70%"} height={"5%"}/>
       <p className = "cardDate w3-margin-left">{ date.toString("YY MMM dd HH MM ss")}</p>
       </div>
     </div>
