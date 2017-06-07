@@ -10,10 +10,11 @@ import Settings from './components/Settings'
 
 let config = {
   //wssHost: 'wss://aka.ite.kth.se:9000/websocket/'
-  wssHost: 'wss://localhost:9000/websocket/'
+  wssHost: 'wss://www.onacci.com:9000/websocket/'
 };
 
 let wsc = new WebSocket(config.wssHost)
+
 console.log("Socket state: ", wsc.readyState)
 
 let peerConnCfg = {'iceServers':
