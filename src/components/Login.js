@@ -104,8 +104,8 @@ componentWillUnmount() {
 
 send(payload) {
   console.log("sending payload: ",payload);
-  this.props.ws.onOpen(()=>
-  this.props.ws.send(JSON.stringify(payload)))
+  this.props.ws.onOpen = () =>
+  this.props.ws.send(JSON.stringify(payload))
 }
 
 handlePasswordChange(e) {
