@@ -73,7 +73,7 @@ getLoginFromLocalStorage() {
   let payload
   if (userInfo) {
     user = JSON.parse(userInfo)
-    payload = {type: "session",payload: {team: user.team,username: user.username,session: user.session}
+    payload = {type: "session",payload: {team: user.team,username: user.username,session: user.session}}
     this.send(payload)
   }
 }
