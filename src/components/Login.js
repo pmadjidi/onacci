@@ -29,7 +29,8 @@ class Login extends React.Component {
     componentDidMount() {
       console.log(this.props.ws)
       console.log(this.state)
-      setTimeout(this.getLoginFromLocalStorage.bind(this), 100)
+      //setTimeout(this.getLoginFromLocalStorage.bind(this), 100)
+      this.getLoginFromLocalStorage()
     }
 
     componentWillMount() {
@@ -104,8 +105,7 @@ componentWillUnmount() {
 
 send(payload) {
   console.log("sending payload: ",payload);
-  this.props.ws.onOpen = () =>
-  this.props.ws.send(JSON.stringify(payload))
+  this.props.ws.onOpen = () => this.props.ws.send(JSON.stringify(payload))
 }
 
 handlePasswordChange(e) {
