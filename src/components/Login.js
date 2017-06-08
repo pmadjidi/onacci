@@ -108,7 +108,8 @@ componentWillUnmount() {
 send(payload) {
   console.log("sending payload: ",payload);
   if (!this.props.ws.readyState) {
-  setTimeout(payload => send(payload),1000)
+  console.log("Socket not ready, delaying one second......");
+  setTimeout(payload => this.send(payload),1000)
   }
   else {
     this.props.ws.send(JSON.stringify(payload))
