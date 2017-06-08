@@ -167,9 +167,9 @@ CL(string) {
 
     sendMessage(message){
       console.log("DDDD",message);
-      message.payload.session = this.state.currentSession
-      message.payload.sourceUser = this.state.currentUser
-      message.payload.team = this.state.currentTeam
+      message.payload.session = this.props.sess
+      message.payload.sourceUser = this.props.username
+      message.payload.team = this.pros.team
       console.log("sending message",message);
       try {
       this.props.ws.send(JSON.stringify(message))
