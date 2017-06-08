@@ -56,7 +56,7 @@ class  Home extends React.Component {
     this.props.ws.onerror =  evt => { this.onError(evt) };
     //console.log(this.props.ws)
     console.log("PROPS FOR HOME",this.props);
-    this.sendWhoAmI()
+  //  this.sendWhoAmI()
     this.sendOnline()
     this.sendChannels()
     this.channelAction({name: "General"})
@@ -83,11 +83,12 @@ class  Home extends React.Component {
 
 
 
-
+/*
   sendWhoAmI() {
     let payload = {type: "whoAmI",payload: {}}
     this.sendMessage(payload)
   }
+  */
 
   sendOnline() {
     let payload = {type: "online",payload: {}}
@@ -261,9 +262,11 @@ sendAsset(fileName,file) {
       case "online":
       that.setState({online: m.data})
       break
+      /*
       case "whoAmIAns":
       this.state.team.push(m.payload.team)
       that.setState({currentUser: m.payload.username,currentSession: m.payload.session,currentTeam: m.payload.team})
+      */
       break
       case "channels":
       that.setState({channels: m.data})
@@ -510,7 +513,7 @@ processEmoji(emoji) {
       <div className = "wrapperHome fade-in.home">
       <div className = "HomeStatusBar">
       <div className= "HomeCurrentUser">
-        <div className="HomeInfo">{"Logged In @ " + this.CL(this.state.currentUser) + "         Status:  " + this.state.commState}</div>
+        <div className="HomeInfo">{"Logged In @ " + this.CL(this.props.username) + "         Status:  " + this.state.commState}</div>
         </div>
         <Links />
        </div>
