@@ -361,7 +361,7 @@ sendAsset(fileName,file) {
 
     resetChannelNotification(channelName) {
       let ar = this.state.channels.map(channel=> {
-        if (channel.name === channelName) {
+        if (channel && channel.name === channelName) {
           channel.notify = 0
         }
         return channel
@@ -373,7 +373,7 @@ sendAsset(fileName,file) {
 
     setUserNotification(userName) {
       let ar = this.state.online.map(aUser=> {
-        if (aUser.name === userName) {
+        if (aUser && aUser.name === userName) {
           aUser.notify += 1
         }
         return  aUser
