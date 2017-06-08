@@ -170,7 +170,7 @@ CL(string) {
       console.log("DDDD",message);
       message.payload.session = this.props.sess
       message.payload.sourceUser = this.props.username
-      message.payload.team = this.pros.team
+      message.payload.team = this.props.team
       console.log("sending message",message);
       try {
       this.props.ws.send(JSON.stringify(message))
