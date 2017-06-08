@@ -22,6 +22,9 @@ let peerConnCfg = {'iceServers':
    {'url': 'stun:stun.l.google.com:19302'}]
 };
 
+let USERNAME = ""
+let TEAM = ""
+let SESS = ""
 //let peerConn = new RTCPeerConnection(peerConnCfg)
 
 
@@ -36,9 +39,14 @@ class  VideoWrapper extends React.Component {
 };
 
 class  LoginWrapper extends React.Component {
+  action (username,sess,team){
+    USERNAME = username
+    TEAM = team
+    SESS = sess
+  }
   render() {
     return (
-        <Login ws={wsc} />
+        <Login ws={wsc} action={this.action.bind(this)}/>
     );
   }
 };
@@ -46,7 +54,7 @@ class  LoginWrapper extends React.Component {
 class  HomeWrapper extends React.Component {
   render() {
     return (
-        <Home ws={wsc} />
+        <Home ws={wsc} username={USERNAME} team={TEAM} sess={SESS}/>
     );
   }
 };

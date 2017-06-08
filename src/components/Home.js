@@ -55,6 +55,7 @@ class  Home extends React.Component {
     this.props.ws.onclose = evt => { this.onClose(evt) };
     this.props.ws.onerror =  evt => { this.onError(evt) };
     //console.log(this.props.ws)
+    console.log("PROPS FOR HOME",this.props);
     this.sendWhoAmI()
     this.sendOnline()
     this.sendChannels()

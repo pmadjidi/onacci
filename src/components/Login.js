@@ -55,6 +55,7 @@ class Login extends React.Component {
         if (that.state.checked) {
         that.storeLogin(m.user,m.session,m.team)
         }
+        this.props.action(m.user,m.session,m.team)
         that.setState({auth: true})
     }
     }
