@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router'
 import {Picker} from 'emoji-mart'
 import {Emoji} from 'emoji-mart'
 import Emojify from 'react-emojione';
@@ -504,11 +505,9 @@ processEmoji(emoji) {
 }
 
   render() {
-    /*
     if (this.props.sess === "") {
         return <Redirect to= "/login" />
     }
-    */
     return (
       <div className = "wrapperHome fade-in.home">
       <div className = "HomeStatusBar">
