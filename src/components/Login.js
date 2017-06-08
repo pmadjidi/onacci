@@ -107,15 +107,15 @@ componentWillUnmount() {
    this.setState({username: e.target.value});
 }
 
-send(payload) {
+send(message) {
   if (!this.props.ws.readyState) {
-  console.log("Socket not ready, delaying one second......",payload);
-  return setTimeout(payload => this.send(payload),1000,this)
+  console.log("Socket not ready, delaying one second......",message);
+  return setTimeout((message) => this.send(message),1000,message)
   }
   else {
-    console.log(payload);
-    console.log("Socket Ready... sending....",payload);
-    this.props.ws.send(JSON.stringify(payload))
+    console.log(message);
+    console.log("Socket Ready... sending....",message);
+    this.props.ws.send(JSON.stringify(message))
   }
 }
 
