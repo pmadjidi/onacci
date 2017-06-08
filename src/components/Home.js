@@ -265,8 +265,8 @@ sendAsset(fileName,file) {
       case "whoAmIAns":
       this.state.team.push(m.payload.team)
       that.setState({currentUser: m.payload.username,currentSession: m.payload.session,currentTeam: m.payload.team})
-      */
       break
+      */
       case "channels":
       that.setState({channels: m.data})
       break
@@ -411,7 +411,7 @@ else {
     let sourceUser = message.sourceUser
     let targetUser = message.targetUser
     let user = null
-    if (sourceUser === this.state.currentUser)
+    if (sourceUser === this.props.username)
       user = targetUser
     else {
       user = sourceUser
@@ -478,7 +478,7 @@ else {
 }
 
 componentDidUpdate() {
-  if (this.state.currentUser !== null)
+  if (this.props.username !== null)
     this.scrollToBottom();
 }
 
