@@ -51,7 +51,7 @@ class Login extends React.Component {
 
     if (m.auth === true  || m.auth === "true"){
       console.log("login sucess....")
-        console.log("Setting auth user and session key to:", m.user,m.session)
+        console.log("Setting auth user and session key and team to:", m.user,m.session,m.team)
         if (that.state.checked) {
         that.storeLogin(m.user,m.session,m.team)
         }
