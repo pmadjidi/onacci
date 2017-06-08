@@ -261,12 +261,6 @@ sendAsset(fileName,file) {
       case "online":
       that.setState({online: m.data})
       break
-      /*
-      case "whoAmIAns":
-      this.state.team.push(m.payload.team)
-      that.setState({currentUser: m.payload.username,currentSession: m.payload.session,currentTeam: m.payload.team})
-      break
-      */
       case "channels":
       that.setState({channels: m.data})
       break
@@ -317,6 +311,7 @@ sendAsset(fileName,file) {
   }
 
       this.setState({selected: {type: "user",name: aUser.name,contentArray: contentArray}})
+      this.resetOnlineNotification(aUser)
       console.log("A User selected...",this.state.selected)
       return
     }
@@ -377,8 +372,26 @@ sendAsset(fileName,file) {
 
 
     setUserNotification(userName) {
-      console.log("implement user notification");
+      let ar = this.state.online.map(aUser=> {
+        if (aUser.name === userName) {
+          aUser.notify += 1
+        }
+        return  aUser
+      })
+      this.setState({online: ar})
     }
+
+    resetOnlineNotification(userName) {
+      let ar = this.state.online.map(aUser=> {
+        if (aUser.name === userName) {
+          aUser.notify = 0
+        }
+        return  aUser
+      })
+      this.setState({online: ar})
+    }
+
+
 
     sendNotifyed(message) {
       if (!message.notifyed) {
@@ -424,6 +437,7 @@ else {
   }
   if (this.state.selected.type === "user" && this.state.selected.name === user) {
   let selected = {type: "user",name: user, contentArray: this.state.usersContent[user]}
+  this.sendNotifyed(message)
   this.setState({selected})
   } else {
   this.setUserNotification(message.targetUser)
