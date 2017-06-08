@@ -174,10 +174,10 @@ CL(string) {
       this.props.ws.send(JSON.stringify(message))
     } catch (err) {
       console.log(err.code);
-      console.log("retry in 2 seconds");
+      console.log("retry in halfe a seconds");
       setTimeout((message) => {
       this.props.ws.send(JSON.stringify(message))
-    }, 1000)
+    }, 500,message)
     }
     }
 
