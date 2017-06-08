@@ -504,9 +504,11 @@ processEmoji(emoji) {
 }
 
   render() {
+    /*
     if (this.props.sess === "") {
         return <Redirect to= "/login" />
     }
+    */
     return (
       <div className = "wrapperHome fade-in.home">
       <div className = "HomeStatusBar">
