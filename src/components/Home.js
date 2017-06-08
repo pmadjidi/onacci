@@ -30,9 +30,6 @@ class  Home extends React.Component {
       assets: [],
       online: [],
       channels: [],
-      currentTeam: "",
-      currentUser: null,
-      currentSession: null,
       selected: {type: "",name: "",contentArray: [],assetArray: []},
       input: "",
       usersContent: {},
@@ -506,9 +503,6 @@ processEmoji(emoji) {
 }
 
   render() {
-    if (this.state.currentUser === null)
-      return null
-  //  console.log("render Home:",this.state)
     return (
       <div className = "wrapperHome fade-in.home">
       <div className = "HomeStatusBar">
