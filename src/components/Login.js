@@ -70,9 +70,11 @@ getLoginFromLocalStorage() {
   let userInfo = localStorage.getItem("OnacciSession")
   console.log(userInfo);
   let user
+  let payload
   if (userInfo) {
     user = JSON.parse(userInfo)
-    this.send({type: "session",payload: {team: user.team,username: user.username,session: user.session}})
+    payload = {type: "session",payload: {team: user.team,username: user.username,session: user.session}
+    this.send(payload)
   }
 }
 
