@@ -46,7 +46,7 @@ class  LoginWrapper extends React.Component {
   }
   render() {
     return (
-        <Login ws={wsc} action={this.action.bind(this)}/>
+        <Login ws={wsc} onLogin={this.action.bind(this)}/>
     );
   }
 };
