@@ -113,6 +113,7 @@ send(payload) {
   return setTimeout(payload => this.send(payload),1000,this)
   }
   else {
+    console.log(payload);
     console.log("Socket Ready... sending....",payload);
     this.props.ws.send(JSON.stringify(payload))
   }
