@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router'
 
+let MESSAGEBUFFER = []
+
 class Login extends React.Component {
 
   constructor(props) {
@@ -105,7 +107,12 @@ componentWillUnmount() {
 
 send(payload) {
   console.log("sending payload: ",payload);
-  this.props.ws.onOpen = () => this.props.ws.send(JSON.stringify(payload))
+  if (!this.props.ws.readyState) {
+  setTimeout(payload => send(payload),1000)
+  }
+  else {
+    this.props.ws.send(JSON.stringify(payload)
+  }
 }
 
 handlePasswordChange(e) {
