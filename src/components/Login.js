@@ -111,7 +111,7 @@ send(payload) {
   setTimeout(payload => send(payload),1000)
   }
   else {
-    this.props.ws.send(JSON.stringify(payload)
+    this.props.ws.send(JSON.stringify(payload))
   }
 }
 
