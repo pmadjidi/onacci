@@ -446,7 +446,7 @@ else {
   this.sendNotifyed(message)
   this.setState({selected})
   } else {
-  this.setUserNotification(message.targetUser)
+  this.setUserNotification(user)
   }
 }
 
