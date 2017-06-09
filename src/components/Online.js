@@ -28,7 +28,6 @@ createOnline(onlineUser,index) {
 
 
 render() {
-  console.log("userList: in Online Render(): ",this.props.userList)
   return (
   <div className="fade-in">
   <div className="HomeInfo">People</div>
