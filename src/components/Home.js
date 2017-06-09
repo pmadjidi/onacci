@@ -65,7 +65,7 @@ class  Home extends React.Component {
 
   onOpen(evt)
   {
-  this.setState({commState: "CONNECTED"},mode: {display: "none"})
+  this.setState({commState: "CONNECTED",mode: {display: "none"}})
   }
 
   onClose(evt)
