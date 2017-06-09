@@ -38,7 +38,8 @@ class  Home extends React.Component {
       typing: null,
       commState: "",
       emoj: "",
-      togglePicker: "none"
+      togglePicker: "none",
+      mode: {display: "none"}
     }
   }
 
@@ -64,12 +65,12 @@ class  Home extends React.Component {
 
   onOpen(evt)
   {
-  this.setState({commState: "CONNECTED"})
+  this.setState({commState: "CONNECTED"},mode: {display: "none"})
   }
 
   onClose(evt)
   {
-    this.setState({commState: "DISCONNECTED"})
+    this.setState({commState: "DISCONNECTED",mode: {display: "block"}})
   }
 
 
@@ -532,6 +533,7 @@ processEmoji(emoji) {
         return <Redirect to= "/login" />
     }
     return (
+      <div ClassName="transp" style={this.state.mode}>
       <div className = "wrapperHome fade-in.home">
       <div className = "HomeStatusBar">
       <div className= "HomeCurrentUser">
@@ -586,6 +588,7 @@ processEmoji(emoji) {
        <Typing name={this.state.typing} />
        </div>
       </div>
+    </div>
     )
   }
 };
