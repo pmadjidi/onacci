@@ -374,9 +374,9 @@ sendAsset(fileName,file) {
     }
 
 
-    setUserNotification(userName) {
+    setUserNotification(user) {
       let ar = this.state.online.map(aUser=> {
-        if (aUser && aUser.name === userName) {
+        if (aUser && aUser.name === user.name) {
           aUser.notify += 1
         }
         return  aUser
@@ -417,7 +417,7 @@ sendAsset(fileName,file) {
   }
   if (this.state.selected.type === "channel" && this.state.selected.name === message.targetChannel) {
     let selected = {type: "channel",name: this.state.selected.name, contentArray: this.state.channelsContent[message.targetChannel]}
-    this.sendNotifyed(message) // channel windo open
+    this.sendNotifyed(message) // channel window open
     this.setState({selected})
 }
 else {
