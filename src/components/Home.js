@@ -65,12 +65,12 @@ class  Home extends React.Component {
 
   onOpen(evt)
   {
-  this.setState({commState: "CONNECTED",mode: {display: "none"}})
+  this.setState({commState: "CONNECTED",mode: "clear")
   }
 
   onClose(evt)
   {
-    this.setState({commState: "DISCONNECTED",mode: {display: "block"}})
+    this.setState({commState: "DISCONNECTED",mode: "transp")
   }
 
 
@@ -533,7 +533,7 @@ processEmoji(emoji) {
         return <Redirect to= "/login" />
     }
     return (
-      <div ClassName="transp" style={this.state.mode}>
+      <div ClassName={this.state.mode} >
       <div className = "wrapperHome fade-in.home">
       <div className = "HomeStatusBar">
       <div className= "HomeCurrentUser">
