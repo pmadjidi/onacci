@@ -385,7 +385,7 @@ sendAsset(fileName,file) {
     }
 
     resetOnlineNotification(user) {
-      console.log("resetOnlineNotification",user;
+      console.log("resetOnlineNotification",user);
       let ar = this.state.online.map(aUser=> {
         if (aUser.name === user.name) {
           aUser.notify = 0
