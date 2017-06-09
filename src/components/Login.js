@@ -84,6 +84,11 @@ componentWillUnmount() {
   this.props.ws.removeEventListener('message')
 }
 
+componentWillReceiveProps(nextProps) {
+  console.log("Login: removeEventListener....");
+  this.props.ws.removeEventListener('message')
+}
+
     processLoginForm(){
       console.log("Socket state: ",this.props.ws.readyState)
       if (this.state.team === "") {
