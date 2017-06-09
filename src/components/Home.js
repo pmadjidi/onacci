@@ -298,6 +298,8 @@ sendAsset(fileName,file) {
   }
 
   onlineAction(aUser) {
+    if (!aUser)
+      return
     console.log("onlineAction",aUser);
     let replayUser = {type: "message",payload: {type: "replayCH", userName: aUser.name}}
     let replayAssets = {type: "assets",payload: {type: "user", userName: aUser.name}}
