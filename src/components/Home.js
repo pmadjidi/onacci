@@ -377,7 +377,7 @@ sendAsset(fileName,file) {
     setUserNotification(user) {
       console.log("setUserNotification",user);
       let ar = this.state.online.map(aUser=> {
-        if (aUser && aUser.name === name) {
+        if (aUser && aUser.name === user) {
           aUser.notify += 1
         }
         return  aUser
