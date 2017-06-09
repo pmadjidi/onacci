@@ -65,12 +65,12 @@ class  Home extends React.Component {
 
   onOpen(evt)
   {
-  this.setState({commState: "CONNECTED",mode: "clear")
+  this.setState({commState: "CONNECTED",mode: "clear"})
   }
 
   onClose(evt)
   {
-    this.setState({commState: "DISCONNECTED",mode: "transp")
+    this.setState({commState: "DISCONNECTED",mode: "transp"})
   }
 
 
