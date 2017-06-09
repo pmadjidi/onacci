@@ -395,7 +395,7 @@ sendAsset(fileName,file) {
 
     sendNotifyed(message) {
       if (!message.notifyed) {
-      let mess = {type: "seen",payload: {id: message.id}}
+      let mess = {type: "seen",payload: {id: message.id,type: message.type}}
       console.log("DEBUGG",mess);
       this.sendMessage(mess)
       }
