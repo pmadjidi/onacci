@@ -298,6 +298,7 @@ sendAsset(fileName,file) {
   }
 
   onlineAction(aUser) {
+    console.log("onlineAction",aUser);
     let replayUser = {type: "message",payload: {type: "replayCH", userName: aUser.name}}
     let replayAssets = {type: "assets",payload: {type: "user", userName: aUser.name}}
     let contentArray = this.state.usersContent[aUser.name]
