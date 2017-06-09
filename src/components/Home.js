@@ -451,9 +451,10 @@ else {
 }
 
   processRecivedTypingUser(message) {
-    console.log("processRecivedTypingUser",message);
-    if (this.state.selected.type === "user" && this.state.selected.name === message.sourceUser)
+    if (this.state.selected.type === "user" && this.state.selected.name === message.sourceUser) {
     this.setState({typing: message.sourceUser})
+    console.log("processRecivedTypingUser",message);
+  }
     setTimeout(this.clearType.bind(this), 7000)
   }
 
