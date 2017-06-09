@@ -535,7 +535,7 @@ processEmoji(emoji) {
       <div className = "wrapperHome fade-in.home">
       <div className = "HomeStatusBar">
       <div className= "HomeCurrentUser">
-        <div className="HomeInfo">{"Logged In @ " + this.CL(this.props.username) + "         Status:  " + this.state.commState}</div>
+        <div className="HomeInfo">{"Logged In @ " + this.CL(this.props.username) + "           " +  this.state.commState}</div>
         </div>
         <Links />
        </div>
