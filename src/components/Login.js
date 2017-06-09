@@ -35,33 +35,35 @@ class Login extends React.Component {
       this.getLoginFromLocalStorage()
     }
 
+    loginEventListner(event) {
+      console.log('Message from server', event);
+      let m = JSON.parse(event.data)
+      console.log("Parsed message...",m)
+
+
+
+      if (m.auth === false || m.auth === "false") {
+        console.log("login failed....");
+        this.setState({auth: false,passMessage: "Wrong password, retry?"})
+      }
+
+      if (m.auth === true  || m.auth === "true"){
+        console.log("login sucess....")
+          console.log("Setting auth user and session key and team to:", m.user,m.session,m.team)
+          if (this.state.checked) {
+          this.storeLogin(m.user,m.session,m.team)
+          }
+          this.props.onLogin(m.user,m.session,m.team)
+          this.setState({auth: true})
+      }
+      }
+
+
+
     componentWillMount() {
       let that = this
       this.props.ws.addEventListener('message',this.loginEventListner.bind(this))
     }
-
-loginEventListner(event) {
-  console.log('Message from server', event);
-  let m = JSON.parse(event.data)
-  console.log("Parsed message...",m)
-
-
-
-  if (m.auth === false || m.auth === "false") {
-    console.log("login failed....");
-    this.setState({auth: false,passMessage: "Wrong password, retry?"})
-  }
-
-  if (m.auth === true  || m.auth === "true"){
-    console.log("login sucess....")
-      console.log("Setting auth user and session key and team to:", m.user,m.session,m.team)
-      if (this.state.checked) {
-      this.storeLogin(m.user,m.session,m.team)
-      }
-      this.props.onLogin(m.user,m.session,m.team)
-      this.setState({auth: true})
-  }
-  }
 
 
 
@@ -90,7 +92,7 @@ componentWillUnmount() {
 
 componentWillReceiveProps(nextProps) {
   console.log("Login: removeEventListener....");
-  this.props.ws.removeEventListener('message',loginEventListner)
+  this.props.ws.removeEventListener('message',this.loginEventListner)
 }
 
     processLoginForm(){
