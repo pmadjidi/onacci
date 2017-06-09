@@ -76,7 +76,7 @@ class  Home extends React.Component {
 
   onError(evt)
   {
-    this.setState({commState: "DISCONNECTED"})
+    this.setState({commState: "DISCONNECTED",mode: "transp"})
     console.log("Socket Error: ", evt.data);
   }
 
