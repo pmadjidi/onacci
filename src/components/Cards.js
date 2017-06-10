@@ -152,7 +152,7 @@ createCard(message,index) {
       break
       case "mp3":
       soundStyle = {display: "block"}
-      sound = "/assets/" + message.team + "/" + message.file
+      sound = "https://www.onacci.com/assets/" + message.team + "/" + message.file
       console.log("should play sound");
       break
       default:
