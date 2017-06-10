@@ -584,7 +584,7 @@ processEmoji(emoji) {
       onClick={this.processEmoji.bind(this) }
   />
 </div>
-      <Emoji emoji={keyboard} size={8}/>
+      <Emoji emoji={"keyboard"} size={8}/>
        <Typing name={this.state.typing} />
        </div>
       </div>
