@@ -55,6 +55,14 @@ a.active {
   z-index: 20;
 }
 
+.tools {
+  display: "none";
+}
+
+.tools:Hover {
+  display: "block";
+}
+
 .wrapperHome {
   #margin: 1%;
   border-radius: 15px;
