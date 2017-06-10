@@ -147,7 +147,7 @@ createCard(message,index) {
     switch (fileExt) {
       case "JPG":
       lightBoxStyle = {display: "block"}
-      image  = "/assets/" + message.team + "/" + message.file
+      image  = "https://www.onacci.com/assets/" + message.team + "/" + message.file
       console.log("should display",image);
       break
       case "mp3":
