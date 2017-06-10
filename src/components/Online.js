@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router'
-
+import {Emoji} from 'emoji-mart'
 
 
 class Online extends React.Component {
