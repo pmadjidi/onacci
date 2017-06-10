@@ -98,7 +98,7 @@ class Cards extends React.Component {
     super(props)
     this.state = {
       errorImage: "",
-      togglePicker: {display: "none"}
+      togglePicker: "none"
     }
 }
 
