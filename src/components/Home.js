@@ -583,9 +583,11 @@ processEmoji(emoji) {
       set='emojione'
       onClick={this.processEmoji.bind(this) }
   />
-</div>
+  </div>
+      <div>
       <Emoji emoji={"keyboard"} size={16} style={{margin: "20px",padding: "20px",float: "left"}}/>
        <Typing name={this.state.typing} />
+       </div>
        </div>
       </div>
     </div>
