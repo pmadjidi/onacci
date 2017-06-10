@@ -542,7 +542,7 @@ processEmoji(emoji) {
         <Links />
        </div>
       <div className = "HomeTeam">
-        <Teams teamList = {this.state.team} action = {()=>{console.log("Clicked on team")}} />
+        <Teams teamList = {this.props.team} action = {()=>{console.log("Clicked on team")}} />
      </div>
      <div className = "HomeTools">
        <div className="HomeInfo">Tools</div>
