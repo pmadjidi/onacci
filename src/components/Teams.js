@@ -1,7 +1,7 @@
 
 import React, { Component } from 'react';
 import { Redirect } from 'react-router'
-
+import {Emoji} from 'emoji-mart'
 
 
 class Teams extends React.Component {
@@ -17,7 +17,7 @@ CL(string) {
 }
 
 createChannel(team,index) {
-      return <li key={index} onClick={()=>this.props.action(team)}><span className="teamStar">*</span> {" " + this.CL(team)}</li>
+      return <li key={index} onClick={()=>this.props.action(team)}> <Emoji emoji={"busts_in_silhouette"} size={16}/>{" " + this.CL(team)}</li>
   }
 
 render() {

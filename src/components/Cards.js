@@ -128,6 +128,7 @@ togglePicker() {
     else {
       this.setState({togglePicker: "none"})
     }
+    console.log("togglePicker: ",this.state.togglePicker);
 }
 
 processEmoji(emoji) {
