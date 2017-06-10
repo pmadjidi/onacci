@@ -96,7 +96,8 @@ class Cards extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      errorImage: ""
+      errorImage: "",
+      togglePicker: {display: "none"}
     }
 }
 
@@ -119,6 +120,18 @@ getYouTubeId(url) {
     }
 }
 
+
+togglePicker() {
+  if (this.state.togglePicker === "none")
+    this.setState({togglePicker: "block"})
+    else {
+      this.setState({togglePicker: "none"})
+    }
+}
+
+processEmoji(emoji) {
+  console.log(emoji);
+}
 
 createCard(message,index) {
   if (!message.id)
@@ -182,6 +195,16 @@ createCard(message,index) {
         <div onClick={()=>this.togglePicker.bind(this)}>
           <p><span className = "HomeChannelPlus" onClick={this.togglePicker.bind(this)}>&#9786;</span></p>
         </div>
+        <Picker style={{display: this.state.togglePicker,zIndex: 2, position: 'absolute', bottom: '10px', right: '40px' }}
+      emojiSize={24}
+      sheetSize={64}
+      color='#39BFD4'
+      perLine={9}
+      skin={1}
+      native={false}
+      set='emojione'
+      onClick={this.processEmoji.bind(this) }
+  />
       </div>
       </div>
     </div>
