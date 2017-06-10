@@ -585,7 +585,7 @@ processEmoji(emoji) {
   />
   </div>
       <div  style={{margin: "20px",padding: "20px",float: "left"}} >
-      <Emoji emoji={"keyboard"} size={32} />
+      <Emoji emoji={"keyboard"} size={32} style={this.state.keyboard} />
        </div>
        <Typing name={this.state.typing} />
        </div>
