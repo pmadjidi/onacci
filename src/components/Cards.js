@@ -3,6 +3,7 @@ import { Redirect } from 'react-router'
 import {emojify} from 'react-emojione';
 import Emojify from 'react-emojione';
 import {Emoji} from 'emoji-mart'
+import {Picker} from 'emoji-mart'
 import Linkify from 'linkifyjs/react';
 import Lightbox from 'react-images';
 import YouTubeVideo from './Youtube'
