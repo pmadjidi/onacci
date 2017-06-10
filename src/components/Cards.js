@@ -193,7 +193,7 @@ createCard(message,index) {
       <ReactPlayer style={soundStyle} url={sound} controls={true} width={"70%"} height={"5%"}/>
       <p className = "cardDate w3-margin-left">{ date.toString("YY MMM dd HH MM ss")}</p>
       <div className="tools" style={{float: "right"}}>
-        <div onClick={()=>this.togglePicker.bind(this)}>
+        <div>
           <p><span className = "HomeChannelPlus" onClick={this.togglePicker.bind(this)}>&#9786;</span></p>
         </div>
         <Picker style={{display: this.state.togglePicker,zIndex: 2, position: 'absolute', bottom: '10px', right: '40px' }}
