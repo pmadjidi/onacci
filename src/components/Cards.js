@@ -192,7 +192,7 @@ createCard(message,index) {
       <div style={youTubeStyle}> <YouTubeVideo id={id} /></div>
       <ReactPlayer style={soundStyle} url={sound} controls={true} width={"70%"} height={"5%"}/>
       <p className = "cardDate w3-margin-left">{ date.toString("YY MMM dd HH MM ss")}</p>
-      <div className="tools">
+      <div className="tools" styple={{fload: "right"}}>
         <div onClick={()=>this.togglePicker.bind(this)}>
           <p><span className = "HomeChannelPlus" onClick={this.togglePicker.bind(this)}>&#9786;</span></p>
         </div>
