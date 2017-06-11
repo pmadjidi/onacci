@@ -25,7 +25,7 @@ createChannel(channel,index) {
     //console.log("DEBUG",channel);
       return (
       <li className="channelLi" key={index} onClick={()=>this.props.action(channel)}>
-        <Emoji emoji={channel.symb} size={16}/>{"         " + this.CL(channel.name)}<span id={index} className="HomeInfo">{channel.notify > 0 ? channel.notify:null}</span></li>
+        <Emoji emoji={channel.symb} size={20}/>{"         " + this.CL(channel.name)}<span id={index} className="HomeInfo">{channel.notify > 0 ? channel.notify:null}</span></li>
         )
   }
 
@@ -86,7 +86,7 @@ render() {
       </div>
       <div className = "ChannelInput" style={{display: this.state.toggleInput}}>
         <input type="text" placeholder={"Channel name... "}  value={this.state.input} onKeyPress={this.checkforEnter.bind(this)} onChange={this.processInput.bind(this)} />
-        <input type="text" placeholder={"Symbol... "}  value={this.state.symb} onKeyPress={this.checkforEnter.bind(this)} onChange={this.processInputSymb.bind(this)} />
+        <input type="text" placeholder={"Symbol... "}  value={this.state.inputSymb} onKeyPress={this.checkforEnter.bind(this)} onChange={this.processInputSymb.bind(this)} />
         <input type="text" placeholder={"Purpuse... "}  value={this.state.inputPurpuse} onKeyPress={this.checkforEnter.bind(this)} onChange={this.processInputPurpuse.bind(this)} />
         <input type="text" placeholder={"Send Invite... "}  value={this.state.inputInvite} onKeyPress={this.checkforEnter.bind(this)} onChange={this.processInputInvite.bind(this)} />
        </div>
