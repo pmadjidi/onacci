@@ -24,7 +24,7 @@ createChannel(channel,index) {
     //console.log("DEBUG",channel);
       return (
       <li className="channelLi" key={index} onClick={()=>this.props.action(channel)}>
-        <span className="channelHash">#</span>{this.CL(channel.name)}<span id={index} className="HomeInfo">{channel.notify > 0 ? channel.notify:null}</span></li>
+        <Emoji emoji={channel.symb} size={32}/></Emoji><span id={index} className="HomeInfo">{channel.notify > 0 ? channel.notify:null}</span></li>
         )
   }
 
@@ -70,7 +70,7 @@ toggleInput() {
 
 render() {
 
-  
+
   if (!this.props.channelList)
      return <div>Loading...</div>;
   return (
