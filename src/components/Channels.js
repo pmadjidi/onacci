@@ -12,7 +12,8 @@ class Channels extends React.Component {
       input: "",
       inputPurpuse: "",
       inputInvite: "",
-      toggleInput: "none"
+      toggleInput: "none",
+      inputSymb: "hash"
     }
 }
 
@@ -32,7 +33,7 @@ checkforEnter(e) {
   if(e.key == 'Enter'){
     if (this.state.input !== "")
       this.props.send({type: "createchannel", payload:{channelname: this.state.input,
-        purpuse: this.state.inputPurpuse,invite: this.state.inputInvite}})
+        purpuse: this.state.inputPurpuse,invite: this.state.inputInvite,symb: this.state.inputSymb}})
   this.setState({toggleInput: "none",input: ""})
 }
 }
@@ -59,6 +60,10 @@ processInputInvite(e) {
     this.setState({inputInvite: e.target.value });
 }
 
+processInputInvite(e) {
+    this.setState({inputSymb: e.target.value });
+}
+
 
 toggleInput() {
   if (this.state.toggleInput === "none")
@@ -81,9 +86,9 @@ render() {
       </div>
       <div className = "ChannelInput" style={{display: this.state.toggleInput}}>
         <input type="text" placeholder={"Channel name... "}  value={this.state.input} onKeyPress={this.checkforEnter.bind(this)} onChange={this.processInput.bind(this)} />
+        <input type="text" placeholder={"Symbol... "}  value={this.state.symb} onKeyPress={this.checkforEnter.bind(this)} onChange={this.processInputSymb.bind(this)} />
         <input type="text" placeholder={"Purpuse... "}  value={this.state.inputPurpuse} onKeyPress={this.checkforEnter.bind(this)} onChange={this.processInputPurpuse.bind(this)} />
         <input type="text" placeholder={"Send Invite... "}  value={this.state.inputInvite} onKeyPress={this.checkforEnter.bind(this)} onChange={this.processInputInvite.bind(this)} />
-
        </div>
     </div>
   <ul className= "channelList">
