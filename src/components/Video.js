@@ -217,7 +217,7 @@ sendMessage(e) {
 
 
   createOnlineList(onlineUser,i) {
-      return <li key={i} onClick={()=>this.signal(onlineUser.username)}>{onlineUser.username}</li>
+      return <li key={i} onClick={()=>this.signal(onlineUser.name)}>{onlineUser.name}</li>
   }
 
   render() {
