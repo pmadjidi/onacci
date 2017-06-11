@@ -24,7 +24,7 @@ createChannel(channel,index) {
     //console.log("DEBUG",channel);
       return (
       <li className="channelLi" key={index} onClick={()=>this.props.action(channel)}>
-        <Emoji emoji={channel.symb} size={32}/></Emoji><span id={index} className="HomeInfo">{channel.notify > 0 ? channel.notify:null}</span></li>
+        <Emoji emoji={channel.symb} size={32}/><span id={index} className="HomeInfo">{channel.notify > 0 ? channel.notify:null}</span></li>
         )
   }
 
