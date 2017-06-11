@@ -60,7 +60,7 @@ processInputInvite(e) {
     this.setState({inputInvite: e.target.value });
 }
 
-processInputInvite(e) {
+processInputSymb(e) {
     this.setState({inputSymb: e.target.value });
 }
 
