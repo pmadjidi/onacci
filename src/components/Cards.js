@@ -193,21 +193,6 @@ createCard(message,index) {
       <div style={youTubeStyle}> <YouTubeVideo id={id} /></div>
       <ReactPlayer style={soundStyle} url={sound} controls={true} width={"70%"} height={"5%"}/>
       <p className = "cardDate w3-margin-left">{ date.toString("YY MMM dd HH MM ss")}</p>
-      <div className="tools" style={{float: "right"}}>
-        <div>
-          <p><span className = "HomeChannelPlus" onClick={this.togglePicker.bind(this)}>&#9786;</span></p>
-        </div>
-        <Picker style={{display: this.state.togglePicker,zIndex: 2, position: 'absolute', bottom: '10px', right: '40px' }}
-      emojiSize={24}
-      sheetSize={64}
-      color='#39BFD4'
-      perLine={9}
-      skin={1}
-      native={false}
-      set='emojione'
-      onClick={this.processEmoji.bind(this) }
-  />
-      </div>
       </div>
     </div>
   )
