@@ -539,7 +539,7 @@ processEmoji(emoji) {
         <div className="HomeInfo">
           <img  src={"/avatar" + this.props.team + "/" + this.props.username + ".png"} className ="onlineImage" ref={img => this.img = img} onError={(e)=>{e.target.src='/images/onacci.png'}} />
           {this.CL(this.props.username)}
-          {if (commState)
+          {if (this.state.commState)
               <Emoji emoji={"arrows_clockwise"} size={32}/>
           else
           <Emoji emoji={"x"} size={32}/>}
