@@ -157,7 +157,7 @@ createCard(message,index) {
   }
 
   if (message.file) {
-    fileExt = message.name.split('.').pop();
+    fileExt = message.name.split('.').pop().toUpperCase();
     console.log("File Extension is:",fileExt);
     switch (fileExt) {
       case "JPG":
