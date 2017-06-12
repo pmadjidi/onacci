@@ -35,7 +35,7 @@ class  Home extends React.Component {
       usersContent: {},
       channelsContent: {},
       typing: null,
-      commState: "",
+      commState: true,
       emoj: "",
       togglePicker: "none",
       mode: {display: "none"}
