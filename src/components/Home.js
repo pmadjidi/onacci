@@ -546,8 +546,7 @@ processEmoji(emoji) {
      <div className = "HomeTools">
        <div className="HomeInfo">Tools</div>
     </div>
-      <div className = "HomeOnline" onDragOver={this.allowDrop.bind(this)} onDrop = {this.handleDropAvatar.bind(this)} currentuser={this.props.username}
-         currentteam={this.props.team}>
+      <div className = "HomeOnline" onDragOver={this.allowDrop.bind(this)} onDrop = {this.handleDropAvatar.bind(this)} currentteam={this.props.team}>
         <Online userList = {this.state.online} action={this.onlineAction.bind(this)}/>
      </div>
       <div className = "HomeChannels">
