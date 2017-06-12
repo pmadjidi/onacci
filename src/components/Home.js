@@ -528,6 +528,12 @@ processEmoji(emoji) {
 }
 
   render() {
+    let connection
+    if (this.state.commState)
+        connection = <Emoji emoji={"arrows_clockwise"} size={32}/>
+    else
+      connection = <Emoji emoji={"x"} size={32}/>
+
     if (this.props.sess === "") {
         return <Redirect to= "/login" />
     }
@@ -539,10 +545,7 @@ processEmoji(emoji) {
         <div className="HomeInfo">
           <img  src={"/avatar" + this.props.team + "/" + this.props.username + ".png"} className ="onlineImage" ref={img => this.img = img} onError={(e)=>{e.target.src='/images/onacci.png'}} />
           {this.CL(this.props.username)}
-          {() = > {if (this.state.commState)
-              <Emoji emoji={"arrows_clockwise"} size={32}/>
-          else
-          <Emoji emoji={"x"} size={32}/>}}
+          {conneciton}
         </div>
         </div>
         <Links />
