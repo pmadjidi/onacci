@@ -165,7 +165,7 @@ createCard(message,index) {
       image  = "https://www.onacci.com/assets/" + message.team + "/" + message.file
       console.log("should display",image);
       break
-      case "mp3":
+      case "MP3":
       soundStyle = {display: "block"}
       sound = "https://www.onacci.com/assets/" + message.team + "/" + message.file
       console.log("should play sound");
