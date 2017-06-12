@@ -64,18 +64,18 @@ class  Home extends React.Component {
 
   onOpen(evt)
   {
-  this.setState({commState: "CONNECTED",mode: "clear"})
+  this.setState({commState: "true",mode: "clear"})
   }
 
   onClose(evt)
   {
-    this.setState({commState: "DISCONNECTED",mode: "transp"})
+    this.setState({commState: "false",mode: "transp"})
   }
 
 
   onError(evt)
   {
-    this.setState({commState: "DISCONNECTED",mode: "transp"})
+    this.setState({commState: "false",mode: "transp"})
     console.log("Socket Error: ", evt.data);
   }
 
@@ -538,7 +538,11 @@ processEmoji(emoji) {
       <div className= "HomeCurrentUser">
         <div className="HomeInfo">
           <img  src={"/avatar" + this.props.team + "/" + this.props.username + ".png"} className ="onlineImage" ref={img => this.img = img} onError={(e)=>{e.target.src='/images/onacci.png'}} />
-          {"Logged In @ " + this.CL(this.props.username) + "           " +  this.state.commState}
+          {this.CL(this.props.username)}
+          {if (commState)
+              <Emoji emoji={"arrows_clockwise"} size={32}/>
+          else
+          <Emoji emoji={"x"} size={32}/>}
         </div>
         </div>
         <Links />
