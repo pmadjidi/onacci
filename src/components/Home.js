@@ -545,7 +545,7 @@ processEmoji(emoji) {
       <div className = "HomeStatusBar">
       <div className= "HomeCurrentUser">
         <div className="HomeInfo">
-          <img  src={"/avatar/" + this.props.team + "/" + this.props.username + ".png"} className ="onlineImage" ref={img => this.img = img} onError={(e)=>{e.target.src='/images/onacci.png'}} />
+          <img  src={"/avatar/" + this.props.team + "/" + this.props.username + ".png"} className ="statusBarImage" ref={img => this.img = img} onError={(e)=>{e.target.src='/images/onacci.png'}} />
           {this.CL(this.props.username)}
           <div style = {{float: "right"}}> test {this.conneciton}</div>
         </div>
