@@ -312,7 +312,7 @@ sendAsset(fileName,file) {
       this.setState({selected: {type: "user",name: aUser.name,contentArray: contentArray}})
       return
   }
-
+      contentArray.forEach(message=>this.sendNotifyed(message))
       this.setState({selected: {type: "user",name: aUser.name,contentArray: contentArray}})
       this.resetOnlineNotification(aUser)
       console.log("A User selected...",this.state.selected)
