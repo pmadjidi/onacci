@@ -534,6 +534,8 @@ processEmoji(emoji) {
     else
       connection = <Emoji emoji={"x"} size={32}/>
 
+    console.log(connection);
+
     if (this.props.sess === "") {
         return <Redirect to= "/login" />
     }
