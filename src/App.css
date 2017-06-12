@@ -542,6 +542,7 @@ img.avatar {
   float: left;
   width: 16px;
   height: 16px;
+  margin-right: auto;
   border-radius: 10%;
 }
 .container {
