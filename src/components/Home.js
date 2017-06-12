@@ -536,7 +536,10 @@ processEmoji(emoji) {
       <div className = "wrapperHome fade-in.home">
       <div className = "HomeStatusBar">
       <div className= "HomeCurrentUser">
-        <div className="HomeInfo">{"Logged In @ " + this.CL(this.props.username) + "           " +  this.state.commState}</div>
+        <div className="HomeInfo">
+          <img  src={"/avatar" + this.props.team + "/" + this.props.username + ".png"} className ="onlineImage" ref={img => this.img = img} onError={(e)=>{e.target.src='/images/onacci.png'}} />
+          {"Logged In @ " + this.CL(this.props.username) + "           " +  this.state.commState}
+        </div>
         </div>
         <Links />
        </div>
