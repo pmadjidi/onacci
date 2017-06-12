@@ -542,6 +542,7 @@ img.avatar {
   float: left;
   width: 16px;
   height: 16px;
+  margin: 10px 0 10px 0;
 }
 .container {
     padding: 16px;
