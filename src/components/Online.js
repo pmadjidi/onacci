@@ -23,7 +23,7 @@ CL(string) {
 createOnline(onlineUser,index) {
       if (onlineUser)
         return <li key={index} className={onlineUser.status + " onlineLi"}  onClick={()=>this.props.action(onlineUser)}>
-          <img src={avatar} alt="Avatar" className ="w3-left  w3-margin-right w3-img" ref={img => this.img = img} onError={(e)=>{e.target.src='/images/onacci.png'}
+          <img src={avatar} alt="Avatar" className ="w3-left  w3-margin-right w3-img" ref={img => this.img = img} onError={(e)=>{e.target.src='/images/onacci.png'}/>
           {" " + this.CL(onlineUser.name)}<span id={index} className="HomeInfo">{onlineUser.notify > 0 ? onlineUser.notify:null}</span></li>
   }
 
