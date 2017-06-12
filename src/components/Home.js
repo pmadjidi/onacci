@@ -530,9 +530,9 @@ processEmoji(emoji) {
   render() {
     let connection
     if (this.state.commState)
-      connection = <Emoji emoji={"arrows_clockwise"} size={16}/>
+      connection = <Emoji emoji={"black_circle"} size={32}/>
     else
-      connection = <Emoji emoji={"x"} size={16}/>
+      connection = <Emoji emoji={"x"} size={32}/>
 
     console.log(connection);
 
