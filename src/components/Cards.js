@@ -206,7 +206,7 @@ render() {
 
   return (
   <div>
-  {this.props.messages.map((message,index)=>this.createCard(message,index))}
+  {this.props.messages.sort(a,b=>a.time - b.time).map((message,index)=>this.createCard(message,index))}
   </div>
 )
 }
