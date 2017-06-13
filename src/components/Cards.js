@@ -146,10 +146,8 @@ createCard(message,index) {
   let format = "cardContent"
   let date = new Date(message.time)
   let image
-  let sound
   let fileExt
   let youtube = null
-  let musicPlayer = null
 //  let formatedContent = emojify(message.content,eOptins)
   let formatedContent = parseEmulti(message.content)
   let id = this.getYouTubeId(message.content)
