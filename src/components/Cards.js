@@ -140,34 +140,35 @@ createCard(message,index) {
     return null
 
   let avatar = "/avatar/" + message.team + "/" + message.sourceUser + ".png"
-  let youTubeStyle = {display: "none"}
-  let lightBoxStyle = {display: "none"}
-  let soundStyle = {display: "none"}
+  let lightBox = null
+  let sound = null
   let format = "cardContent"
   let date = new Date(message.time)
   let image
   let sound
   let fileExt
+  let youtube = null
+  let musicPlayer = null
 //  let formatedContent = emojify(message.content,eOptins)
   let formatedContent = parseEmulti(message.content)
   let id = this.getYouTubeId(message.content)
   if (id) {
-    youTubeStyle = {display: "block"}
-    format = "YouTubeLink"
+    youtube = <div> <YouTubeVideo id={id} /></div>
   }
+
 
   if (message.file) {
     fileExt = message.name.split('.').pop().toUpperCase();
     console.log("File Extension is:",fileExt);
     switch (fileExt) {
       case "JPG":
-      lightBoxStyle = {display: "block"}
       image  = "https://www.onacci.com/assets/" + message.team + "/" + message.file
+      lightBox =   <img  src={image}  height="200" width="300" />
       console.log("should display",image);
       break
       case "MP3":
-      soundStyle = {display: "block"}
       sound = "https://www.onacci.com/assets/" + message.team + "/" + message.file
+      sound = <ReactPlayer style={soundStyle} url={sound} controls={true} width={"70%"} height={"5%"}/>
       console.log("should play sound");
       break
       default:
@@ -189,9 +190,9 @@ createCard(message,index) {
       <p className={format}><Linkify tagName="p">
           {parseEmulti(message.content)}
       </Linkify></p>
-    <img style={lightBoxStyle} src={image}  height="200" width="300" />
-      <div style={youTubeStyle}> <YouTubeVideo id={id} /></div>
-      <ReactPlayer style={soundStyle} url={sound} controls={true} width={"70%"} height={"5%"}/>
+    {youtube}
+    {lightBox}
+    {sound}
       <p className = "cardDate w3-margin-left">{ date.toString("YY MMM dd HH MM ss")}</p>
       </div>
     </div>
