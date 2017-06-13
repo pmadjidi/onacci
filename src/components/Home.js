@@ -224,21 +224,21 @@ handleDrop(e) {
 // prevent browser default behavior on drop
 e.preventDefault();
 
+let type = this.state.selected.type
+let name = this.state.selected.name
 
 // iterate over the files dragged on to the browser
 for (var x=0; x < e.dataTransfer.files.length; x++) {
   // instantiate a new FileReader object
   this.sendAsset(e.dataTransfer.files[x].name,
-    e.dataTransfer.files[x])
+    e.dataTransfer.files[x],name,type)
 }
 }
 
 
-sendAsset(fileName,file) {
+sendAsset(fileName,file,name,type) {
   let fr = new FileReader();
   fr.addEventListener("loadend",(evt)=> {
-    let type = this.state.selected.type
-    let name = this.state.selected.name
     let payload
     if (type === "channel")
       payload = {type: "assets", payload: {name: fileName, file: fr.result, type: type, targetChannel: name}}
