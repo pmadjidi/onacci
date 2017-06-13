@@ -1,3 +1,4 @@
+'use strict'
 import React, { Component } from 'react';
 import { Redirect } from 'react-router'
 import {emojify} from 'react-emojione';
