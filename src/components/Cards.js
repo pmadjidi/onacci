@@ -167,7 +167,7 @@ createCard(message,index) {
       break
       case "MP3":
       sound = "https://www.onacci.com/assets/" + message.team + "/" + message.file
-      sound = <ReactPlayer style={soundStyle} url={sound} controls={true} width={"70%"} height={"5%"}/>
+      sound = <ReactPlayer  url={sound} controls={true} width={"70%"} height={"5%"}/>
       console.log("should play sound");
       break
       default:
