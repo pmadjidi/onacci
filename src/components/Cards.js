@@ -140,7 +140,7 @@ createCard(message,index) {
   if (!message.id)
     return null
 
-  let avatar = "/avatar/" + message.team + "/" + message.sourceUser + ".png"
+  let avatar = "/avatar/user/" + message.team + "/" + message.sourceUser + ".png"
   let lightBox = null
   let sound = null
   let format = "cardContent"

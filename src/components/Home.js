@@ -188,35 +188,41 @@ CL(string) {
       }
 
   handleDropAvatar(e) {
-    console.log("CALLED.......");
-    console.log(e.dataTransfer.files);
-  // prevent browser default behavior on drop
   e.preventDefault();
-
-
-  // iterate over the files dragged on to the browser
   for (var x=0; x < e.dataTransfer.files.length; x++) {
-    // instantiate a new FileReader object
     var fr = new FileReader();
     fr.fileName = e.dataTransfer.files[x].name
 
-    // loading files from the file system is an asynchronous
-    // operation, run this function when the loading process
-    // is complete
     fr.addEventListener("loadend",(evt)=> {
       console.log(fr.result)
-      // send the file over web sockets
-      //this.props.ws.binaryData = 'ArrayBuffer'
-
-      let payload = {type: "avatar", payload: {name: fr.fileName, file: fr.result}}
+      let payload = {type: "avatar", payload: {type: "user",name: fr.fileName, file: fr.result}}
       this.sendMessage(payload)
     })
 
-    // load the file into an array buffer
-    //fr.readAsArrayBuffer(e.dataTransfer.files[x]);
      fr.readAsDataURL(e.dataTransfer.files[x])
   }
 }
+
+handleDropTeamAvatar(e) {
+// prevent browser default behavior on drop
+e.preventDefault();
+
+
+for (var x=0; x < e.dataTransfer.files.length; x++) {
+  var fr = new FileReader();
+  fr.fileName = e.dataTransfer.files[x].name
+
+  fr.addEventListener("loadend",(evt)=> {
+    console.log(fr.result)
+    let payload = {type: "avatar", payload: {type:"team" ,name: fr.fileName, file: fr.result}}
+    this.sendMessage(payload)
+  })
+
+   fr.readAsDataURL(e.dataTransfer.files[x])
+}
+}
+
+
 
 handleDrop(e) {
   console.log("CALLED.......");
@@ -553,7 +559,7 @@ processEmoji(emoji) {
         <Links />
        </div>
       <div className = "HomeTeam">
-        <Teams teamList = {[this.props.team]} action = {()=>{console.log("Clicked on team")}} />
+        <Teams teamList = {[this.props.team]} action = {()=>{console.log("Clicked on team")}} onDrop = {this.handleDropTeamAvatar.bind(this)} />
      </div>
      <div className = "HomeTools">
        <div className="HomeInfo">Tools</div>

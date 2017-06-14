@@ -17,7 +17,10 @@ CL(string) {
 }
 
 createChannel(team,index) {
-      return <li key={index} onClick={()=>this.props.action(team)}> <Emoji emoji={"busts_in_silhouette"} size={16}/>{" " + this.CL(team)}</li>
+      let avatar = "/avatar/team/" + message.team + "/" + message.sourceUser + ".png"
+      return <li key={index} onClick={()=>this.props.action(team)}>
+        <img src={avatar} alt="Avatar" className ="w3-left  w3-margin-right w3-img" ref={img => this.img = img} onError={(e)=>{e.target.src='/images/onacci.png'}} />
+        {this.CL(team)}</li>
   }
 
 render() {
