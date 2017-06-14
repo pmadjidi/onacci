@@ -559,7 +559,7 @@ processEmoji(emoji) {
         <Links />
        </div>
       <div className = "HomeTeam" onDrop = {this.handleDropTeamAvatar.bind(this)} >
-        <Teams teamList = {[this.props.team]} action = {()=>{console.log("Clicked on team")}} />
+        <Teams teamList = {[this.props.team]} action = {()=>{console.log("Clicked on team")}} onDrop = {this.handleDropTeamAvatar.bind(this)}  />
      </div>
      <div className = "HomeTools">
        <div className="HomeInfo">Tools</div>
