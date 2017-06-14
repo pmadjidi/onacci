@@ -22,8 +22,8 @@ createChannel(team,index) {
         <div className="tooltip">
         <img  className ="onlineImage"  data-tooltip="Current Team...." src={avatar} ref={img => this.img = img} onError={(e)=>{e.target.src='/images/onacci.png'}} />
           <span className="tooltiptext">Current selected team</span>
-          </div>
          {this.CL(team)}
+         </div>
       </li>
   }
 
