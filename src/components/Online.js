@@ -39,8 +39,8 @@ render() {
   <div className="fade-in">
   <div className="tooltip">
   <div className="HomeInfo">People
-  <span className="tooltiptext">{"Drag your picture to this pannel..."}</span>
   </div>
+  <span className="tooltiptext">{"Drag your picture to this pannel..."}</span>
 </div>
 
   <ul className= "onlineList fade-in">
