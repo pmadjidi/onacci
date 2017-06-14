@@ -21,8 +21,8 @@ createChannel(team,index) {
       return <li key={index} onClick={()=>this.props.action(team)}>
         <div className="tooltip">
         <img  className ="onlineImage"  data-tooltip="Current Team...." src={avatar} ref={img => this.img = img} onError={(e)=>{e.target.src='/images/onacci.png'}} />
+          <span className="tooltiptext">Current selected team</span>
          <span class="caption">{this.CL(team)}</span>
-        <span className="tooltiptext">Current selected team</span>
       </div>
       </li>
   }
