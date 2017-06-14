@@ -19,9 +19,10 @@ CL(string) {
 createChannel(team,index) {
       let avatar = "/avatar/team/" + team + "/" + team  + ".png"
       return <li key={index} onClick={()=>this.props.action(team)}>
-        <div>
+        <div class="tooltip">
         <img  className ="onlineImage"  data-tooltip="Current Team...." src={avatar} ref={img => this.img = img} onError={(e)=>{e.target.src='/images/onacci.png'}} />
          <span class="caption">{this.CL(team)}</span>
+        <span class="tooltiptext">Current selected team</span>
       </div>
       </li>
   }
@@ -39,3 +40,9 @@ render() {
 }
 
 export default Teams
+
+/*
+<div class="tooltip">Hover over me
+  <span class="tooltiptext">Tooltip text</span>
+</div>
+*/
