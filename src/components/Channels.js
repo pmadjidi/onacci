@@ -25,8 +25,8 @@ createChannel(channel,index) {
     //console.log("DEBUG",channel);
     let tooltext = "Owner: "+ channel.owner + " Purpose: " + channel.purpuse
       return (
-      <li className="channelLi" key={index} onClick={()=>this.props.action(channel)}>
       <div className="tooltip">
+      <li className="channelLi" key={index} onClick={()=>this.props.action(channel)}>
         <Emoji emoji={channel.symb} size={20}/>{"         " + this.CL(channel.name)}<span id={index} className="HomeInfo">{channel.notify > 0 ? channel.notify:null}</span></li>
       <span className="tooltiptext">{tooltext}</span>
       </div>
