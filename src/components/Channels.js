@@ -24,9 +24,12 @@ channelPermission() {
 createChannel(channel,index) {
     //console.log("DEBUG",channel);
       return (
+      <div className="tooltip">
       <li className="channelLi" key={index} onClick={()=>this.props.action(channel)}>
         <Emoji emoji={channel.symb} size={20}/>{"         " + this.CL(channel.name)}<span id={index} className="HomeInfo">{channel.notify > 0 ? channel.notify:null}</span></li>
-        )
+      <span className="tooltiptext">{"Owner: "+ channel.owner + " Purpose: " + channel.purpuse}</span>
+      </div>
+      )
   }
 
 checkforEnter(e) {
