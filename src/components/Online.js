@@ -37,9 +37,11 @@ createOnline(onlineUser,index) {
 render() {
   return (
   <div className="fade-in">
-  <div className="HomeInfo tooltip">People
+  <div className="tooltip">
+  <div className="HomeInfo">People
   <span className="tooltiptext">{"Drag your picture to this pannel..."}</span>
   </div>
+</div>
 
   <ul className= "onlineList fade-in">
   {this.props.userList.map((onlineUser,index)=>this.createOnline(onlineUser,index))}
