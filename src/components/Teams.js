@@ -20,7 +20,7 @@ createChannel(team,index) {
       let avatar = "/avatar/team/" + team + "/" + team  + ".png"
       return <li key={index} onClick={()=>this.props.action(team)}>
         <div>
-        <img src={avatar} ref={img => this.img = img} onError={(e)=>{e.target.src='/images/onacci.png'}} />
+        <img src={avatar} className ="onlineImage" ref={img => this.img = img} onError={(e)=>{e.target.src='/images/onacci.png'}} />
          <span class="caption">{this.CL(team)}</span>
       </div>
       </li>
