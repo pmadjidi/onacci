@@ -347,14 +347,14 @@ sendAsset(fileName,file,name,type) {
   }
 
   processInput(e) {
-      this.setState({input: e.target.value });
+      this.setState({input: e.target.value,keyboard: {display: "block"} });
       this.sendTyping()
   }
 
   checkforEnter(e) {
     if(e.key == 'Enter'){
     this.handelInput()
-    this.setState({input: ""})
+    this.setState({input: "",keyboard: {display: "none"}})
   }
   }
 
