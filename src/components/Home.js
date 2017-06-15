@@ -38,7 +38,8 @@ class  Home extends React.Component {
       commState: true,
       emoj: "",
       togglePicker: "none",
-      mode: {display: "none"}
+      mode: {display: "none"},
+      keyboard: {display: "none"}
     }
   }
 
@@ -496,7 +497,7 @@ else {
 
 
   clearType() {
-    this.setState({typing: null})
+    this.setState({typing: null, keyboard: {display: "none"}})
   }
 
   scrollToBottom() {
