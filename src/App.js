@@ -10,7 +10,7 @@ import Settings from './components/Settings'
 
 let config = {
   //wssHost: 'wss://aka.ite.kth.se:9000/websocket/'
-  wssHost: 'wss://aka.ite.kth.se:9000/websocket/'
+  wssHost: 'wss://onacci.com:9000/websocket/'
 };
 
 let wsc = new WebSocket(config.wssHost)
