@@ -555,6 +555,8 @@ processEmoji(emoji) {
           {this.CL(this.props.username)}
           <div style = {{float: "right"}}>{connection}</div>
         </div>
+        </div>
+       </div>
       <div className = "HomeTeam" onDrop = {this.handleDropTeamAvatar.bind(this)} >
         <Teams teamList = {[this.props.team]} action = {()=>{console.log("Clicked on team")}} onDrop = {this.handleDropTeamAvatar.bind(this)}  />
      </div>
