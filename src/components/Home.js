@@ -536,9 +536,9 @@ processEmoji(emoji) {
   render() {
     let connection
     if (this.state.commState)
-      connection = <Emoji emoji={"black_circle"} size={32}/>
+      connection = <Emoji emoji={"sun_with_face"} size={64}/>
     else
-      connection = <Emoji emoji={"x"} size={32}/>
+      connection = <Emoji emoji={"new_moon_with_face"} size={64}/>
 
     console.log(connection);
 
