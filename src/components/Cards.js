@@ -51,7 +51,7 @@ function parseEmulti(str) {
   {
 
   result.push(str.substring(0,match[0].start))
-  result.push(<Emoji emoji={Emulti[0]} size={size}/>)
+  result.push(<Emoji key={i} emoji={Emulti[0]} size={size}/>)
 
   for ( i = 1; i < match.length ; i++) {
   result.push(str.substring(match[i-1].end,match[i].start))
@@ -185,8 +185,8 @@ createCard(message,index) {
     <div id = {message.id} key={message.id} className="fade-in" onClick={()=>this.props.messageSelect(message.id)}>
     <img src={avatar} alt="Avatar" className ="w3-left  w3-margin-right w3-img" ref={img => this.img = img} onError={(e)=>{e.target.src='/images/onacci.png'}} />
     <div className ="w3-panel w3-card-4 w3-margin-left">
-      <p className="cardName">{ this.CL(message.sourceUser) }</p>
-      <p className={format}><Linkify tagName="p">
+      <p className="cardName">{this.CL(message.sourceUser)}</p>
+      <p className={format} > <Linkify tagName="p">
           {parseEmulti(message.content)}
       </Linkify></p>
     {youtube}

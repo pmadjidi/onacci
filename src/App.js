@@ -54,7 +54,7 @@ class  LoginWrapper extends React.Component {
 class  HomeWrapper extends React.Component {
   render() {
     return (
-        <Home ws={wsc} username={USERNAME} team={TEAM} sess={SESS}/>
+        <Home ws={wsc} username={USERNAME} team={TEAM} sess={SESS}  peerConn={new RTCPeerConnection(peerConnCfg)}/>
     );
   }
 };

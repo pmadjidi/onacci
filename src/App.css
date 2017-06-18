@@ -370,11 +370,14 @@ color: rgb(150,150,150);
 .WorkBenchInfo {
 padding: 12px;
 color: rgb(150,150,150);
- z-index:1000;
  position:sticky;
  background-color: inherit;
  width: 50%;
  overflow: hidden;
+}
+
+span{
+     word-spacing:10px;
 }
 
 /* make keyframes that tell the start state and the end state of our object */

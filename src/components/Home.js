@@ -10,6 +10,21 @@ import Cards from './Cards'
 import Teams from './Teams'
 import Assets from './Assets'
 
+/** browser dependent definition are aligned to one and the same standard name **/
+navigator.getUserMedia = navigator.getUserMedia || navigator.mozGetUserMedia || navigator.webkitGetUserMedia;
+window.RTCPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection;
+window.RTCIceCandidate = window.RTCIceCandidate || window.mozRTCIceCandidate || window.webkitRTCIceCandidate;
+window.RTCSessionDescription = window.RTCSessionDescription || window.mozRTCSessionDescription || window.webkitRTCSessionDescription;
+window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition || window.mozSpeechRecognition
+  || window.msSpeechRecognition || window.oSpeechRecognition;
+
+  let ringing = new Audio('/sound/detringer.m4a');
+  console.log(ringing)
+  let peeronline = new Audio('/sound/peeronline.m4a');
+
+
+
+
 
 
 
@@ -39,7 +54,9 @@ class  Home extends React.Component {
       emoj: "",
       togglePicker: "none",
       mode: {display: "none"},
-      keyboard: {display: "none"}
+      keyboard: {display: "none"},
+      video: {display: "none"},
+      callStatus: "signal_strength"
     }
   }
 
@@ -59,6 +76,7 @@ class  Home extends React.Component {
     this.sendOnline()
     this.sendChannels()
     this.channelAction({name: "General"})
+    this.setupVideoEvents()
 
   }
 
@@ -283,10 +301,167 @@ sendAsset(fileName,file,name,type) {
       case "assets":
       that.processAsset(m.payload)
       break
+      case "signal":
+      that.processSignal(m.payload)
+      break
       default:
       console.log("Uknown message type:",m)
      }
   }
+
+//**************************************************** video call*********************************************
+
+  processSignal(payload) {  //reciver
+    console.log("signal payload:",payload)
+    this.setState({targetUser: payload.sourceUser})
+    if (payload.candidate) {
+      let cand = new RTCIceCandidate(payload.candidate)
+      console.log("cand: ",cand)
+      this.props.peerConn.addIceCandidate(cand).
+      then(()=>{console.log("sucess addIceCandiate......");this.setState({callStatus: "calling"})})
+      .catch(err=>console.log("Error addIceCandiate Failded:",err))
+      //this.setState({messageWindow: payload.sourceUser + " Det ringer, det ringer..."})
+    } else if (payload.sdp) {
+        let sdp = new RTCSessionDescription(payload.sdp)
+        console.log("sdp: ",sdp)
+        this.props.peerConn.setRemoteDescription(sdp)
+    } else {
+      console.log("Uknown signaling type: ",payload)
+    }
+  }
+
+
+  setupVideoEvents() {
+
+  let that = this
+
+
+  this.props.peerConn.onicecandidate = evt => {
+    console.log("onicecandidate event",evt)
+     if (!evt || !evt.candidate)
+     return;
+     ringing.play();
+     this.setState({callStatus: "calling"})
+     console.log("iceevent: ",evt);
+     this.props.ws.send(JSON.stringify({type: "signal", payload:
+        {candidate: evt.candidate, targetUser: this.state.selected.name,sourceUser: this.props.username}}));
+   }
+
+  this.props.peerConn.onaddstream = evt => {
+    console.log("Remote video called................",evt)
+    let remoteVideoSrc = URL.createObjectURL(evt.stream)
+    console.log("Remote Video Object: ",remoteVideoSrc)
+    this.setState({remoteVideoSrc})
+  }
+
+  this.props.peerConn.ondatachannel = evt => {
+    let receiveChannel = evt.channel;
+    receiveChannel.onmessage = function(event){
+      that.setState({chattWindow: event.data})
+}
+}
+
+  let dataChannel = this.props.peerConn.createDataChannel(this.state.selected.name, {reliable: false})
+  dataChannel.onerror = function (error) {
+console.log("Data Channel Error:", error);
+}
+
+
+dataChannel.onmessage = function (event) {
+  console.log("Got Data Channel Message:", event.data);
+}
+
+dataChannel.onopen = function () {
+  dataChannel.send("Hello from ONACCI...");
+}
+
+dataChannel.onclose = function () {
+  console.log("The Data Channel is Closed");
+}
+
+this.setState({dataChannel})
+
+}
+
+signal(){ //caler
+  let onlineUser = this.state.selected.name
+  this.setState({video: {display: "block"}})
+  console.log("Signaling.....",onlineUser)
+  this.setState({messageWindow: "Ringing.......\n"})
+  this.setState({targetUser: onlineUser})
+
+  //this.setState({peerConn,targetUser: onlineUser})
+
+   navigator.getUserMedia({ "audio": true, "video": true }, stream => {
+    let localVideoSrc = URL.createObjectURL(stream)
+    this.props.peerConn.addStream(stream)
+    //Creating offer
+    this.props.peerConn.createOffer(offer => {
+      let off = new RTCSessionDescription(offer);
+
+      this.props.peerConn.setLocalDescription(off,() => {
+          let message = JSON.stringify({type: "signal", payload: {sdp: off,targetUser: onlineUser }})
+          this.props.ws.send(message)
+        },
+        error =>{ console.log("peerConn.setLocalDescription: ",error);}
+      );
+    },
+    error => { console.log("peerConn.createOffer: ",error)}
+  );
+  console.log("Local Video Object:",localVideoSrc)
+this.setState({localVideoSrc})
+}, error => { console.log(" navigator.getUserMedia: ",error)
+})
+
+}
+
+answerCall() {
+  navigator.getUserMedia({ "audio": true, "video": true }, stream => {
+    this.props.peerConn.addStream(stream);
+    this.props.peerConn.createAnswer(
+      answer => {
+        let ans = new RTCSessionDescription(answer);
+        this.props.peerConn.setLocalDescription(ans, () => {
+            let answer= JSON.stringify({type: "signal", payload: {sdp: ans,targetUser:  this.state.selected.name}})
+            console.log("answer: ",answer)
+            this.props.ws.send(answer);
+            this.setState({messageWindow: "Picking the call, conected...."})
+          },
+          error => { console.log(error);}
+        );
+      },
+      error => {console.log(error);}
+    )
+    let localVideoSrc = URL.createObjectURL(stream);
+    this.onlineAction({name: this.state.targetUser})
+    this.setState({localVideoSrc: localVideoSrc,video: {display: "block"}})
+  }, error => { console.log(error) ;});
+}
+
+
+endCall() {
+  this.setState({messageWindow: "Call ended..." + this.state.selected.name})
+  this.props.peerConn.close();
+  if (this.state.localVideoSrc) {
+    this.state.localVideoSrc.getTracks().forEach(function (track) {
+      track.stop();
+    });
+  }
+  this.setState({video: {display: "none"}})
+}
+
+sendP2PMessage(e) {
+  if (e.keyCode == 13) {
+  this.setState({chattWindow:  this.props.username + ": " +  this.state.chattWindow})
+  }
+  this.setState({chattWindow: e.target.value });
+  console.log("chattWindow is: ",this.state.chattWindow);
+   this.state.dataChannel.send(this.state.chattWindow)
+}
+
+
+
+//************************************************
 
 
   processAsset(payload){
@@ -541,19 +716,26 @@ processEmoji(emoji) {
     else
       connection = <Emoji emoji={"new_moon_with_face"} size={64}/>
 
-    console.log(connection);
 
     if (this.props.sess === "") {
         return <Redirect to= "/login" />
     }
     return (
-      <div ClassName={this.state.mode} >
+      <div className={this.state.mode} >
       <div className = "wrapperHome fade-in.home">
       <div className = "HomeStatusBar">
       <div className= "HomeCurrentUser">
         <div className="HomeInfo">
           <img  src={"/avatar/user/" + this.props.team + "/" + this.props.username + ".png"} className ="statusBarImage" ref={img => this.img = img} onError={(e)=>{e.target.src='/images/onacci.png'}} />
           {this.CL(this.props.username)}
+          <span style = {{marginLeft: "10%"}}><Emoji emoji={this.state.callStatus} size={32} onClick={
+              ()=>{
+                if (this.state.callStatus === "calling") {
+                  console.log("Clicked.........");
+                  this.answerCall()
+                }
+              }
+            }/></span>
           <div style = {{float: "right"}}>{connection}</div>
         </div>
         </div>
@@ -573,9 +755,31 @@ processEmoji(emoji) {
                 ref={(el) => { this.messagesEnd = el; }}></div>
        </div>
       <div className = "HomeWorkBench"  ref={(div) => {this.messageList = div}} onDragOver={this.allowDrop.bind(this)} onDrop = {this.handleDrop.bind(this)} >
-      <div className = "WorkBenchInfo">{this.CL(this.state.selected.type) + " "} {this.CL(this.state.selected.name)}</div>
-<Cards messages = {this.state.selected.contentArray} send={this.sendMessage.bind(this)} messageSelect={this.messageSelect.bind(this)} ></Cards>
+      <div className = "WorkBenchInfo">{this.CL(this.state.selected.type) + " "} {this.CL(this.state.selected.name)}
+        <span style={{float: "right"}}><Emoji emoji={"iphone"} size={32} onClick={()=>this.signal()}/></span>
+        </div>
+      <Cards messages = {this.state.selected.contentArray} send={this.sendMessage.bind(this)} messageSelect={this.messageSelect.bind(this)} ></Cards>
+
+      <div className = "VideoCall" style={this.state.video}>
+        <div className="rVideo">
+        <video className="rVideo" id="remoteVideo"  src={this.state.remoteVideoSrc} autoPlay poster="/images/onacci.png" ></video>
       </div>
+      <div className = "lVideo" >
+        <video className = "lVideo" id="localVideo" src={this.state.localVideoSrc} autoPlay muted poster="/images/onacci.png"></video>
+      </div>
+      <div className = "cButtons">
+      <input className ="button button1"  id="answer" type="button" onClick={this.answerCall.bind(this)} value="Answer"/>
+      <input  className ="button button2" id="end" type="button" onClick={this.endCall.bind(this)} value="End"/>
+    </div>
+    <div className = "iWindow">
+      <textarea className = "iWindow" id="statusWindow" rows="2" cols="100" value = {this.state.messageWindow}></textarea>
+     </div>
+     <div className = "cWindow">
+       <textarea className = "cWindow" id="chattWindow"  autoFocus="autofocus" rows="9" cols="100" onChange= {this.sendP2PMessage.bind(this)} value ={this.state.chattWindow}></textarea>
+      </div>
+      </div>
+
+    </div>
       <div className = "HomeAssets">
 
             <Assets assetList = {this.state.assets} action={this.assetsAction.bind(this)}/>
