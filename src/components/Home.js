@@ -325,7 +325,6 @@ sendAsset(fileName,file,name,type) {
       this.props.peerConn.addIceCandidate(cand).
       then(()=>{
         console.log("sucess addIceCandiate......")
-        this.displayToolBarMessage("Connected to: " + payload.sourceUser)
       })
       .catch(err=>{
         console.log("Error addIceCandiate Failded:",err)
@@ -334,6 +333,7 @@ sendAsset(fileName,file,name,type) {
       //this.setState({messageWindow: payload.sourceUser + " Det ringer, det ringer..."})
     } else if (payload.sdp) {
       this.setState({callStatus: "connected"}) // local
+      this.displayToolBarMessage("Connected to: " + payload.sourceUser )
       console.log("SDP from payload is",payload.sdp);
         let sdp = new RTCSessionDescription(payload.sdp)
         console.log("sdp: ",sdp)
