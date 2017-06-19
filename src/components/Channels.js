@@ -27,7 +27,7 @@ createChannel(channel,index) {
       <li className="channelLi" key={index} onClick={()=>this.props.action(channel)}>
         <div className="tooltip">
         <Emoji emoji={channel.symb} size={32}/>{"         " + this.CL(channel.name)}<span id={index} className="HomeInfo">{channel.notify > 0 ? channel.notify:null}</span>
-        <span className="tooltiptext" onClick={()=>console.log("clicked on:",channel.name)}>{"Purpuse: " + channel.purpuse}</span>
+        <span className="tooltiptext" onClick={()=>console.log("clicked on:",channel.name)}>{channel.purpuse}</span>
         </div>
         </li>
       )

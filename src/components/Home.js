@@ -50,13 +50,14 @@ class  Home extends React.Component {
       usersContent: {},
       channelsContent: {},
       typing: null,
-      commState: true,
+      commState: "sun_with_face",
+      toolbarMessage: "",
       emoj: "",
       togglePicker: "none",
       mode: {display: "none"},
       keyboard: {display: "none"},
       video: {display: "none"},
-      callStatus: "signal_strength"
+      callStatus: "none"
     }
   }
 
@@ -83,18 +84,18 @@ class  Home extends React.Component {
 
   onOpen(evt)
   {
-  this.setState({commState: "true",mode: "clear"})
+  this.setState({commState: "sun_with_face",mode: "clear"})
   }
 
   onClose(evt)
   {
-    this.setState({commState: "false",mode: "transp"})
+    this.setState({commState: "new_moon_with_face",mode: "transp"})
   }
 
 
   onError(evt)
   {
-    this.setState({commState: "false",mode: "transp"})
+    this.setState({commState: "bomb",mode: "transp"})
     console.log("Socket Error: ", evt.data);
   }
 
@@ -241,6 +242,11 @@ for (var x=0; x < e.dataTransfer.files.length; x++) {
 }
 }
 
+displayToolBarMessage(message){
+  this.setState({toolbarMessage: message})
+  setTimeout(()=> {
+    this.setState({toolbarMessage: ""})}, 5000)
+}
 
 
 handleDrop(e) {
@@ -313,12 +319,14 @@ sendAsset(fileName,file,name,type) {
 
   processSignal(payload) {  //reciver
     console.log("signal payload:",payload)
-    this.setState({targetUser: payload.sourceUser})
+    this.setState({targetUser: payload.sourceUser,callStatus: "called"})
     if (payload.candidate) {
       let cand = new RTCIceCandidate(payload.candidate)
-      console.log("cand: ",cand)
       this.props.peerConn.addIceCandidate(cand).
-      then(()=>{console.log("sucess addIceCandiate......");this.setState({callStatus: "calling"})})
+      then(()=>{
+        console.log("sucess addIceCandiate......")
+        this.displayToolBarMessage("Acceept a call from: " + payload.sourceUser + " ?")
+        this.setState({callStatus: "connected",commState: "telephone_receiver"})})
       .catch(err=>console.log("Error addIceCandiate Failded:",err))
       //this.setState({messageWindow: payload.sourceUser + " Det ringer, det ringer..."})
     } else if (payload.sdp) {
@@ -341,7 +349,7 @@ sendAsset(fileName,file,name,type) {
      if (!evt || !evt.candidate)
      return;
      ringing.play();
-     this.setState({callStatus: "calling"})
+     this.setState({commState: "telephone_receiver"})
      console.log("iceevent: ",evt);
      this.props.ws.send(JSON.stringify({type: "signal", payload:
         {candidate: evt.candidate, targetUser: this.state.selected.name,sourceUser: this.props.username}}));
@@ -351,7 +359,7 @@ sendAsset(fileName,file,name,type) {
     console.log("Remote video called................",evt)
     let remoteVideoSrc = URL.createObjectURL(evt.stream)
     console.log("Remote Video Object: ",remoteVideoSrc)
-    this.setState({remoteVideoSrc})
+    this.setState({remoteVideoSrc: remoteVideoSrc,commState: "connected"})
   }
 
   this.props.peerConn.ondatachannel = evt => {
@@ -383,12 +391,11 @@ this.setState({dataChannel})
 
 }
 
-signal(){ //caler
+signal(){ //caller
   let onlineUser = this.state.selected.name
-  this.setState({video: {display: "block"}})
+  this.setState({video: {display: "block"},callStatus: "calling",messageWindow: "Ringing.......\n",targetUser: onlineUser})
   console.log("Signaling.....",onlineUser)
-  this.setState({messageWindow: "Ringing.......\n"})
-  this.setState({targetUser: onlineUser})
+
 
   //this.setState({peerConn,targetUser: onlineUser})
 
@@ -425,7 +432,7 @@ answerCall() {
             let answer= JSON.stringify({type: "signal", payload: {sdp: ans,targetUser:  this.state.selected.name}})
             console.log("answer: ",answer)
             this.props.ws.send(answer);
-            this.setState({messageWindow: "Picking the call, conected...."})
+            this.setState({messageWindow: "Picking the call, conected....",callStatus: "connected"})
           },
           error => { console.log(error);}
         );
@@ -440,14 +447,17 @@ answerCall() {
 
 
 endCall() {
+  console.log("signal state: ",this.props.peerConn.signalingState);
   this.setState({messageWindow: "Call ended..." + this.state.selected.name})
   this.props.peerConn.close();
+  /*
   if (this.state.localVideoSrc) {
     this.state.localVideoSrc.getTracks().forEach(function (track) {
       track.stop();
     });
   }
-  this.setState({video: {display: "none"}})
+  */
+  this.setState({video: {display: "none"},callStatus: "none"})
 }
 
 sendP2PMessage(e) {
@@ -709,14 +719,25 @@ processEmoji(emoji) {
   this.setState({input: this.state.input + emoji.colons,togglePicker: "none" })
 }
 
+handleCommmState(){
+
+  switch (this.state.callStatus) {
+    case "calling":
+    this.displayToolBarMessage("Calling " + this.state.targetUser + ".....")
+    break
+    case "called":
+    this.displayToolBarMessage("Answering " + this.state.targetUser + ".....")
+    this.answerCall()
+    break
+    case "connected":
+    this.endCall()
+    break
+    default:
+      this.displayToolBarMessage("Onacci online.....")
+    }
+}
+
   render() {
-    let connection
-    if (this.state.commState)
-      connection = <Emoji emoji={"sun_with_face"} size={64}/>
-    else
-      connection = <Emoji emoji={"new_moon_with_face"} size={64}/>
-
-
     if (this.props.sess === "") {
         return <Redirect to= "/login" />
     }
@@ -726,17 +747,12 @@ processEmoji(emoji) {
       <div className = "HomeStatusBar">
       <div className= "HomeCurrentUser">
         <div className="HomeInfo">
-          <img  src={"/avatar/user/" + this.props.team + "/" + this.props.username + ".png"} className ="statusBarImage" ref={img => this.img = img} onError={(e)=>{e.target.src='/images/onacci.png'}} />
+          <img  className ="statusBarImage" src={"/avatar/user/" + this.props.team + "/" + this.props.username + ".png"} ref={img => this.img = img} onError={(e)=>{e.target.src='/images/onacci.png'}} />
           {this.CL(this.props.username)}
-          <span style = {{marginLeft: "10%"}}><Emoji emoji={this.state.callStatus} size={32} onClick={
-              ()=>{
-                if (this.state.callStatus === "calling") {
-                  console.log("Clicked.........");
-                  this.answerCall()
-                }
-              }
-            }/></span>
-          <div style = {{float: "right"}}>{connection}</div>
+          <span style = {{marginLeft: "20%"}}>{this.CL(this.state.toolbarMessage)}</span>
+          <div style = {{float: "right"}} onClick={this.handleCommmState.bind(this)}>
+            <Emoji emoji={this.state.commState} size={64}/>
+          </div>
         </div>
         </div>
        </div>
@@ -767,10 +783,6 @@ processEmoji(emoji) {
       <div className = "lVideo" >
         <video className = "lVideo" id="localVideo" src={this.state.localVideoSrc} autoPlay muted poster="/images/onacci.png"></video>
       </div>
-      <div className = "cButtons">
-      <input className ="button button1"  id="answer" type="button" onClick={this.answerCall.bind(this)} value="Answer"/>
-      <input  className ="button button2" id="end" type="button" onClick={this.endCall.bind(this)} value="End"/>
-    </div>
     <div className = "iWindow">
       <textarea className = "iWindow" id="statusWindow" rows="2" cols="100" value = {this.state.messageWindow}></textarea>
      </div>
