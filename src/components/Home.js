@@ -326,7 +326,7 @@ sendAsset(fileName,file,name,type) {
       then(()=>{
         console.log("sucess addIceCandiate......")
         this.displayToolBarMessage("Acceept a call from: " + payload.sourceUser + " ?")
-        this.setState({callStatus: "connected",commState: "telephone_receiver"})})
+        this.setState({commState: "telephone_receiver"})})
       .catch(err=>console.log("Error addIceCandiate Failded:",err))
       //this.setState({messageWindow: payload.sourceUser + " Det ringer, det ringer..."})
     } else if (payload.sdp) {
@@ -722,6 +722,9 @@ processEmoji(emoji) {
 handleCommmState(){
 
   switch (this.state.callStatus) {
+    case "none":
+    this.signal()
+    break
     case "calling":
     this.displayToolBarMessage("Calling " + this.state.targetUser + ".....")
     this.endCall()
