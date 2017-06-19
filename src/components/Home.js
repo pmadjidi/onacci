@@ -328,7 +328,11 @@ sendAsset(fileName,file,name,type) {
         this.displayToolBarMessage("Connected to: " + payload.sourceUser)
         this.setState({commState: "calling"})
       })
-      .catch(err=>console.log("Error addIceCandiate Failded:",err))
+      .catch(err=>{
+        this.setState({commState: "sun_with_face"})
+        console.log("Error addIceCandiate Failded:",err)
+
+      })
       //this.setState({messageWindow: payload.sourceUser + " Det ringer, det ringer..."})
     } else if (payload.sdp) {
       console.log("SDP from payload is",payload.sdp);
