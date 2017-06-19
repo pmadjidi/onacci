@@ -333,7 +333,7 @@ sendAsset(fileName,file,name,type) {
       //this.setState({messageWindow: payload.sourceUser + " Det ringer, det ringer..."})
     } else if (payload.sdp) {
       this.setState({callStatus: "connected"}) // local
-      this.displayToolBarMessage("Connected to: " + payload.sourceUser )
+      this.displayToolBarMessage("Connected")
       console.log("SDP from payload is",payload.sdp);
         let sdp = new RTCSessionDescription(payload.sdp)
         console.log("sdp: ",sdp)
@@ -453,6 +453,7 @@ answerCall() {
     let localVideoSrc = URL.createObjectURL(stream);
     this.onlineAction({name: this.state.targetUser})
     this.setState({localVideoSrc: localVideoSrc,video: {display: "block"},callStatus: "connected"})
+    this.displayToolBarMessage("Connected")
   }, error => { console.log(error) ;});
 }
 
