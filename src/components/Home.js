@@ -319,17 +319,15 @@ sendAsset(fileName,file,name,type) {
 
   processSignal(payload) {  //reciver
     console.log("signal payload:",payload)
-    this.setState({targetUser: payload.sourceUser,callStatus: "called"})
+    this.setState({targetUser: payload.sourceUser,callStatus: "called",commState: "calling"})
     if (payload.candidate) {
       let cand = new RTCIceCandidate(payload.candidate)
       this.props.peerConn.addIceCandidate(cand).
       then(()=>{
         console.log("sucess addIceCandiate......")
         this.displayToolBarMessage("Connected to: " + payload.sourceUser)
-        this.setState({commState: "calling"})
       })
       .catch(err=>{
-        this.setState({commState: "sun_with_face"})
         console.log("Error addIceCandiate Failded:",err)
 
       })
@@ -355,7 +353,6 @@ sendAsset(fileName,file,name,type) {
      if (!evt || !evt.candidate)
      return;
      ringing.play();
-     this.setState({commState: "telephone_receiver"})
      console.log("iceevent: ",evt);
      this.props.ws.send(JSON.stringify({type: "signal", payload:
         {candidate: evt.candidate, targetUser: this.state.selected.name,sourceUser: this.props.username}}));
@@ -406,7 +403,7 @@ this.setState({dataChannel})
 
 signal(){ //caller
   let onlineUser = this.state.selected.name
-  this.setState({video: {display: "block"},callStatus: "calling",messageWindow: "Ringing.......\n",targetUser: onlineUser})
+  this.setState({video: {display: "block"},callStatus: "calling",commState: "calling",messageWindow: "Ringing.......\n",targetUser: onlineUser})
   console.log("Signaling.....",onlineUser)
 
 
@@ -461,8 +458,7 @@ answerCall() {
 
 endCall() {
   console.log("signal state: ",this.props.peerConn.signalingState);
-  this.setState({messageWindow: "Call ended..." + this.state.selected.name})
-  this.props.peerConn.close();
+  //this.props.peerConn.close();
   /*
   if (this.state.localVideoSrc) {
     this.state.localVideoSrc.getTracks().forEach(function (track) {
@@ -470,7 +466,7 @@ endCall() {
     });
   }
   */
-  this.setState({video: {display: "none"},callStatus: "none",commState: "sun_with_face"})
+  this.setState({video: {display: "none"},callStatus: "none",commState: "sun_with_face",messageWindow: "Call ended..." + this.state.selected.name})
 }
 
 sendP2PMessage(e) {
