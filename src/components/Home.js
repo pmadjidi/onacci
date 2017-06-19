@@ -442,7 +442,7 @@ answerCall() {
             let answer= JSON.stringify({type: "signal", payload: {sdp: ans,targetUser:  this.state.selected.name}})
             console.log("answer: ",answer)
             this.props.ws.send(answer);
-            this.setState({messageWindow: "Picking the call, conected....",callStatus: "connected"})
+            this.setState({messageWindow: "Picking the call, conected...."})
           },
           error => { console.log(error);}
         );
@@ -451,7 +451,7 @@ answerCall() {
     )
     let localVideoSrc = URL.createObjectURL(stream);
     this.onlineAction({name: this.state.targetUser})
-    this.setState({localVideoSrc: localVideoSrc,video: {display: "block"}})
+    this.setState({localVideoSrc: localVideoSrc,video: {display: "block"},callStatus: "connected"})
   }, error => { console.log(error) ;});
 }
 
