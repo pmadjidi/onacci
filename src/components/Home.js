@@ -326,7 +326,7 @@ sendAsset(fileName,file,name,type) {
       then(()=>{
         console.log("sucess addIceCandiate......")
         this.displayToolBarMessage("Connected to: " + payload.sourceUser)
-        this.setState({commState: "calling"},callStatus: "connected")})
+        this.setState({commState: "calling",callStatus: "connected"})
       .catch(err=>console.log("Error addIceCandiate Failded:",err))
       //this.setState({messageWindow: payload.sourceUser + " Det ringer, det ringer..."})
     } else if (payload.sdp) {
