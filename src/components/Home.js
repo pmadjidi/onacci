@@ -326,7 +326,7 @@ sendAsset(fileName,file,name,type) {
       then(()=>{
         console.log("sucess addIceCandiate......")
         this.displayToolBarMessage("Connected to: " + payload.sourceUser)
-        this.setState({commState: "calling",callStatus: "connected"})
+        this.setState({commState: "calling"})
       })
       .catch(err=>console.log("Error addIceCandiate Failded:",err))
       //this.setState({messageWindow: payload.sourceUser + " Det ringer, det ringer..."})
@@ -441,7 +441,7 @@ answerCall() {
             let answer= JSON.stringify({type: "signal", payload: {sdp: ans,targetUser:  this.state.selected.name}})
             console.log("answer: ",answer)
             this.props.ws.send(answer);
-            this.setState({messageWindow: "Picking the call, conected...."})
+            this.setState({messageWindow: "Picking the call, conected....",callStatus: "connected"})
           },
           error => { console.log(error);}
         );
