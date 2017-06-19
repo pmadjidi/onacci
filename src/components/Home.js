@@ -317,16 +317,15 @@ sendAsset(fileName,file,name,type) {
 
 //**************************************************** video call*********************************************
 
-  processSignal(payload) {  //reciver
+  processSignal(payload) {  //reciver local
     console.log("signal payload:",payload)
     this.setState({targetUser: payload.sourceUser,callStatus: "called",commState: "calling"})
     if (payload.candidate) {
-      let cand = new RTCIceCandidate(payload.candidate)
+      let cand = new RTCIceCandidate(payload.candidate) // remote
       this.props.peerConn.addIceCandidate(cand).
       then(()=>{
         console.log("sucess addIceCandiate......")
         this.displayToolBarMessage("Connected to: " + payload.sourceUser)
-        this.setState({callStatus: "connected"})
       })
       .catch(err=>{
         console.log("Error addIceCandiate Failded:",err)
@@ -334,6 +333,7 @@ sendAsset(fileName,file,name,type) {
       })
       //this.setState({messageWindow: payload.sourceUser + " Det ringer, det ringer..."})
     } else if (payload.sdp) {
+      this.setState({callStatus: "connected"}) // local
       console.log("SDP from payload is",payload.sdp);
         let sdp = new RTCSessionDescription(payload.sdp)
         console.log("sdp: ",sdp)
