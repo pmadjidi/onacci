@@ -369,6 +369,13 @@ sendAsset(fileName,file,name,type) {
 }
 }
 
+this.props.peerConn.oniceconnectionstatechange = function() {
+    if(this.props.peerConn.iceConnectionState == 'disconnected') {
+        console.log('Disconnected');
+        this.endCall()
+    }
+}
+
   let dataChannel = this.props.peerConn.createDataChannel(this.state.selected.name, {reliable: false})
   dataChannel.onerror = function (error) {
 console.log("Data Channel Error:", error);
@@ -457,7 +464,7 @@ endCall() {
     });
   }
   */
-  this.setState({video: {display: "none"},callStatus: "none"})
+  this.setState({video: {display: "none"},callStatus: "none",commState: "sun_with_face"})
 }
 
 sendP2PMessage(e) {
