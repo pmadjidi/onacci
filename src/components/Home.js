@@ -326,6 +326,7 @@ sendAsset(fileName,file,name,type) {
       then(()=>{
         console.log("sucess addIceCandiate......")
         this.displayToolBarMessage("Connected to: " + payload.sourceUser)
+        this.setState({callStatus: "connected"})
       })
       .catch(err=>{
         console.log("Error addIceCandiate Failded:",err)
