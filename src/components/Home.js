@@ -724,6 +724,7 @@ handleCommmState(){
   switch (this.state.callStatus) {
     case "calling":
     this.displayToolBarMessage("Calling " + this.state.targetUser + ".....")
+    this.endCall()
     break
     case "called":
     this.displayToolBarMessage("Answering " + this.state.targetUser + ".....")
