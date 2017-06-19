@@ -325,11 +325,12 @@ sendAsset(fileName,file,name,type) {
       this.props.peerConn.addIceCandidate(cand).
       then(()=>{
         console.log("sucess addIceCandiate......")
-        this.displayToolBarMessage("Acceept a call from: " + payload.sourceUser + " ?")
+        this.displayToolBarMessage("Connected to: " + payload.sourceUser)
         this.setState({commState: "telephone_receiver"})})
       .catch(err=>console.log("Error addIceCandiate Failded:",err))
       //this.setState({messageWindow: payload.sourceUser + " Det ringer, det ringer..."})
     } else if (payload.sdp) {
+      console.log("SDP from payload is",payload.sdp);
         let sdp = new RTCSessionDescription(payload.sdp)
         console.log("sdp: ",sdp)
         this.props.peerConn.setRemoteDescription(sdp)
