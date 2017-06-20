@@ -21,13 +21,18 @@ CL(string) {
 }
 
 
+
+
 createOnline(onlineUser,index) {
       if (onlineUser) {
       let avatar = "/avatar/" + this.props.team + "/" + onlineUser.name + ".png"
         return (
-        <li key={index} className={onlineUser.status + " onlineLi"}  onClick={()=>this.props.action(onlineUser)}>
+        <li key={index} className={onlineUser.status + " onlineLi "}  onClick={()=>this.props.action(onlineUser)}>
           <img  src={avatar} className ="onlineImage" ref={img => this.img = img} onError={(e)=>{e.target.src='/images/onacci.png'}} />
-          {" " + this.CL(onlineUser.name)}<span id={index} className="HomeInfo">{onlineUser.notify > 0 ? onlineUser.notify:null}</span>
+          <div className = "tooltip">
+          <span style={{marginLeft: "5px"}}>{this.CL(onlineUser.name)}</span><span id={index} className="HomeInfo">{onlineUser.notify > 0 ? onlineUser.notify:null}</span>
+        <span className="tooltiptext" onClick={()=>console.log("clicked on:",onlineUser.name)}>{this.CL(onlineUser.status)}</span>
+        </div>
           </li>
       )
     }
