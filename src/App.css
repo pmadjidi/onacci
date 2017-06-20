@@ -99,7 +99,7 @@ a.active {
 .verticalStrip {position:fixed; top:0; left:0; width:20px; background-color:grey; height:100%;}
 
 .cardContent {
-    font-size: 120%;
+    font-size: 100%;
     font-family: "Times New Roman", Times, serif;
 }
 

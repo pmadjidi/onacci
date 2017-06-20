@@ -517,11 +517,11 @@ sendP2PMessage(e) {
     if (!contentArray) {
       let contentArray = this.state.usersContent[aUser.name] = new Array()
       this.sendMessage(replayUser)
-      this.setState({selected: {type: "user",name: aUser.name,contentArray: contentArray}})
+      this.setState({selected: {type: "user",name: aUser.name,contentArray: contentArray,status: aUser.status}})
       return
   }
       contentArray.forEach(message=>this.sendNotifyed(message))
-      this.setState({selected: {type: "user",name: aUser.name,contentArray: contentArray}})
+      this.setState({selected: {type: "user",name: aUser.name,contentArray: contentArray,status: aUser.status}})
       this.resetOnlineNotification(aUser)
       console.log("A User selected...",this.state.selected)
       return
@@ -763,7 +763,7 @@ handleCommmState(){
         return <Redirect to= "/login" />
     }
 
-    if (this.state.selected.type === "user")
+    if (this.state.selected.type === "user" && this.state.selected.status === "online")
       userPhone =   <span style={{float: "right"}}><Emoji emoji={"iphone"} size={32} onClick={()=>this.signal()}/></span>
 
     return (
