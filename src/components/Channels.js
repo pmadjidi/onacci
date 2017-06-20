@@ -97,7 +97,7 @@ render() {
        </div>
     </div>
   <ul className= "channelList">
-  {this.props.channelList.map((channel,index)=>this.createChannel(channel,index))}
+  {this.props.channelList.sort((a,b)=>a.name - b.name).map((channel,index)=>this.createChannel(channel,index))}
   </ul>
   </div>
 )
