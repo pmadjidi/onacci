@@ -758,9 +758,14 @@ handleCommmState(){
 }
 
   render() {
+    let userPhone = null
     if (this.props.sess === "") {
         return <Redirect to= "/login" />
     }
+
+    if (this.state.selected.type === "user")
+      userPhone =   <span style={{float: "right"}}><Emoji emoji={"iphone"} size={32} onClick={()=>this.signal()}/></span>
+
     return (
       <div className={this.state.mode} >
       <div className = "wrapperHome fade-in.home">
@@ -792,7 +797,7 @@ handleCommmState(){
        </div>
       <div className = "HomeWorkBench"  ref={(div) => {this.messageList = div}} onDragOver={this.allowDrop.bind(this)} onDrop = {this.handleDrop.bind(this)} >
       <div className = "WorkBenchInfo">{this.CL(this.state.selected.type) + " "} {this.CL(this.state.selected.name)}
-        <span style={{float: "right"}}><Emoji emoji={"iphone"} size={32} onClick={()=>this.signal()}/></span>
+      {userPhone}
         </div>
       <Cards messages = {this.state.selected.contentArray} send={this.sendMessage.bind(this)} messageSelect={this.messageSelect.bind(this)} ></Cards>
 
