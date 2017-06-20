@@ -392,6 +392,8 @@ dataChannel.onopen = function () {
   dataChannel.send("Hello from ONACCI...");
   this.setState({callStatus: "connected"})
   this.displayToolBarMessage("Connected")
+  dataChannel.send("Connected...");
+  console.log("connected: ",this.state.callStatus);
 }
 
 dataChannel.onclose = function () {
