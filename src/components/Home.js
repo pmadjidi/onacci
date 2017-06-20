@@ -390,7 +390,7 @@ dataChannel.onmessage = function (event) {
 
 dataChannel.onopen = function () {
   dataChannel.send("Hello from ONACCI...");
-  this.setState(callStatus: "connected"})
+  this.setState({callStatus: "connected"})
   this.displayToolBarMessage("Connected")
 }
 
