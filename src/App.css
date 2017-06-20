@@ -406,7 +406,7 @@ span{
 
 .w3-left{float:left!important}.w3-right{float:right!important}
 .w3-circle{border-radius:50%}
-.w3-margin{margin:16px!important}.w3-margin-top{margin-top:16px!important}.w3-margin-bottom{margin-bottom:16px!important}
+.w3-margin{margin:8px!important}.w3-margin-top{margin-top:8px!important}.w3-margin-bottom{margin-bottom:8px!important}
 .w3-margin-left{margin-left:16px!important}.w3-margin-right{margin-right:16px!important}
 .w3-card-4 {
   word-break: break-all;
@@ -962,5 +962,5 @@ span.psw {
 }
 
 .tools {
-  
+
 }

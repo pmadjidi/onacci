@@ -160,6 +160,11 @@ createCard(message,index) {
     fileExt = message.name.split('.').pop().toUpperCase();
     console.log("File Extension is:",fileExt);
     switch (fileExt) {
+      case "GIF":
+      case "TIF":
+      case "SVG":
+      case "BMP":
+      case "PNG":
       case "JPG":
       image  = "https://www.onacci.com/assets/" + message.team + "/" + message.file
       lightBox =   <img  src={image}  height="200" width="300" />
