@@ -371,7 +371,8 @@ sendAsset(fileName,file,name,type) {
 }
 }
 
-this.props.peerConn.oniceconnectionstatechange = evt => {
+this.props.peerConn.oniceconnectionstatechange = evt =>
+    console.log("state changed...",evt);
     if(this.props.peerConn.iceConnectionState == 'disconnected') {
         console.log('Disconnected');
         this.endCall()
