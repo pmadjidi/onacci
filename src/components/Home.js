@@ -362,7 +362,7 @@ sendAsset(fileName,file,name,type) {
   this.props.peerConn.onaddstream = evt => {
     console.log("Remote video called................",evt)
     let remoteVideoSrc = URL.createObjectURL(evt.stream)
-    console.log("Remote Video Object: ",remoteVideoSrc,"callstatus: ",this.callStatus)
+    console.log("Remote Video Object: ",remoteVideoSrc,"callstatus: ",this.state.callStatus)
     this.setState({remoteVideoSrc: remoteVideoSrc,callStatus: "connected"})
     this.displayToolBarMessage("Connected")
   }
