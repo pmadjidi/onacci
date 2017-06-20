@@ -21,6 +21,7 @@ channelPermission() {
   console.log("Clicked on plus");
 }
 
+
 createChannel(channel,index) {
     //console.log("DEBUG",channel);
       return (

@@ -362,8 +362,9 @@ sendAsset(fileName,file,name,type) {
   this.props.peerConn.onaddstream = evt => {
     console.log("Remote video called................",evt)
     let remoteVideoSrc = URL.createObjectURL(evt.stream)
-    console.log("Remote Video Object: ",remoteVideoSrc)
-    this.setState({remoteVideoSrc: remoteVideoSrc})
+    console.log("Remote Video Object: ",remoteVideoSrc,"callstatus: ",callStatus)
+    this.setState({remoteVideoSrc: remoteVideoSrc,callStatus: "connected"})
+    this.displayToolBarMessage("Connected")
   }
 
   this.props.peerConn.ondatachannel = evt => {
@@ -452,8 +453,7 @@ answerCall() {
     )
     let localVideoSrc = URL.createObjectURL(stream);
     this.onlineAction({name: this.state.targetUser})
-    this.setState({localVideoSrc: localVideoSrc,video: {display: "block"},callStatus: "connected"})
-    this.displayToolBarMessage("Connected")
+    this.setState({localVideoSrc: localVideoSrc,video: {display: "block"}})
   }, error => { console.log(error) ;});
 }
 
