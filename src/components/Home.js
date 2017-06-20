@@ -394,7 +394,7 @@ dataChannel.onopen = function () {
   this.displayToolBarMessage("Connected")
   dataChannel.send("Connected...");
   console.log("connected: ",this.state.callStatus);
-}
+}.bind(this)
 
 dataChannel.onclose = function () {
   console.log("The Data Channel is Closed");
