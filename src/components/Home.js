@@ -332,8 +332,6 @@ sendAsset(fileName,file,name,type) {
       })
       //this.setState({messageWindow: payload.sourceUser + " Det ringer, det ringer..."})
     } else if (payload.sdp) {
-      this.setState({callStatus: "connected"}) // local
-      this.displayToolBarMessage("Connected")
       console.log("SDP from payload is",payload.sdp);
         let sdp = new RTCSessionDescription(payload.sdp)
         console.log("sdp: ",sdp)
@@ -363,8 +361,7 @@ sendAsset(fileName,file,name,type) {
     console.log("Remote video called................",evt)
     let remoteVideoSrc = URL.createObjectURL(evt.stream)
     console.log("Remote Video Object: ",remoteVideoSrc,"callstatus: ",this.state.callStatus)
-    this.setState({remoteVideoSrc: remoteVideoSrc,callStatus: "connected"})
-    this.displayToolBarMessage("Connected")
+    this.setState({remoteVideoSrc: remoteVideoSrc})
   }
 
   this.props.peerConn.ondatachannel = evt => {
@@ -393,6 +390,8 @@ dataChannel.onmessage = function (event) {
 
 dataChannel.onopen = function () {
   dataChannel.send("Hello from ONACCI...");
+  this.setState(callStatus: "connected"})
+  this.displayToolBarMessage("Connected")
 }
 
 dataChannel.onclose = function () {
