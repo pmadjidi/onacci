@@ -191,6 +191,7 @@ createCard(message,index) {
 
   return  (
 //  Math.random().toString(36).slice(2)
+    <div>
     <div id = {message.id} key={message.id} className="fade-in" onClick={()=>this.props.messageSelect(message.id)}>
     <img src={avatar} alt="Avatar" className ="w3-left  w3-margin-right w3-img" ref={img => this.img = img} onError={(e)=>{e.target.src='/images/onacci.png'}} />
     <div className ="w3-panel w3-card-4 w3-margin-left tooltip">
@@ -198,11 +199,12 @@ createCard(message,index) {
       <p className={format} > <Linkify tagName="p">
           {parseEmulti(message.content)}
       </Linkify></p>
-    {youtube}
-    {element}
       <p className = "cardDate w3-margin-left tooltiptext" >{ date.toString("YY MMM dd HH MM ss")}</p>
       </div>
     </div>
+    {youtube}
+    {element}
+  </div>
   )
 
   }
