@@ -8,6 +8,7 @@
   "dependencies": {
     "emoji-mart": "^1.0.0",
     "linkifyjs": "^2.1.4",
+    "mgr-pdf-viewer-react": "0.0.1",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
     "react-emojione": "^3.1.10",

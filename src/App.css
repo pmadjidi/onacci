@@ -106,6 +106,8 @@ a.active {
 .cardName {
   font-size: 90%;
   transition: opacity 2s ease-in;
+  color: blue;
+  font-variant: small-caps;
 }
 
 .YouTubeLink {

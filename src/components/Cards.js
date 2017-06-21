@@ -10,6 +10,7 @@ import Lightbox from 'react-images';
 import YouTubeVideo from './Youtube'
 import { emojiIndex } from 'emoji-mart'
 import ReactPlayer from 'react-player'
+import PDFViewer from  "mgr-pdf-viewer-react"
 
 function parseEmulti(str) {
   let match = []
@@ -141,11 +142,11 @@ createCard(message,index) {
     return null
 
   let avatar = "/avatar/user/" + message.team + "/" + message.sourceUser + ".png"
-  let lightBox = null
   let sound = null
   let format = "cardContent"
   let date = new Date(message.time)
-  let image
+  let url
+  let element
   let fileExt
   let youtube = null
 //  let formatedContent = emojify(message.content,eOptins)
@@ -159,6 +160,8 @@ createCard(message,index) {
   if (message.file) {
     fileExt = message.name.split('.').pop().toUpperCase();
     console.log("File Extension is:",fileExt);
+    url  = "https://www.onacci.com/assets/" + message.team + "/" + message.file
+
     switch (fileExt) {
       case "GIF":
       case "TIF":
@@ -166,14 +169,15 @@ createCard(message,index) {
       case "BMP":
       case "PNG":
       case "JPG":
-      image  = "https://www.onacci.com/assets/" + message.team + "/" + message.file
-      lightBox =   <img  src={image}  height="200" width="300" />
-      console.log("should display",image);
+      element =   <img  src={url}  height="200" width="300" />
+      console.log("should display",url);
       break
       case "MP3":
-      sound = "https://www.onacci.com/assets/" + message.team + "/" + message.file
-      sound = <ReactPlayer  url={sound} controls={true} width={"70%"} height={"5%"}/>
+      element = <ReactPlayer  url={url} controls={true} width={"70%"} height={"5%"}/>
       console.log("should play sound");
+      break
+      case "PDF":
+      element = <PDFViewer document={{url: url}} />
       break
       default:
         console.log("Unknown media file.....");
@@ -195,8 +199,7 @@ createCard(message,index) {
           {parseEmulti(message.content)}
       </Linkify></p>
     {youtube}
-    {lightBox}
-    {sound}
+    {element}
       <p className = "cardDate w3-margin-left tooltiptext" >{ date.toString("YY MMM dd HH MM ss")}</p>
       </div>
     </div>
