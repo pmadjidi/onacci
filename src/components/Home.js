@@ -799,7 +799,7 @@ toogleCamera(){
      <div className = "HomeTools">
        <div className="HomeInfo">Tools</div>
        <div onClick={this.toogleCamera.bind(this)}>
-         <span style = {{marginLeft: "5%"}}> <Emoji emoji="camera" size={16}/> </span>
+         <span style = {{marginLeft: "15%"}}> <Emoji emoji="camera" size={16}/> </span>
           <span style = {{marginLeft: "5%"}}> Camera </span>
         </div>
         <div style={this.state.toggleCamera}> <Webcamera send={this.sendMessage.bind(this)} selected={this.state.selected}
