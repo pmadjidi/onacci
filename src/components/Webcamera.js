@@ -13,7 +13,7 @@ class Webcamera extends React.Component {
     let targetChannel
     let type = this.props.selected.type
     let name = this.props.selected.name
-    let fileName = this.props.user + new Date().toString() + ".jpeg"
+    let fileName = this.props.user + "_" + new Date().toString() + ".jpg"
     if (type === "channel"){
       payload = {type: "assets", payload: {name: fileName, file: imageSrc, type: type, targetChannel: name}}
     }
