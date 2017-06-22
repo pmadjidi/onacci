@@ -9,6 +9,7 @@ import Channels from './Channels'
 import Cards from './Cards'
 import Teams from './Teams'
 import Assets from './Assets'
+import Webcamera from './Webcamera'
 
 /** browser dependent definition are aligned to one and the same standard name **/
 navigator.getUserMedia = navigator.getUserMedia || navigator.mozGetUserMedia || navigator.webkitGetUserMedia;
@@ -57,7 +58,8 @@ class  Home extends React.Component {
       mode: {display: "none"},
       keyboard: {display: "none"},
       video: {display: "none"},
-      callStatus: "none"
+      callStatus: "none",
+      toggleCamera: {display: "none"}
     }
   }
 
@@ -757,6 +759,15 @@ handleCommmState(){
     }
 }
 
+toogleCamera(){
+  if (this.state.toggleCamera.display === "none")
+    this.setState({toggleCamera: {display: "block"}})
+    else {
+      this.setState({toggleCamera: {display: "none"}})
+    }
+
+}
+
   render() {
     let userPhone = null
     if (this.props.sess === "") {
@@ -786,6 +797,11 @@ handleCommmState(){
      </div>
      <div className = "HomeTools">
        <div className="HomeInfo">Tools</div>
+       <div onClick={()=>this.toogleCamera.bind(this)}>
+         <span style = {{marginLeft: "5%"}}> <Emoji emoji="camera" size={16}/> </span>
+          <span style = {{marginLeft: "5%"}}> Camera </span>
+        </div>
+        <div style={this.state.toggleCamera}> <Webcamera /></div>
     </div>
       <div className = "HomeOnline" onDragOver={this.allowDrop.bind(this)} onDrop = {this.handleDropAvatar.bind(this)}>
         <Online userList = {this.state.online} action={this.onlineAction.bind(this)} team={this.props.team} />
