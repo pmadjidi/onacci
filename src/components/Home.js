@@ -803,7 +803,7 @@ toogleCamera(){
           <span style = {{marginLeft: "5%"}}> Camera </span>
         </div>
         <div style={this.state.toggleCamera}> <Webcamera send={this.sendMessage.bind(this)} selected={this.state.selected}
-          user = {this.props.username}/> toogle={this.toogleCamera.bind(this)}</div>
+          user = {this.props.username} toogle={this.toogleCamera.bind(this)}/></div>
     </div>
       <div className = "HomeOnline" onDragOver={this.allowDrop.bind(this)} onDrop = {this.handleDropAvatar.bind(this)}>
         <Online userList = {this.state.online} action={this.onlineAction.bind(this)} team={this.props.team} />
