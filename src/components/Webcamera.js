@@ -21,6 +21,7 @@ class Webcamera extends React.Component {
       payload = {type: "assets", payload: {name: fileName, file: imageSrc, type: type, targetUser: name}}
 
     this.props.send(payload)
+    this.props.toogle()
 
   };
 
