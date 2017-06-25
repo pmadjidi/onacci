@@ -11,6 +11,7 @@ import YouTubeVideo from './Youtube'
 import { emojiIndex } from 'emoji-mart'
 import ReactPlayer from 'react-player'
 import PDFViewer from  "mgr-pdf-viewer-react"
+import Highlight from 'react-highlight'
 
 function parseEmulti(str) {
   let match = []
@@ -148,6 +149,7 @@ createCard(message,index) {
   let url
   let element
   let fileExt
+  let snippet
   let youtube = null
 //  let formatedContent = emojify(message.content,eOptins)
   let formatedContent = parseEmulti(message.content)
@@ -155,7 +157,6 @@ createCard(message,index) {
   if (id) {
     youtube = <div> <YouTubeVideo id={id} /></div>
   }
-
 
   if (message.file) {
     fileExt = message.name.split('.').pop().toUpperCase();
@@ -182,6 +183,24 @@ createCard(message,index) {
       default:
         console.log("Unknown media file.....");
     }
+
+  }
+
+  if (message.subtype === "snippet") {
+    element =  <Highlight className={message.lang}>{message.content}</Highlight>
+
+    return (
+      <div id = {message.id} key={message.id} className="fade-in" onClick={()=>this.props.messageSelect(message.id)}>
+      <img src={avatar} alt="Avatar" className ="w3-left  w3-margin-right w3-img" ref={img => this.img = img} onError={(e)=>{e.target.src='/images/onacci.png'}} />
+      <div className ="w3-panel w3-card-4 w3-margin-left tooltip" >
+        <p className="cardName">{this.CL(message.sourceUser)}</p>
+        <p className = "cardDate w3-margin-left tooltiptext" >{ date.toString("YY MMM dd HH MM ss")}</p>
+      <div>
+        {element}
+      </div>
+        </div>
+      </div>
+    )
 
   }
 

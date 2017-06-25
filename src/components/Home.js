@@ -10,6 +10,7 @@ import Cards from './Cards'
 import Teams from './Teams'
 import Assets from './Assets'
 import Webcamera from './Webcamera'
+import CodeSnippet from './CodeSnippet'
 
 /** browser dependent definition are aligned to one and the same standard name **/
 navigator.getUserMedia = navigator.getUserMedia || navigator.mozGetUserMedia || navigator.webkitGetUserMedia;
@@ -59,7 +60,8 @@ class  Home extends React.Component {
       keyboard: {display: "none"},
       video: {display: "none"},
       callStatus: "none",
-      toggleCamera: {display: "none"}
+      toggleCamera: {display: "none"},
+      toggleCodeSnippet: {display: "none"}
     }
   }
 
@@ -104,12 +106,6 @@ class  Home extends React.Component {
 
 
 
-/*
-  sendWhoAmI() {
-    let payload = {type: "whoAmI",payload: {}}
-    this.sendMessage(payload)
-  }
-  */
 
   sendOnline() {
     let payload = {type: "online",payload: {}}
@@ -769,6 +765,17 @@ toogleCamera(){
 
 }
 
+toogleCodeSnippet(){
+  console.log("toggleCamera clicked");
+  if (this.state.toggleCodeSnippet.display === "none")
+    this.setState({toggleCodeSnippet: {display: "block"}})
+    else {
+      this.setState({toggleCodeSnippet: {display: "none"}})
+    }
+
+}
+
+
   render() {
     let userPhone = null
     if (this.props.sess === "") {
@@ -804,6 +811,14 @@ toogleCamera(){
         </div>
         <div style={this.state.toggleCamera}> <Webcamera send={this.sendMessage.bind(this)} selected={this.state.selected}
           user = {this.props.username} toogle={this.toogleCamera.bind(this)}/></div>
+
+        <div onClick={this.toogleCodeSnippet.bind(this)}>
+            <span style = {{marginLeft: "15%"}}> <Emoji emoji="desktop_computer" size={16}/> </span>
+             <span style = {{marginLeft: "5%"}}> Snippet </span>
+           </div>
+           <div style={this.state.toggleCodeSnippet}> <CodeSnippet send={this.sendMessage.bind(this)} selected={this.state.selected}
+             user = {this.props.username} toogle={this.toogleCodeSnippet.bind(this)}/></div>
+
     </div>
       <div className = "HomeOnline" onDragOver={this.allowDrop.bind(this)} onDrop = {this.handleDropAvatar.bind(this)}>
         <Online userList = {this.state.online} action={this.onlineAction.bind(this)} team={this.props.team} />

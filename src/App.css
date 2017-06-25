@@ -68,7 +68,7 @@ a.active {
   border-radius: 15px;
   display: grid;
   grid-template-columns: repeat(9, 1fr);
-  grid-gap: 7px;
+  grid-gap: 1px;
   grid-auto-rows: minmax(70px, auto);
 #  height: auto;
 #  min-height: 100% ;
@@ -229,6 +229,22 @@ a.active {
   border: 1px solid #ccc;
   box-sizing: border-box;
 }
+
+.SinppetInputField {
+  -moz-user-select: text;
+  -webkit-user-select: text;
+  -ms-user-select: text;
+  float: left;
+  border-radius: 5px;
+  padding: 12px 20px;
+  margin: 8px 10px;
+  height: 350px;
+  width: 350px;
+  overflow: scroll;
+  line-height: 1.2em
+}
+
+
 
 .pickerSmily {
   font-size: 120%;
@@ -967,14 +983,77 @@ span.psw {
 
 }
 
-.snippet {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  margin-left: -5px;
-  border-width: 5px;
-  border-style: solid;
-  border-color: #555 transparent transparent transparent;
-  z-index: 2;
-  }
+
+/*
+  IR_Black style (c) Vasily Mikhailitchenko <vaskas@programica.ru>
+*/
+
+.hljs {
+  display: block;
+  overflow-x: auto;
+  padding: 0.5em;
+  background: #000;
+  color: #f8f8f8;
+}
+
+.hljs-comment,
+.hljs-quote,
+.hljs-meta {
+  color: #7c7c7c;
+}
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-tag,
+.hljs-name {
+  color: #96cbfe;
+}
+
+.hljs-attribute,
+.hljs-selector-id {
+  color: #ffffb6;
+}
+
+.hljs-string,
+.hljs-selector-attr,
+.hljs-selector-pseudo,
+.hljs-addition {
+  color: #a8ff60;
+}
+
+.hljs-subst {
+  color: #daefa3;
+}
+
+.hljs-regexp,
+.hljs-link {
+  color: #e9c062;
+}
+
+.hljs-title,
+.hljs-section,
+.hljs-type,
+.hljs-doctag {
+  color: #ffffb6;
+}
+
+.hljs-symbol,
+.hljs-bullet,
+.hljs-variable,
+.hljs-template-variable,
+.hljs-literal {
+  color: #c6c5fe;
+}
+
+.hljs-number,
+.hljs-deletion {
+  color:#ff73fd;
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: bold;
+}
