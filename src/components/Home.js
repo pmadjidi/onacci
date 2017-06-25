@@ -756,7 +756,6 @@ handleCommmState(){
 }
 
 toogleCamera(){
-  console.log("toggleCamera clicked");
   if (this.state.toggleCamera.display === "none")
     this.setState({toggleCamera: {display: "block"}})
     else {
@@ -766,13 +765,29 @@ toogleCamera(){
 }
 
 toogleCodeSnippet(){
-  console.log("toggleCamera clicked");
   if (this.state.toggleCodeSnippet.display === "none")
     this.setState({toggleCodeSnippet: {display: "block"}})
     else {
       this.setState({toggleCodeSnippet: {display: "none"}})
     }
+}
 
+toogleMusicPlayer(){
+  console.log("toggleCamera clicked");
+  if (this.state.toggleMusicPlayer.display === "none")
+    this.setState({toggleMusicPlayer: {display: "block"}})
+    else {
+      this.setState({toggleMusicPlayer: {display: "none"}})
+    }
+}
+
+toogleGeo(){
+  console.log("toggleCamera clicked");
+  if (this.state.toggleGeo.display === "none")
+    this.setState({toggleGeo: {display: "block"}})
+    else {
+      this.setState({toggleGeo: {display: "none"}})
+    }
 }
 
 
@@ -805,7 +820,8 @@ toogleCodeSnippet(){
      </div>
      <div className = "HomeTools">
        <div className="HomeInfo">Tools</div>
-       <div onClick={this.toogleCamera.bind(this)}>
+
+     <div onClick={this.toogleCamera.bind(this)}>
          <span style = {{marginLeft: "15%"}}> <Emoji emoji="camera" size={16}/> </span>
           <span style = {{marginLeft: "5%"}}> Camera </span>
         </div>
@@ -818,6 +834,19 @@ toogleCodeSnippet(){
            </div>
            <div style={this.state.toggleCodeSnippet}> <CodeSnippet send={this.sendMessage.bind(this)} selected={this.state.selected}
              user = {this.props.username} toogle={this.toogleCodeSnippet.bind(this)}/></div>
+
+           <div onClick={this.toogleMusicPlayer.bind(this)}>
+                 <span style = {{marginLeft: "15%"}}> <Emoji emoji="notes" size={16}/> </span>
+                  <span style = {{marginLeft: "5%"}}> Player </span>
+                </div>
+                <div style={this.state.toggleMusicPlayer}></div>
+
+                  <div onClick={this.toogleGeo.bind(this)}>
+                        <span style = {{marginLeft: "15%"}}> <Emoji emoji="world_map" size={16}/> </span>
+                         <span style = {{marginLeft: "5%"}}> Geo </span>
+                       </div>
+                       <div style={this.state.toggleGeo}></div>
+
 
     </div>
       <div className = "HomeOnline" onDragOver={this.allowDrop.bind(this)} onDrop = {this.handleDropAvatar.bind(this)}>
