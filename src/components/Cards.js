@@ -174,7 +174,10 @@ createCard(message,index) {
       console.log("should display",url);
       break
       case "MP3":
-      element = <ReactPlayer  url={url} controls={true} width={"70%"} height={"5%"}/>
+
+      /* element = <audio  src={url} controls={true} width={"70%"} height={"5%"}> </audio>*/
+
+      element = <div onClick={()=>this.props.play(url)}>{message.name}</div>
       console.log("should play sound");
       break
       case "PDF":

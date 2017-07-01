@@ -61,7 +61,10 @@ class  Home extends React.Component {
       video: {display: "none"},
       callStatus: "none",
       toggleCamera: {display: "none"},
-      toggleCodeSnippet: {display: "none"}
+      toggleCodeSnippet: {display: "none"},
+      toggleMusicPlayer: {display: "none"},
+      toggleGeo: {display: "none"},
+      playMP3: ""
     }
   }
 
@@ -773,7 +776,7 @@ toogleCodeSnippet(){
 }
 
 toogleMusicPlayer(){
-  console.log("toggleCamera clicked");
+  console.log("calling toggle music");
   if (this.state.toggleMusicPlayer.display === "none")
     this.setState({toggleMusicPlayer: {display: "block"}})
     else {
@@ -782,12 +785,16 @@ toogleMusicPlayer(){
 }
 
 toogleGeo(){
-  console.log("toggleCamera clicked");
   if (this.state.toggleGeo.display === "none")
     this.setState({toggleGeo: {display: "block"}})
     else {
       this.setState({toggleGeo: {display: "none"}})
     }
+}
+
+playMP3(url) {
+  console.log("called playmp3",url);
+  this.setState({playMP3: url})
 }
 
 
@@ -806,12 +813,17 @@ toogleGeo(){
       <div className = "HomeStatusBar">
       <div className= "HomeCurrentUser">
         <div className="HomeInfo">
-          <img  className ="statusBarImage" src={"/avatar/user/" + this.props.team + "/" + this.props.username + ".png"} ref={img => this.img = img} onError={(e)=>{e.target.src='/images/onacci.png'}} />
-          {this.CL(this.props.username)}
-          <span style = {{marginLeft: "20%"}}>{this.CL(this.state.toolbarMessage)}</span>
-          <div style = {{float: "right"}} onClick={this.handleCommmState.bind(this)}>
+          <span style = {{marginLeft: "2%",textAlign: "center",display: "inlineBlock"}}><img  className ="statusBarImage" src={"/avatar/user/" + this.props.team + "/" + this.props.username + ".png"}
+            ref={img => this.img = img} onError={(e)=>{e.target.src='/images/onacci.png'}} /></span>
+          <span style = {{marginLeft: "4%",textAlign: "center",display: "inlineBlock"}}>{this.CL(this.props.username)}</span>
+          <span style = {{marginLeft: "20%",textAlign: "center",display: "inlineBlock"}}>
+          <span style = {{float: "right",marginRight: "0.1%",display: "inline-block"}} onClick={this.handleCommmState.bind(this)}>
             <Emoji emoji={this.state.commState} size={64}/>
-          </div>
+          </span>
+        </span>
+        <div>
+            <span style = {{marginLeft: "2%",textAlign: "center"}}>{this.CL(this.state.toolbarMessage)}</span>
+        </div>
         </div>
         </div>
        </div>
@@ -839,7 +851,11 @@ toogleGeo(){
                  <span style = {{marginLeft: "15%"}}> <Emoji emoji="notes" size={16}/> </span>
                   <span style = {{marginLeft: "5%"}}> Player </span>
                 </div>
-                <div style={this.state.toggleMusicPlayer}></div>
+                <div style={this.state.toggleMusicPlayer}>
+                  <span><audio  src={this.state.playMP3} controls style={{marginLeft: "12px", marginRight: "12px",marginTop: "12px",marginBottom: "12px"}} autoPlay>
+                        Your browser does not support the audio element.
+                      </audio></span>
+                </div>
 
                   <div onClick={this.toogleGeo.bind(this)}>
                         <span style = {{marginLeft: "15%"}}> <Emoji emoji="world_map" size={16}/> </span>
@@ -861,7 +877,8 @@ toogleGeo(){
       <div className = "WorkBenchInfo">{this.CL(this.state.selected.type) + " "} {this.CL(this.state.selected.name)}
       {userPhone}
         </div>
-      <Cards messages = {this.state.selected.contentArray} send={this.sendMessage.bind(this)} messageSelect={this.messageSelect.bind(this)} ></Cards>
+      <Cards messages = {this.state.selected.contentArray} send={this.sendMessage.bind(this)} messageSelect={this.messageSelect.bind(this)}
+           play={this.playMP3.bind(this)}></Cards>
 
       <div className = "VideoCall" style={this.state.video}>
         <div className="rVideo">
