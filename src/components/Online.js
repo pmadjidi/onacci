@@ -27,7 +27,7 @@ createOnline(onlineUser,index) {
       if (onlineUser) {
       let avatar = "/avatar/" + this.props.team + "/" + onlineUser.name + ".png"
         return (
-        <li key={index} className={onlineUser.status + " onlineLi "}  onClick={()=>this.props.action(onlineUser)}>
+        <li style={{marginTop: "1px"}} key={index} className={onlineUser.status + " onlineLi "}  onClick={()=>this.props.action(onlineUser)}>
           <img  src={avatar} className ="onlineImage" ref={img => this.img = img} onError={(e)=>{e.target.src='/images/onacci.png'}} />
           <div className = "tooltip">
           <span style={{marginLeft: "5px"}}>{this.CL(onlineUser.name)}</span><span id={index} className="HomeInfo">{onlineUser.notify > 0 ? onlineUser.notify:null}</span>
