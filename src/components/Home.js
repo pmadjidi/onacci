@@ -64,7 +64,8 @@ class  Home extends React.Component {
       toggleCodeSnippet: {display: "none"},
       toggleMusicPlayer: {display: "none"},
       toggleGeo: {display: "none"},
-      playMP3: ""
+      playMP3: "",
+      playMP3Name: ""
     }
   }
 
@@ -777,7 +778,7 @@ toogleCodeSnippet(){
 
 toogleMusicPlayer(){
   console.log("calling toggle music");
-  if (this.state.toggleMusicPlayer.display === "none")
+  if (this.state.toggleMusicPlayer.display === "none"  && this.state.playMP3 !== "")
     this.setState({toggleMusicPlayer: {display: "block"}})
     else {
       this.setState({toggleMusicPlayer: {display: "none"}})
@@ -792,9 +793,9 @@ toogleGeo(){
     }
 }
 
-playMP3(url) {
+playMP3(url,name) {
   console.log("called playmp3",url);
-  this.setState({playMP3: url})
+  this.setState({playMP3: url,playMP3Name: name})
 }
 
 
@@ -847,14 +848,16 @@ playMP3(url) {
            <div style={this.state.toggleCodeSnippet}> <CodeSnippet send={this.sendMessage.bind(this)} selected={this.state.selected}
              user = {this.props.username} toogle={this.toogleCodeSnippet.bind(this)}/></div>
 
+
            <div onClick={this.toogleMusicPlayer.bind(this)}>
                  <span style = {{marginLeft: "15%"}}> <Emoji emoji="notes" size={16}/> </span>
                   <span style = {{marginLeft: "5%"}}> Player </span>
                 </div>
-                <div style={this.state.toggleMusicPlayer}>
+                <div  className="tooltip" style={this.state.toggleMusicPlayer}>
                   <span><audio  src={this.state.playMP3} controls style={{marginLeft: "12px", marginRight: "12px",marginTop: "12px",marginBottom: "12px"}} autoPlay>
                         Your browser does not support the audio element.
                       </audio></span>
+                    <span className="tooltiptext">{this.state.playMP3Name}</span>
                 </div>
 
                   <div onClick={this.toogleGeo.bind(this)}>

@@ -52,6 +52,7 @@ processSnippet(e) {
          <textarea className = "SnippetInputField"  rows="30" cols="75" placeholder={"Enter text to format "}
           ref="SnippetInputField" value = {this.state.snippetWindow} onChange= {this.sendMessage.bind(this)} placeholder="Enter code...."></textarea>
         <select value={this.state.lang} onChange={this.processSnippet.bind(this)} style={{width: "100%",height: "4%"}}>
+      <option value=""></option>
       <option value="python">Python</option>
       <option value="js">Javascript</option>
       <option value="c">C</option>

@@ -105,6 +105,18 @@ class Cards extends React.Component {
     }
 }
 
+parseCommand(str) {
+  if (!str)
+    return false
+  let regExp = /^!(.+)$/
+  let match = str.match(regExp)
+
+  if (match) {
+      console.log("command matched",match);
+      return true
+  }
+}
+
 CL(string) {
     if (string)
       return string.charAt(0).toUpperCase() + string.slice(1);
@@ -138,6 +150,23 @@ processEmoji(emoji) {
   console.log(emoji);
 }
 
+mlist() {
+  return (
+  <div>
+  {this.props.messages.sort((a,b)=>a.time - b.time).map((message,index)=>{
+    let ext
+    if (message.file) {
+      ext = message.name.split('.').pop().toUpperCase();
+    }
+    if (ext = "MP3") {
+      return <div>{index}{message.name}</div>
+    }
+  })
+  }
+  </div>
+  )
+}
+
 createCard(message,index) {
   if (!message.id)
     return null
@@ -153,6 +182,19 @@ createCard(message,index) {
   let youtube = null
 //  let formatedContent = emojify(message.content,eOptins)
   let formatedContent = parseEmulti(message.content)
+  let command = this.parseCommand(message.content)
+
+  if (command) {
+    switch(command[1]) {
+      case "mlist":
+      return this.mlist()
+      break
+      default:
+      console.log("create card, unkown command",command);
+    }
+  return
+  }
+
   let id = this.getYouTubeId(message.content)
   if (id) {
     youtube = <div> <YouTubeVideo id={id} /></div>
@@ -177,7 +219,7 @@ createCard(message,index) {
 
       /* element = <audio  src={url} controls={true} width={"70%"} height={"5%"}> </audio>*/
 
-      element = <div onClick={()=>this.props.play(url)}>{message.name}</div>
+      element = <div onClick={()=>this.props.play(url,message.name)}>{message.name}</div>
       console.log("should play sound");
       break
       case "PDF":
