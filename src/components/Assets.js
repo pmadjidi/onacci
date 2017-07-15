@@ -1,6 +1,21 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router'
+import {Emoji} from 'emoji-mart'
+import {emojify} from 'react-emojione';
 
+const options = {
+    convertShortnames: true,
+    convertUnicode: true,
+    convertAscii: true,
+    styles: {
+        backgroundImage: 'url(emojione.sprites.png)',
+        width: '16px',
+        height: '16px',
+        margin: '4px'
+    },
+    // this click handler will be set on every emoji
+    handleClick: event => alert(event.target.title)
+};
 
 
 class Assets extends React.Component {
@@ -28,10 +43,36 @@ channelPermission() {
 
 createAsset(asset,index) {
     //console.log("DEBUG",channel);
+    let contentSymbol
+    let fileExt = asset.name.split('.').pop().toUpperCase();
     let path = "/assets/" + asset.team + "/" + asset.file
+
+    switch (fileExt) {
+    case "GIF":
+    case "TIF":
+    case "SVG":
+    case "BMP":
+    case "PNG":
+    case "JPG":
+    contentSymbol = "camera"
+    break
+    case "MP3":
+    contentSymbol = ":musical_note:"
+
+    break
+    case "PDF":
+    contentSymbol = 0x128462
+    break
+    default:
+    contentSymbol = "bomb"
+      console.log("Unknown media file.....",fileExt);
+  }
+
       return (
     //  <li className="assetLi" key={index} onClick={()=>this.props.action(asset)}>{asset.name}</li>
-       <li className="assetLi" key={index} onClick={()=>this.props.action(asset)}><a className ="assetLink" href={path} download={asset.name}>{asset.name}</a></li>
+      <div>
+      <span onClick={console.log("test")}> {emojify(":musical_note:",options)} </span><span key={index} onClick={()=>this.props.action(asset)}>{index}<a className ="assetLink" href={path} download={asset.name}>{asset.name}</a></span>
+     </div>
         )
   }
 
@@ -92,9 +133,9 @@ render() {
 
        </div>
     </div>
-  <ul className= "assetList">
+  <div className= "assetList">
   {this.props.assetList.map((asset,index)=>this.createAsset(asset,index))}
-  </ul>
+</div>
   </div>
 )
 }

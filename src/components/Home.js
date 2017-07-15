@@ -11,6 +11,7 @@ import Teams from './Teams'
 import Assets from './Assets'
 import Webcamera from './Webcamera'
 import CodeSnippet from './CodeSnippet'
+import CandleStickChartWithMACDIndicator from './StockGraph'
 
 /** browser dependent definition are aligned to one and the same standard name **/
 navigator.getUserMedia = navigator.getUserMedia || navigator.mozGetUserMedia || navigator.webkitGetUserMedia;
@@ -64,8 +65,10 @@ class  Home extends React.Component {
       toggleCodeSnippet: {display: "none"},
       toggleMusicPlayer: {display: "none"},
       toggleGeo: {display: "none"},
+      toggleStocks: {display: "none"},
       playMP3: "",
-      playMP3Name: ""
+      playMP3Name: "",
+      stockData: []
     }
   }
 
@@ -793,6 +796,14 @@ toogleGeo(){
     }
 }
 
+toogleStocks(){
+  if (this.state.toggleStocks.display === "none")
+    this.setState({toggleStocks: {display: "block"}})
+    else {
+      this.setState({toggleStocks: {display: "none"}})
+    }
+}
+
 playMP3(url,name) {
   console.log("called playmp3",url);
   this.setState({playMP3: url,playMP3Name: name})
@@ -866,6 +877,16 @@ playMP3(url,name) {
                        </div>
                        <div style={this.state.toggleGeo}></div>
 
+                         <div onClick={this.toogleStocks.bind(this)}>
+                               <span style = {{marginLeft: "15%"}}> <Emoji emoji="moneybag" size={16}/> </span>
+                                <span style = {{marginLeft: "5%"}}> Stocks </span>
+                              </div>
+                              <div style={this.state.toggleStocks}>
+                                <CandleStickChartWithMACDIndicator data={this.state.StockData} width={1400} ratio={1} type="svg"
+                                  send={this.sendMessage.bind(this)} selected={this.state.selected}
+                                    user = {this.props.username} toogle={this.toogleStocks.bind(this)}/>
+                              </div>
+
 
     </div>
       <div className = "HomeOnline" onDragOver={this.allowDrop.bind(this)} onDrop = {this.handleDropAvatar.bind(this)}>
@@ -897,6 +918,10 @@ playMP3(url,name) {
        <textarea className = "cWindow" id="chattWindow"  autoFocus="autofocus" rows="9" cols="100" onChange= {this.sendP2PMessage.bind(this)} value ={this.state.chattWindow}></textarea>
       </div>
       </div>
+      <div className = "StockCharts" >
+        <CandleStickChartWithMACDIndicator data={this.state.StockData} width={1400} ratio={1} type="svg" />
+      </div>
+
 
     </div>
       <div className = "HomeAssets">
