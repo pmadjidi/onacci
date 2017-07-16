@@ -14,7 +14,8 @@ var { fitWidth } = helper;
 class CandleStickChartWithMACDIndicator extends React.Component {
         render() {
                 var { data, type, width, ratio } = this.props;
-    console.log(this.props)
+        if (!data)
+          return null
 
                 var ema26 = ema()
                         .id(0)

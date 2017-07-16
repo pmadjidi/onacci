@@ -65,10 +65,10 @@ class  Home extends React.Component {
       toggleCodeSnippet: {display: "none"},
       toggleMusicPlayer: {display: "none"},
       toggleGeo: {display: "none"},
-      toggleStocks: {display: "none"},
+      toggleMarkets: {display: "none"},
       playMP3: "",
       playMP3Name: "",
-      stockData: []
+      marketData: []
     }
   }
 
@@ -85,6 +85,7 @@ class  Home extends React.Component {
     //console.log(this.props.ws)
     console.log("PROPS FOR HOME",this.props);
   //  this.sendWhoAmI()
+    this.sendMarkets()
     this.sendOnline()
     this.sendChannels()
     this.channelAction({name: "General"})
@@ -112,7 +113,10 @@ class  Home extends React.Component {
 
 
 
-
+  sendMarkets() {
+    let payload = {type: "markets",payload: {type: "list"}}
+    this.sendMessage(payload)
+  }
 
   sendOnline() {
     let payload = {type: "online",payload: {}}
@@ -796,12 +800,14 @@ toogleGeo(){
     }
 }
 
-toogleStocks(){
-  if (this.state.toggleStocks.display === "none")
-    this.setState({toggleStocks: {display: "block"}})
+toogleMarkets(){
+  if (this.state.toggleMarkets.display === "none")
+    this.setState({toggleMarkets: {display: "block"}})
     else {
-      this.setState({toggleStocks: {display: "none"}})
+      this.setState({toggleMarkets: {display: "none"}})
     }
+  this.sendMessage({type: "markets", payload: {type: "timeserie",stock: "AAPL",selected: this.state.selected}})
+  this.sendMessage({type: "markets", payload: {type: "news",stock: "AAPL",selected: this.state.selected}})
 }
 
 playMP3(url,name) {
@@ -877,14 +883,14 @@ playMP3(url,name) {
                        </div>
                        <div style={this.state.toggleGeo}></div>
 
-                         <div onClick={this.toogleStocks.bind(this)}>
+                         <div onClick={this.toogleMarkets.bind(this)}>
                                <span style = {{marginLeft: "15%"}}> <Emoji emoji="moneybag" size={16}/> </span>
-                                <span style = {{marginLeft: "5%"}}> Stocks </span>
+                                <span style = {{marginLeft: "5%"}}> Markets </span>
                               </div>
-                              <div style={this.state.toggleStocks}>
+                              <div style={this.state.toggleMarkets}>
                                 <CandleStickChartWithMACDIndicator data={this.state.StockData} width={1400} ratio={1} type="svg"
                                   send={this.sendMessage.bind(this)} selected={this.state.selected}
-                                    user = {this.props.username} toogle={this.toogleStocks.bind(this)}/>
+                                    user = {this.props.username} toogle={this.toogleMarkets.bind(this)}/>
                               </div>
 
 
@@ -918,10 +924,6 @@ playMP3(url,name) {
        <textarea className = "cWindow" id="chattWindow"  autoFocus="autofocus" rows="9" cols="100" onChange= {this.sendP2PMessage.bind(this)} value ={this.state.chattWindow}></textarea>
       </div>
       </div>
-      <div className = "StockCharts" >
-        <CandleStickChartWithMACDIndicator data={this.state.StockData} width={1400} ratio={1} type="svg" />
-      </div>
-
 
     </div>
       <div className = "HomeAssets">
