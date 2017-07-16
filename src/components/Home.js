@@ -816,8 +816,10 @@ toogleMarkets(){
     else {
       this.setState({toggleMarkets: {display: "none"}})
     }
+  /*
   this.sendMessage({type: "markets", payload: {type: "timeserie",stock: "AAPL",selected: this.state.selected}})
   this.sendMessage({type: "markets", payload: {type: "news",stock: "AAPL",selected: this.state.selected}})
+  */
   console.log("toogleMarkets",this.state.marketInstruments);
 }
 
@@ -838,6 +840,17 @@ toogleSense() {
 
 }
 toogleMic() {}
+
+toogleScreen() {}
+
+marketClicked(symbol) {
+  console.log("marketClicked: ",symbol);
+  let {type,name} = this.state.selected
+  this.sendMessage({type: "markets",payload: {type: "timeserie",instrument: symbol,selected: {type,name}}})
+  this.toogleMarkets()
+}
+
+
 
   render() {
     let userPhone = null
@@ -913,8 +926,8 @@ toogleMic() {}
                               <div style={this.state.toggleMarkets}>
                                 <ul style={{height: "100px",overflow: "scroll"}}>
                                   {this.state.marketInstruments.map(function(instrument){
-                                    return <li onClick={this.sendMessage({type: "stock",payload: {type: "timeserie",instrument: instrument}}).bind(this)}>{instrument.Symbol}</li>;
-                                    })}
+                                    return <li onClick={()=>this.marketClicked(instrument.Symbol)}>{instrument.Symbol}</li>;
+                                    },this)}
                                   </ul>
                               </div>
 
@@ -932,15 +945,22 @@ toogleMic() {}
 
                                             <div onClick={this.toogleSense.bind(this)}>
                                                   <span style = {{marginLeft: "15%"}}> <Emoji emoji="spider_web" size={16}/> </span>
-                                                   <span style = {{marginLeft: "5%"}}> WWW </span>
+                                                   <span style = {{marginLeft: "5%"}}> Sense </span>
                                                  </div>
                                                  <div style={this.state.toggleSense}></div>
 
                                                    <div onClick={this.toogleMic.bind(this)}>
                                                          <span style = {{marginLeft: "15%"}}> <Emoji emoji="studio_microphone" size={16}/> </span>
-                                                          <span style = {{marginLeft: "5%"}}> MIC </span>
+                                                          <span style = {{marginLeft: "5%"}}> Mic </span>
                                                         </div>
                                                         <div style={this.state.toggleMic}></div>
+
+                                                          <div onClick={this.toogleScreen.bind(this)}>
+                                                                <span style = {{marginLeft: "15%"}}> <Emoji emoji="desktop_computer" size={16}/> </span>
+                                                                 <span style = {{marginLeft: "5%"}}> Screen </span>
+                                                               </div>
+                                                               <div style={this.state.toggleScreen}></div>
+
 
 
 
