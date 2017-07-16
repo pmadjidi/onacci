@@ -68,7 +68,7 @@ class  Home extends React.Component {
       toggleMarkets: {display: "none"},
       playMP3: "",
       playMP3Name: "",
-      marketData: []
+      marketInstruments: []
     }
   }
 
@@ -319,6 +319,10 @@ sendAsset(fileName,file,name,type) {
       case "signal":
       that.processSignal(m.payload)
       break
+      case "markets":
+      console.log("markets package recieved",m);
+      that.processMarkets(m.payload)
+      break
       default:
       console.log("Uknown message type:",m)
      }
@@ -502,6 +506,12 @@ sendP2PMessage(e) {
   processAsset(payload){
     //console.log("processAsset recieved: ",payload);
     this.setState({assets: payload})
+  }
+
+  processMarkets(payload){
+    console.log("processMarkett recieved: ",payload);
+    if (payload.instrumentlist)
+      this.setState({marketInstruments: payload.instrumentlist})
   }
 
   componentWillUnmount() {
@@ -808,6 +818,7 @@ toogleMarkets(){
     }
   this.sendMessage({type: "markets", payload: {type: "timeserie",stock: "AAPL",selected: this.state.selected}})
   this.sendMessage({type: "markets", payload: {type: "news",stock: "AAPL",selected: this.state.selected}})
+  console.log("toogleMarkets",this.state.marketInstruments);
 }
 
 playMP3(url,name) {
@@ -815,6 +826,18 @@ playMP3(url,name) {
   this.setState({playMP3: url,playMP3Name: name})
 }
 
+
+toogleGoogle() {
+}
+
+toogleWikipedia() {
+
+}
+
+toogleSense() {
+
+}
+toogleMic() {}
 
   render() {
     let userPhone = null
@@ -859,7 +882,7 @@ playMP3(url,name) {
           user = {this.props.username} toogle={this.toogleCamera.bind(this)}/></div>
 
         <div onClick={this.toogleCodeSnippet.bind(this)}>
-            <span style = {{marginLeft: "15%"}}> <Emoji emoji="desktop_computer" size={16}/> </span>
+            <span style = {{marginLeft: "15%"}}> <Emoji emoji="bookmark_tabs" size={16}/> </span>
              <span style = {{marginLeft: "5%"}}> Snippet </span>
            </div>
            <div style={this.state.toggleCodeSnippet}> <CodeSnippet send={this.sendMessage.bind(this)} selected={this.state.selected}
@@ -888,10 +911,40 @@ playMP3(url,name) {
                                 <span style = {{marginLeft: "5%"}}> Markets </span>
                               </div>
                               <div style={this.state.toggleMarkets}>
-                                <CandleStickChartWithMACDIndicator data={this.state.StockData} width={1400} ratio={1} type="svg"
-                                  send={this.sendMessage.bind(this)} selected={this.state.selected}
-                                    user = {this.props.username} toogle={this.toogleMarkets.bind(this)}/>
+                                <ul style={{height: "100px",overflow: "scroll"}}>
+                                  {this.state.marketInstruments.map(function(instrument){
+                                    return <li onClick={this.sendMessage({type: "stock",payload: {type: "timeserie",instrument: instrument}}).bind(this)}>{instrument.Symbol}</li>;
+                                    })}
+                                  </ul>
                               </div>
+
+                              <div onClick={this.toogleGoogle.bind(this)}>
+                                    <span style = {{marginLeft: "15%"}}> <Emoji emoji="mag" size={16}/> </span>
+                                     <span style = {{marginLeft: "5%"}}> Google </span>
+                                   </div>
+                                   <div style={this.state.toggleGoogle}></div>
+
+                                     <div onClick={this.toogleWikipedia.bind(this)}>
+                                           <span style = {{marginLeft: "15%"}}> <Emoji emoji="mag" size={16}/> </span>
+                                            <span style = {{marginLeft: "5%"}}> Wikipedia </span>
+                                          </div>
+                                          <div style={this.state.toggleWikipedia}></div>
+
+                                            <div onClick={this.toogleSense.bind(this)}>
+                                                  <span style = {{marginLeft: "15%"}}> <Emoji emoji="spider_web" size={16}/> </span>
+                                                   <span style = {{marginLeft: "5%"}}> WWW </span>
+                                                 </div>
+                                                 <div style={this.state.toggleSense}></div>
+
+                                                   <div onClick={this.toogleMic.bind(this)}>
+                                                         <span style = {{marginLeft: "15%"}}> <Emoji emoji="studio_microphone" size={16}/> </span>
+                                                          <span style = {{marginLeft: "5%"}}> MIC </span>
+                                                        </div>
+                                                        <div style={this.state.toggleMic}></div>
+
+
+
+
 
 
     </div>
@@ -964,3 +1017,12 @@ playMP3(url,name) {
 };
 
 export default Home
+
+
+/*
+<div style={this.state.toggleMarkets}>
+  <CandleStickChartWithMACDIndicator data={this.state.StockData} width={1400} ratio={1} type="svg"
+    send={this.sendMessage.bind(this)} selected={this.state.selected}
+      user = {this.props.username} toogle={this.toogleMarkets.bind(this)}/>
+</div>
+*/
