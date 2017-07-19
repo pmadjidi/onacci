@@ -169,6 +169,7 @@ mlist() {
 }
 
 createCard(message,index) {
+//  console.log("createCard",message);
   if (!message.id)
     return null
 
@@ -234,13 +235,6 @@ createCard(message,index) {
 
   if (message.subtype === "snippet") {
     element =  <Highlight className={message.lang}>{message.content}</Highlight>
-
-
-  if (message.symbol) {
-    console.log("GOT message symbol",message);
-    element = <CandleStickChartWithMACDIndicator data={message.timeseries} width={1400} ratio={1} type="svg"/>
-  }
-
     return (
       <div id = {message.id} key={message.id} className="fade-in" onClick={()=>this.props.messageSelect(message.id)}>
       <img src={avatar} alt="Avatar" className ="w3-left  w3-margin-right w3-img" ref={img => this.img = img} onError={(e)=>{e.target.src='/images/onacci.png'}} />
@@ -248,16 +242,22 @@ createCard(message,index) {
         <p className="cardName">{this.CL(message.sourceUser)}</p>
         <p className = "cardDate w3-margin-left tooltiptext" >{ date.toString("YY MMM dd HH MM ss")}</p>
       <div>
+        {youtube}
         {element}
       </div>
         </div>
       </div>
     )
-
   }
 
 
-
+  if ('symbol' in message) {
+    // Important date string must convert to date data structure otherwise CandleStickChartWithMACDIndicator will fail with xAccessor
+    console.log("SYMBOL EXISTS",message);
+    let timeseries = message.timeseries
+    timeseries.map(item=>{item.date = new Date(item.date)})
+    element = <CandleStickChartWithMACDIndicator data={timeseries} width={600} ratio={1} type="svg"/>
+  }
 
 
   return  (
