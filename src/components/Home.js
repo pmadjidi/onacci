@@ -283,7 +283,7 @@ sendAsset(fileName,file,name,type) {
     if (type === "channel")
       payload = {type: "assets", payload: {name: fileName, file: fr.result, type: type, targetChannel: name}}
     else
-      payload = {type: "assets", payload: {name: fileName, file: fr.result, type: type, targetUser: name}}
+      payload = {type: "assets", payload: {name: fileName, file: fr.result, type: "P2P", targetUser: name}}
 
     this.sendMessage(payload)
 
@@ -844,9 +844,18 @@ toogleMic() {}
 toogleScreen() {}
 
 marketClicked(symbol) {
-  console.log("marketClicked: ",symbol);
   let {type,name} = this.state.selected
-  this.sendMessage({type: "markets",payload: {type: "timeserie",instrument: symbol,selected: {type,name}}})
+  let payload = {type: "markets",payload: {type: "timeserie",instrument: symbol,selected: {type}}}
+  if (type === "user") {
+    payload.payload.selected.type =  "P2P"
+    payload.payload.selected.targetUser = name
+  }
+  else {
+    payload.payload.selected.targetChannel = name
+  }
+
+  console.log("marketClicked: ",symbol);
+  this.sendMessage(payload)
   this.toogleMarkets()
 }
 
@@ -924,11 +933,11 @@ marketClicked(symbol) {
                                 <span style = {{marginLeft: "5%"}}> Markets </span>
                               </div>
                               <div style={this.state.toggleMarkets}>
-                                <ul style={{height: "100px",overflow: "scroll"}}>
+                                <ol style={{height: "100px",overflow: "scroll"}}>
                                   {this.state.marketInstruments.map(function(instrument){
                                     return <li onClick={()=>this.marketClicked(instrument.Symbol)}>{instrument.Symbol}</li>;
                                     },this)}
-                                  </ul>
+                                  </ol>
                               </div>
 
                               <div onClick={this.toogleGoogle.bind(this)}>
