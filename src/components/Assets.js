@@ -9,8 +9,8 @@ const options = {
     convertAscii: true,
     styles: {
         backgroundImage: 'url(emojione.sprites.png)',
-        width: '16px',
-        height: '16px',
+        width: '8px',
+        height: '8px',
         margin: '4px'
     },
     // this click handler will be set on every emoji
@@ -54,7 +54,7 @@ createAsset(asset,index) {
     case "BMP":
     case "PNG":
     case "JPG":
-    contentSymbol = "camera"
+    contentSymbol = ":camera:"
     break
     case "MP3":
     contentSymbol = ":musical_note:"
@@ -64,14 +64,14 @@ createAsset(asset,index) {
     contentSymbol = 0x128462
     break
     default:
-    contentSymbol = "bomb"
+    contentSymbol = ":bomb:"
       console.log("Unknown media file.....",fileExt);
   }
 
       return (
     //  <li className="assetLi" key={index} onClick={()=>this.props.action(asset)}>{asset.name}</li>
       <div>
-      <span onClick={console.log("test")}> {emojify(":musical_note:",options)} </span><span key={index} onClick={()=>this.props.action(asset)}>{index}<a className ="assetLink" href={path} download={asset.name}>{asset.name}</a></span>
+      <span onClick={console.log("test")}> {emojify(contentSymbol,options)} </span><span key={index} onClick={()=>this.props.action(asset)}>{index}<a className ="assetLink" href={path} download={asset.name}>{asset.name}</a></span>
      </div>
         )
   }

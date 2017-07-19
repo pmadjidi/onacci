@@ -12,6 +12,7 @@ import { emojiIndex } from 'emoji-mart'
 import ReactPlayer from 'react-player'
 import PDFViewer from  "mgr-pdf-viewer-react"
 import Highlight from 'react-highlight'
+import CandleStickChartWithMACDIndicator from './StockGraph'
 
 function parseEmulti(str) {
   let match = []
@@ -233,6 +234,12 @@ createCard(message,index) {
 
   if (message.subtype === "snippet") {
     element =  <Highlight className={message.lang}>{message.content}</Highlight>
+
+
+  if (message.symbol) {
+    console.log("GOT message symbol",message);
+    element = <CandleStickChartWithMACDIndicator data={message.timeseries} width={1400} ratio={1} type="svg"/>
+  }
 
     return (
       <div id = {message.id} key={message.id} className="fade-in" onClick={()=>this.props.messageSelect(message.id)}>
