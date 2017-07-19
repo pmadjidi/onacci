@@ -66,6 +66,7 @@ class  Home extends React.Component {
       toggleMusicPlayer: {display: "none"},
       toggleGeo: {display: "none"},
       toggleMarkets: {display: "none"},
+      toggleNews: {display: "none"},
       playMP3: "",
       playMP3Name: "",
       marketInstruments: []
@@ -816,12 +817,16 @@ toogleMarkets(){
     else {
       this.setState({toggleMarkets: {display: "none"}})
     }
-  /*
-  this.sendMessage({type: "markets", payload: {type: "timeserie",stock: "AAPL",selected: this.state.selected}})
-  this.sendMessage({type: "markets", payload: {type: "news",stock: "AAPL",selected: this.state.selected}})
-  */
-  console.log("toogleMarkets",this.state.marketInstruments);
 }
+
+toogleNews(){
+  if (this.state.toggleNews.display === "none")
+    this.setState({toggleNews: {display: "block"}})
+    else {
+      this.setState({toggleNews: {display: "none"}})
+    }
+}
+
 
 playMP3(url,name) {
   console.log("called playmp3",url);
@@ -859,6 +864,22 @@ marketClicked(symbol) {
   this.toogleMarkets()
 }
 
+
+newsClicked(symbol) {
+  let {type,name} = this.state.selected
+  let payload = {type: "markets",payload: {type: "news",instrument: symbol,selected: {type}}}
+  if (type === "user") {
+    payload.payload.selected.type =  "P2P"
+    payload.payload.selected.targetUser = name
+  }
+  else {
+    payload.payload.selected.targetChannel = name
+  }
+
+  console.log("newsClicked: ",symbol);
+  this.sendMessage(payload)
+  this.toogleNews()
+}
 
 
   render() {
@@ -939,6 +960,19 @@ marketClicked(symbol) {
                                     },this)}
                                   </ol>
                               </div>
+
+                              <div onClick={this.toogleNews.bind(this)}>
+                                    <span style = {{marginLeft: "15%"}}> <Emoji emoji="newspaper" size={16}/> </span>
+                                     <span style = {{marginLeft: "5%"}}> News</span>
+                                   </div>
+                                   <div style={this.state.toggleNews}>
+                                     <ol style={{height: "100px",overflow: "scroll"}}>
+                                       {this.state.marketInstruments.map(function(instrument){
+                                         return <li onClick={()=>this.newsClicked(instrument.Symbol)}>{instrument.Symbol}</li>;
+                                         },this)}
+                                       </ol>
+                                   </div>
+
 
                               <div onClick={this.toogleGoogle.bind(this)}>
                                     <span style = {{marginLeft: "15%"}}> <Emoji emoji="mag" size={16}/> </span>

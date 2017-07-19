@@ -251,7 +251,7 @@ createCard(message,index) {
   }
 
 
-  if ('symbol' in message) {
+  if ('timeseries' in message) {
     // Important date string must convert to date data structure otherwise CandleStickChartWithMACDIndicator will fail with xAccessor
     console.log("SYMBOL EXISTS",message);
     let timeseries = message.timeseries
