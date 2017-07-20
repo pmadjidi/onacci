@@ -253,11 +253,29 @@ createCard(message,index) {
 
   if ('timeseries' in message) {
     // Important date string must convert to date data structure otherwise CandleStickChartWithMACDIndicator will fail with xAccessor
-    console.log("SYMBOL EXISTS",message);
     let timeseries = message.timeseries
     timeseries.map(item=>{item.date = new Date(item.date)})
     element = <CandleStickChartWithMACDIndicator data={timeseries} width={600} ratio={1} type="svg"/>
   }
+
+
+    if ('news' in message) {
+      // Important date string must convert to date data structure otherwise CandleStickChartWithMACDIndicator will fail with xAccessor
+    console.log("IN NEWS");
+      let news = message.news
+      element = news.map(item=>{
+        return (<div>
+        <h2>{item.symbol}</h2>
+        <a href={item.link}>{item.title}</a>
+        <h5>{item.description}</h5>
+        </div>
+      )
+      }
+      )
+
+    }
+
+
 
 
   return  (
