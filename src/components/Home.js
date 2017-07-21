@@ -89,7 +89,7 @@ class  Home extends React.Component {
     this.sendMarkets()
     this.sendOnline()
     this.sendChannels()
-    this.channelAction({name: "General"})
+    // this.channelAction({name: "General"})
     this.setupVideoEvents()
 
   }

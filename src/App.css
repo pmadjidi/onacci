@@ -188,6 +188,7 @@ a.active {
   grid-column: 4/9;
   #border-style: ridge;
   overflow: auto;
+  overflow-x: scroll;
   background-color: rgb(240,240,240);
 }
 

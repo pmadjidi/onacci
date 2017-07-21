@@ -13,6 +13,7 @@ import ReactPlayer from 'react-player'
 import PDFViewer from  "mgr-pdf-viewer-react"
 import Highlight from 'react-highlight'
 import CandleStickChartWithMACDIndicator from './StockGraph'
+import Popup from 'react-popup';
 
 function parseEmulti(str) {
   let match = []
@@ -255,7 +256,7 @@ createCard(message,index) {
     // Important date string must convert to date data structure otherwise CandleStickChartWithMACDIndicator will fail with xAccessor
     let timeseries = message.timeseries
     timeseries.map(item=>{item.date = new Date(item.date)})
-    element = <CandleStickChartWithMACDIndicator data={timeseries} width={600} ratio={1} type="svg"/>
+    element = <div onClick={()=>this}><CandleStickChartWithMACDIndicator data={timeseries} width={800} ratio={1} type="svg"/></div>
   }
 
 

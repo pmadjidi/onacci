@@ -10,6 +10,7 @@ var { OHLCTooltip, MovingAverageTooltip, MACDTooltip } = tooltip;
 var { XAxis, YAxis } = axes;
 var { macd, ema, sma } = indicator;
 var { fitWidth } = helper;
+import Popout from 'react-popout'
 
 class CandleStickChartWithMACDIndicator extends React.Component {
         render() {
@@ -124,4 +125,53 @@ CandleStickChartWithMACDIndicator.defaultProps = {
 
 CandleStickChartWithMACDIndicator = fitWidth(CandleStickChartWithMACDIndicator);
 
-export default CandleStickChartWithMACDIndicator;
+
+
+class PcandleStickChartWithMACDIndicator extends React.Component {
+  constructor(props){
+    super(props);
+    this.popout = this.popout.bind(this);
+    this.popoutContentClicked = this.popoutContentClicked.bind(this);
+    this.state = {isPoppedOut: false}
+  }
+
+
+  popout(){
+    this.setState({isPoppedOut: true});
+  }
+
+  popoutClosed(){
+      this.setState({isPoppedOut: false});
+  }
+
+
+  popoutContentClicked(){
+    this.popoutClosed();
+  }
+
+  render(){
+    if (this.state.isPoppedOut){
+      return (
+        // Remove url parameter to see about:blank support
+        <Popout title='Stock Chart' onClosing={this.popoutClosed}>
+          <div>
+            <CandleStickChartWithMACDIndicator {...this.props}/>
+            <div onClick={this.popoutContentClicked}>Close</div>
+          </div>
+        </Popout>
+      );
+    } else {
+      return (
+        <div>
+          <a style={{ textDecoration: 'underline', color: 'blue', cursor: 'pointer' }} onClick={this.popout}>Open in new window</a>
+          <CandleStickChartWithMACDIndicator {...this.props}/>
+        </div>
+      );
+    }
+  }
+}
+
+
+
+
+export default PcandleStickChartWithMACDIndicator;
